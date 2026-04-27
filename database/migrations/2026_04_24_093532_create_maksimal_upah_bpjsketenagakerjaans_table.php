@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('maksimal_upah_bpjsketenagakerjaans', function (Blueprint $table) {
             $table->id();
+            $table->string('maksimal_upah_bpjsketenagakerjaan');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

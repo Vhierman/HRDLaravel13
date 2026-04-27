@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('golongans', function (Blueprint $table) {
             $table->id();
+            $table->string('golongan');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
             $table->timestamps();
         });
     }

@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employees_id')->constrained('employees');
+            $table->string('nik_karyawan');
+            $table->date('tanggal_absen');
+            $table->string('keterangan_absen');
+            $table->string('lama_absen');
+            $table->string('keterangan_cuti_khusus');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

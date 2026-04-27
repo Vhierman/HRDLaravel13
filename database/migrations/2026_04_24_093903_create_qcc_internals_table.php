@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('qcc_internals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employees_id')->constrained('employees');
+            $table->string('nik_karyawan');
+            $table->string('nama_group_qcc_internal');
+            $table->string('tema_qcc_internal');
+            $table->string('circle_leader_qcc_internal');
+            $table->date('tanggal_konvensi_qcc_internal');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

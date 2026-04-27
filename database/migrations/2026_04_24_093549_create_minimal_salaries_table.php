@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('minimal_salaries', function (Blueprint $table) {
             $table->id();
+            $table->string('minimal_upah');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

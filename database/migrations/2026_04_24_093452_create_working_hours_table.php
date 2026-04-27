@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('working_hours', function (Blueprint $table) {
             $table->id();
+            $table->time('jam_masuk');
+            $table->time('jam_pulang');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

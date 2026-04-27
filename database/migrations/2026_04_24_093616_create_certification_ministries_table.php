@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('certification_ministries', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employees_id')->constrained('employees');
+            $table->string('nik_karyawan');
+            $table->string('jumlah_sertifikat_kementrian');
+            $table->string('nomor_sertifikat_kementrian');
+            $table->string('jenis_sertifikat_kementrian');
+            $table->string('masa_berlaku_sertifikat_kementrian');
+            $table->date('tanggal_terbit_kementrian');
+            $table->date('sampai_tanggal_kementrian');
+            $table->string('lsp_kementrian');
+            $table->string('input_oleh')->nullable();
+            $table->string('edit_oleh')->nullable();
+            $table->string('hapus_oleh')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
