@@ -12,6 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        $middleware->alias([
+        'admin.auth' => \App\Http\Middleware\AdminAuthenticate::class,
+        // 'member.auth' => \App\Http\Middleware\MemberAuthenticate::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
