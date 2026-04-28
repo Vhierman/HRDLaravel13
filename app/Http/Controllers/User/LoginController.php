@@ -17,7 +17,7 @@ class LoginController extends Controller
         return view('user.auth');
     }
 
-    public function auth(Request $request)
+    public function authenticate(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -29,24 +29,18 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->route('user.dashboard');
-            // return 'success';
         }
-
         return back()->withErrors([
-            'credentials' => 'Your credentials are wrong'
+            'error' => 'Your credentials are wrong'
         ])->withInput();
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
- 
         $request->session()->invalidate();
- 
         $request->session()->regenerateToken();
- 
         return redirect()->route('user.login');
     }
 

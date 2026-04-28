@@ -1,5 +1,5 @@
 @extends('user.layouts.base')
 @section('title', 'Dashboard User')
-@section('Content')
+@section('content')
     <h1>Dashboard User</h1>
 @endsection
