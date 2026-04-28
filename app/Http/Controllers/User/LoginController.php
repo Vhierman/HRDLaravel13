@@ -4,8 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class DashboardUserController extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,40 @@ class DashboardUserController extends Controller
     public function index()
     {
         //
-        return view('user.dashboard_user');
+        return view('user.auth');
+    }
+
+    public function auth(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        $credentials['roles'] = 'karyawan';
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->route('user.dashboard');
+            // return 'success';
+        }
+
+        return back()->withErrors([
+            'credentials' => 'Your credentials are wrong'
+        ])->withInput();
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+ 
+        $request->session()->invalidate();
+ 
+        $request->session()->regenerateToken();
+ 
+        return redirect()->route('user.login');
     }
 
     /**
