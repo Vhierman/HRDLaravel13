@@ -50,6 +50,27 @@ body {
   font-weight: 600;
 }
 
+/* Video background */
+.container{
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.back-vid{
+  position:absolute;
+  right:0;
+  bottom:0;
+  z-index:-1;
+}
+
+.cover{
+  position:fixed;
+  inset: 0 0 0 0;
+  background-color: #526bd82d;
+}
+/* Video background */
+
 input,
 button {
   border: none;
@@ -217,5 +238,20 @@ img {
     padding: 1.5rem 1.5rem 1.5rem 7rem;
     border-radius: 4rem;
     overflow: hidden;
+  }
+}
+
+/* For Small Device */
+@media (max-aspect-ratio: 16/9) {
+  .back-vid {
+    width :auto;
+    height: 100%;
+  }
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .back-vid {
+    width :100%;
+    height: auto;
   }
 }
