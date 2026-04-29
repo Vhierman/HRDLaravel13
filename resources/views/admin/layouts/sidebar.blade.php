@@ -32,7 +32,8 @@
                     <div class="menu-title">Master</div>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>User</a></li>
+                    <li><a href="{{ route('user.index') }}"><i class="material-icons-outlined">arrow_right</i>User</a>
+                    </li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Perusahaan</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Area</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Penempatan</a></li>

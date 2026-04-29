@@ -12,7 +12,7 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,10 @@ class UserRequest extends FormRequest
     {
         return [
             //
+            'name'  => 'required|string',
+            'roles' => 'required|string|in:admin,karyawan,hrd,accounting,leader,supervisor,manager',
+            'nik'   => 'required|string|min:16',
+            'email' => 'required|email'
         ];
     }
 }

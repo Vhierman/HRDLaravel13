@@ -47,6 +47,11 @@
     @include('admin.layouts.sidebar')
     <!--end sidebar-->
 
+    {{-- Bungkus directive SweetAlert dengan pengecekan session. Laravel menyimpan pesan SweetAlert dalam key alert. Jika key ini tidak ada, script tidak akan dipanggil sama sekali. --}}
+    @if (Session::has('alert.config'))
+        @include('sweetalert::alert')
+    @endif
+
     <!--start main wrapper-->
     <main class="main-wrapper">
         <div class="main-content">
@@ -73,7 +78,6 @@
 
     <!--bootstrap js-->
     <script src="{{ asset('template_admin/assets/js/bootstrap.bundle.min.js') }}"></script>
-
     <!--plugins-->
     <script src="{{ asset('template_admin/assets/js/jquery.min.js') }}"></script>
     <!--plugins-->
@@ -81,10 +85,10 @@
     <script src="{{ asset('template_admin/assets/plugins/metismenu/metisMenu.min.js') }}"></script>
     {{-- <script src="{{ asset('template_admin/assets/plugins/apexchart/apexcharts.min.js') }}"></script> --}}
     <script src="{{ asset('template_admin/assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
-    <script src="{{ asset('template_admin/assets/plugins/peity/jquery.peity.min.js') }}"></script>
+    {{-- <script src="{{ asset('template_admin/assets/plugins/peity/jquery.peity.min.js') }}"></script>
     <script>
         $(".data-attributes span").peity("donut")
-    </script>
+    </script> --}}
     {{-- <script src="{{ asset('template_admin/assets/js/dashboard2.js') }}"></script> --}}
     <script src="{{ asset('template_admin/assets/js/main.js') }}"></script>
 

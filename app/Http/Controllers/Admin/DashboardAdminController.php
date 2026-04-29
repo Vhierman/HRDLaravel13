@@ -13,6 +13,8 @@ class DashboardAdminController extends Controller
     public function index()
     {
         //
+        toast('Hello ' . auth()->user()->name, 'success');
+        return view('admin.dashboard_admin');
     }
 
     /**
