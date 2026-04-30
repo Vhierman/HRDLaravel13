@@ -10,6 +10,7 @@ use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\AreaController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -26,6 +27,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
     Route::resource('user', UserController::class);
     Route::resource('company', CompanyController::class);
+    Route::resource('area', AreaController::class);
 });
 // Route Admin Area
 

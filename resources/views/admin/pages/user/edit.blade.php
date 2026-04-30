@@ -1,5 +1,5 @@
 @extends('admin.layouts.base')
-@section('title', 'Dashboard Admin');
+@section('title', 'Edit User');
 
 @section('content')
     {{-- <h1>User</h1> --}}

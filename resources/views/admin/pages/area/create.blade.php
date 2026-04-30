@@ -1,5 +1,6 @@
 @extends('admin.layouts.base')
-@section('title', 'Edit Perusahaan');
+@section('title', 'Tambah Area');
+
 
 @section('content')
 
@@ -8,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Edit Perusahaan</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Area</li>
                 </ol>
             </nav>
         </div>
@@ -29,15 +30,14 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Edit Perusahaan</h5>
-            <form action="{{ route('company.update', $company->id) }}" method="post" enctype="multipart/form-data">
-                @method('PUT')
+            <h5 class="mb-4">Form Tambah Area</h5>
+            <form action="{{ route('area.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Nama Perusahaan</label>
+                    <label for="input35" class="col-sm-3 col-form-label">Nama Area</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" onkeyup="huruf(this);" name="nama_perusahaan"
-                            value="{{ $company->nama_perusahaan }}" id="input35" placeholder="Nama Perusahaan" />
+                        <input type="text" class="form-control" onkeyup="huruf(this);" name="area"
+                            value="{{ old('area') }}" id="input35" placeholder="Nama Area" />
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
                                             class="material-icons-outlined">save</i>Simpan</button>
                                 </div>
                                 <div class="col">
-                                    <a href="{{ route('company.index') }}" class="btn btn-danger px-4 raised d-flex gap-2">
+                                    <a href="{{ route('area.index') }}" class="btn btn-danger px-4 raised d-flex gap-2">
                                         <i class="material-icons-outlined">cancel</i>Cancel
                                     </a>
                                 </div>
