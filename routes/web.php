@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\PositionController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -30,6 +31,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('company', CompanyController::class);
     Route::resource('area', AreaController::class);
     Route::resource('division', DivisionController::class);
+    Route::resource('position', PositionController::class);
 });
 // Route Admin Area
 

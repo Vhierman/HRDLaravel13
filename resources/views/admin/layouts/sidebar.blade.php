@@ -42,7 +42,8 @@
                                     class="material-icons-outlined">arrow_right</i>Area</a></li>
                         <li><a href="{{ route('division.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Penempatan</a></li>
-                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
+                        <li><a href="{{ route('position.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
                         <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Golongan</a>
                         <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Jam Kerja</a>
                         <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Minimal Upah</a>

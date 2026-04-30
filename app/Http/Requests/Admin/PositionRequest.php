@@ -12,7 +12,7 @@ class PositionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class PositionRequest extends FormRequest
     {
         return [
             //
+            'jabatan'  => 'required|string',
         ];
     }
 }
