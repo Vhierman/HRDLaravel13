@@ -9,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Data User</li>
                 </ol>
             </nav>
         </div>
@@ -30,27 +30,27 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Tamnbah User</h5>
+            <h5 class="mb-4">Form Tambah User</h5>
             <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
                     <label for="input35" class="col-sm-3 col-form-label">Nama</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="huruf(this);" name="name"
-                            old="{{ old('name') }}" id="input35" placeholder="Name" />
+                            value="{{ old('name') }}" id="input35" placeholder="Name" />
                     </div>
                 </div>
                 <div class="row mb-3">
                     <label for="input36" class="col-sm-3 col-form-label">NIK</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="angka(this);" name="nik"
-                            old="{{ old('nik') }}" id="input36" placeholder="NIK" maxlength="16" />
+                            value="{{ old('nik') }}" id="input36" placeholder="NIK" maxlength="16" />
                     </div>
                 </div>
                 <div class="row mb-3">
                     <label for="input36" class="col-sm-3 col-form-label">Email Address</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" name="email" old="{{ old('email') }}" id="input36"
+                        <input type="email" class="form-control" name="email" value="{{ old('email') }}" id="input36"
                             placeholder="Email" />
                     </div>
                 </div>
@@ -66,22 +66,22 @@
 
                         <select id="input39" class="form-select" name="roles">
                             <option value="">Pilih Roles</option>
-                            <option value="admin">
+                            <option value="admin" {{ old('roles') == 'admin' ? 'selected' : '' }}>
                                 Admin</option>
-                            <option value="karyawan">
+                            <option value="karyawan" {{ old('roles') == 'karyawan' ? 'selected' : '' }}>
                                 Karyawan</option>
-                            <option value="hrd">
+                            <option value="hrd" {{ old('roles') == 'hrd' ? 'selected' : '' }}>
                                 HRD</option>
-                            <option value="accounting">
+                            <option value="accounting" {{ old('roles') == 'accounting' ? 'selected' : '' }}>
                                 Accounting
                             </option>
-                            <option value="leader">
+                            <option value="leader" {{ old('roles') == 'leader' ? 'selected' : '' }}>
                                 Leader
                             </option>
-                            <option value="supervisor">
+                            <option value="supervisor" {{ old('roles') == 'supervisor' ? 'selected' : '' }}>
                                 Supervisor
                             </option>
-                            <option value="manager">
+                            <option value="manager" {{ old('roles') == 'manager' ? 'selected' : '' }}>
                                 Manager
                             </option>
                         </select>

@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,14 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->user()->id;
+
         return [
             //
             'name'      => 'required|string',
             'roles'     => 'required|string|in:admin,karyawan,hrd,accounting,leader,supervisor,manager',
             'nik'       => 'required|string|min:16',
-            'password'  => 'required|min:8',
-            'email'     => 'required|email|unique:users,email',
+            'email'     => 'required|email',
         ];
     }
 }

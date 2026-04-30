@@ -56,9 +56,11 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label for="input36" class="col-sm-3 col-form-label">Password</label>
+                    <label for="input36" class="col-sm-3 col-form-label">Password (Jika Tidak Diubah Maka Kosongkan
+                        Saja)</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" name="password" id="input36" placeholder="Password" />
+                        <input type="password" class="form-control" name="password" id="input36"
+                            placeholder="Password (Jika Tidak Diubah Maka Kosongkan Saja)" />
                     </div>
                 </div>
                 <div class="row mb-3">

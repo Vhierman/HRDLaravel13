@@ -90,7 +90,7 @@
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
+                    {{-- <tfoot>
                         <tr>
                             <th>Name</th>
                             <th>Position</th>
@@ -99,7 +99,7 @@
                             <th>Start date</th>
                             <th>Salary</th>
                         </tr>
-                    </tfoot>
+                    </tfoot> --}}
                 </table>
             </div>
         </div>

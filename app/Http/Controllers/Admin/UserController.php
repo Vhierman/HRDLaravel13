@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\UserRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
 use App\Models\User;
 use Alert;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,12 @@ class UserController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
         //Tampilkan Semua Data Dari Model User Kecuali User Yang Sedang Login
         $users = User::where('id', '!=', Auth::user()->id)->get();
-        
         //Tampilkan View User
         return view('admin.pages.user.index',[
             'users' => $users
@@ -31,6 +35,9 @@ class UserController extends Controller
     public function create()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
         return view('admin.pages.user.create');
     }
 
@@ -40,6 +47,9 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
         $data = $request->all();
 
         User::create([
@@ -48,7 +58,7 @@ class UserController extends Controller
             'email'         => $request->input('email'),
             'password'      => bcrypt($request->input('password')),
             'roles'         => $request->input('roles'),
-            'edit_oleh'     => Auth::user()->name
+            'input_oleh'     => Auth::user()->name
             ]);
 
 
@@ -62,6 +72,9 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -69,6 +82,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
         //Ambil Semua Data Dari Model User Berdasarkan ID
         $user = User::findOrFail($id);
 
@@ -81,8 +97,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
         //Ambil Semua Data Dari Form
         $data = $request->all();
 
@@ -120,17 +139,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
-        $user  = User::findOrFail($id);
-        
-        //Hapus Oleh
-        $user->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        //Hapus Oleh
-
-        $user->delete();
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        User::find($id)->delete();
         Alert::error('Menghapus Data User','Oleh '.auth()->user()->name);
-        return redirect()->route('user.index');
+        return redirect()->route('user.index')->with('success', 'User deleted');
     }
 }

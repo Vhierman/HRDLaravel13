@@ -25,29 +25,32 @@
             {{-- Dashboard --}}
 
             {{-- Master --}}
-            <li>
-                <a class="has-arrow" href="#">
-                    <div class="parent-icon"><i class="material-icons-outlined">apps</i>
-                    </div>
-                    <div class="menu-title">Master</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('user.index') }}"><i class="material-icons-outlined">arrow_right</i>User</a>
-                    </li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Perusahaan</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Area</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Penempatan</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Golongan</a>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Jam Kerja</a>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Minimal Upah</a>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
-                            Kesehatan</a>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
-                            Ketenagakerjaan</a>
-                    </li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
+                <li>
+                    <a class="has-arrow" href="#">
+                        <div class="parent-icon"><i class="material-icons-outlined">apps</i>
+                        </div>
+                        <div class="menu-title">Master</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('user.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>User</a>
+                        </li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Perusahaan</a></li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Area</a></li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Penempatan</a></li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Golongan</a>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Jam Kerja</a>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Minimal Upah</a>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
+                                Kesehatan</a>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
+                                Ketenagakerjaan</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             {{-- Master --}}
 
             {{-- Karyawan --}}
