@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\AreaController;
+use App\Http\Controllers\Admin\DivisionController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -28,6 +29,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('company', CompanyController::class);
     Route::resource('area', AreaController::class);
+    Route::resource('division', DivisionController::class);
 });
 // Route Admin Area
 

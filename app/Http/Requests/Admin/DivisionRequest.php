@@ -12,7 +12,7 @@ class DivisionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class DivisionRequest extends FormRequest
     {
         return [
             //
+            'penempatan'  => 'required|string',
         ];
     }
 }
