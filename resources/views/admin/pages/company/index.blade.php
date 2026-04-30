@@ -10,7 +10,7 @@
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Data Users');
+@section('title', 'Data Perusahaan');
 
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -18,7 +18,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Users</li>
+                    <li class="breadcrumb-item active" aria-current="page">Perusahaan</li>
                 </ol>
             </nav>
         </div>
@@ -27,8 +27,8 @@
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
-                    <a href="{{ route('user.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data User
+                    <a href="{{ route('company.create') }}" class="btn btn-primary px-5 raised">
+                        Tambah Data Perusahaan
                     </a>
                 </div>
             </div>
@@ -38,20 +38,13 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Karyawan</th>
-                            <th>NIK</th>
-                            <th>Email</th>
-                            <th>Roles</th>
+                            <th>Nama Perusahaan</th>
                             <th>Action</th>
                         </tr>
                         <tr class="search-row">
                             <th></th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Nama..." />
-                            </th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari NIK..." /></th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Email..." />
-                            </th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Role..." />
+                            <th><input type="text" class="form-control form-control-sm"
+                                    placeholder="Cari Nama Perusahaan..." />
                             </th>
                             <th></th>
                         </tr>
@@ -60,29 +53,25 @@
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($users as $user)
+                        @foreach ($companies as $company)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->nik }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->roles }}</td>
+                                <td>{{ $company->nama_perusahaan }}</td>
                                 <td>
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">
-                                            <a href="{{ route('user.edit', $user->id) }}"
+                                            <a href="{{ route('company.edit', $company->id) }}"
                                                 class="btn btn-success raised d-flex gap-2">
                                                 <i class="material-icons-outlined">edit</i>
                                             </a>
                                         </div>
                                         <div class="col">
-                                            <form action="{{ route('user.destroy', $user->id) }}" method="POST">
+                                            <form action="{{ route('company.destroy', $company->id) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-danger raised d-flex gap-2">
                                                     <i class="material-icons-outlined">delete</i>
                                                 </button>
-
                                             </form>
                                         </div>
                                     </div>
@@ -90,16 +79,6 @@
                             </tr>
                         @endforeach
                     </tbody>
-                    {{-- <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
-                        </tr>
-                    </tfoot> --}}
                 </table>
             </div>
         </div>

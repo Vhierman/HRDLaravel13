@@ -1,8 +1,7 @@
 @extends('admin.layouts.base')
-@section('title', 'Dashboard Admin');
+@section('title', 'Tambah User');
 
 @section('content')
-    {{-- <h1>User</h1> --}}
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">Master</div>

@@ -9,6 +9,7 @@ use App\Http\Controllers\User\LoginController as UserLoginController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CompanyController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -24,6 +25,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
     Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
     Route::resource('user', UserController::class);
+    Route::resource('company', CompanyController::class);
 });
 // Route Admin Area
 

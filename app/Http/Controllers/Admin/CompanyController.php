@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\CompanyRequest;
+use App\Models\Admin\Companies;
+use Alert;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -13,6 +17,16 @@ class CompanyController extends Controller
     public function index()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        //Tampilkan Semua Data Dari Model Company
+        $companies = Companies::all();
+        //Tampilkan View Company
+        return view('admin.pages.company.index',[
+            'companies' => $companies
+        ]);
     }
 
     /**
@@ -21,14 +35,31 @@ class CompanyController extends Controller
     public function create()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        return view('admin.pages.company.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyRequest $request)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $data = $request->all();
+
+        Companies::create([
+            'nama_perusahaan'   => $request->input('nama_perusahaan'),
+            'input_oleh'        => Auth::user()->name
+            ]);
+
+        Alert::success('Success Input Data Perusahaan','Oleh '.auth()->user()->name);
+        return redirect()->route('company.index');
     }
 
     /**
@@ -37,22 +68,49 @@ class CompanyController extends Controller
     public function show(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        //Ambil Semua Data Dari Model Company Berdasarkan ID
+        $company = Companies::findOrFail($id);
+
+        //Tampilkan View Edit Company
+        return view('admin.pages.company.edit',[
+        'company' => $company
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CompanyRequest $request,$id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $company = Companies::findOrFail($id);
+
+        $company->update([
+            'nama_perusahaan'   => $request->input('nama_perusahaan'),
+            'edit_oleh'         => Auth::user()->name
+            ]);
+
+        Alert::success('Success Update Data Perusahaan','Oleh '.auth()->user()->name);
+        return redirect()->route('company.index');
     }
 
     /**
@@ -61,5 +119,18 @@ class CompanyController extends Controller
     public function destroy(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $company  = Companies::findOrFail($id);        
+        //Hapus Oleh
+        $company->update([
+            'hapus_oleh'    => auth()->user()->name
+        ]);
+        //Hapus Oleh
+        $company->delete();
+        Alert::error('Menghapus Data Perusahaan','Oleh '.auth()->user()->name);
+        return redirect()->route('company.index');
     }
 }
