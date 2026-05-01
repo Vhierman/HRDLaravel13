@@ -12,7 +12,7 @@ class WorkingHourRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,8 @@ class WorkingHourRequest extends FormRequest
     {
         return [
             //
+            'jam_masuk'     => 'required',
+            'jam_pulang'    => 'required',
         ];
     }
 }

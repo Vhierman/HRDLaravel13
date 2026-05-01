@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\WorkingHourRequest;
+use App\Models\Admin\WorkingHours;
+use Alert;
+use Illuminate\Support\Facades\Auth;
 
 class WorkingHourController extends Controller
 {
@@ -13,6 +17,14 @@ class WorkingHourController extends Controller
     public function index()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $working_hours = WorkingHours::all();
+        return view('admin.pages.working_hour.index',[
+            'working_hours' => $working_hours
+        ]);
     }
 
     /**
@@ -21,14 +33,30 @@ class WorkingHourController extends Controller
     public function create()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        return view('admin.pages.working_hour.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WorkingHourRequest $request)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        $data = $request->all();
+        WorkingHours::create([
+            'jam_masuk'     => $request->input('jam_masuk'),
+            'jam_pulang'    => $request->input('jam_pulang'),
+            'input_oleh'    => Auth::user()->name
+            ]);
+
+        Alert::success('Success Input Data Jam Kerja','Oleh '.auth()->user()->name);
+        return redirect()->route('working_hour.index');
     }
 
     /**
@@ -37,6 +65,9 @@ class WorkingHourController extends Controller
     public function show(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -45,14 +76,32 @@ class WorkingHourController extends Controller
     public function edit(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        $working_hour = WorkingHours::findOrFail($id);
+        return view('admin.pages.working_hour.edit',[
+        'working_hour' => $working_hour
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(WorkingHourRequest $request, string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        $working_hour = WorkingHours::findOrFail($id);
+        $working_hour->update([
+            'jam_masuk'     => $request->input('jam_masuk'),
+            'jam_pulang'    => $request->input('jam_pulang'),
+            'edit_oleh'    => Auth::user()->name
+            ]);
+        Alert::success('Success Update Data Jam Kerja','Oleh '.auth()->user()->name);
+        return redirect()->route('working_hour.index');
     }
 
     /**
@@ -61,5 +110,16 @@ class WorkingHourController extends Controller
     public function destroy(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $working_hour  = WorkingHours::findOrFail($id);        
+        $working_hour->update([
+            'hapus_oleh'    => auth()->user()->name
+        ]);
+        $working_hour->delete();
+        Alert::error('Menghapus Data Jam Kerja','Oleh '.auth()->user()->name);
+        return redirect()->route('working_hour.index');
     }
 }

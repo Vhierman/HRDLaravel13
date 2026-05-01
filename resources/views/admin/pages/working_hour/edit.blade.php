@@ -1,0 +1,82 @@
+@extends('admin.layouts.base')
+@section('title', 'Edit Jam Kerja');
+
+@section('content')
+
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Master</div>
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item active" aria-current="page">Edit Jam Kerja</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card">
+
+        {{-- Pesan Error --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        {{-- Pesan Error --}}
+
+        <div class="card-body p-4">
+            <h5 class="mb-4">Form Edit Jam Kerja</h5>
+            <form action="{{ route('working_hour.update', $working_hour->id) }}" method="post"
+                enctype="multipart/form-data">
+                @method('PUT')
+                @csrf
+                <div class="row mb-3">
+                    <label for="input35" class="col-sm-3 col-form-label">Jam Masuk</label>
+                    <div class="col-sm-9">
+                        <input type="time" class="form-control" onkeyup="huruf(this);" name="jam_masuk"
+                            value="{{ $working_hour->jam_masuk }}" id="input35" placeholder="Jam Masuk" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="input35" class="col-sm-3 col-form-label">Jam Pulang</label>
+                    <div class="col-sm-9">
+                        <input type="time" class="form-control" onkeyup="huruf(this);" name="jam_pulang"
+                            value="{{ $working_hour->jam_pulang }}" id="input35" placeholder="Jam Pulang" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <div class="d-md-flex d-grid align-items-center gap-3">
+                            <div class="row row-cols-auto g-3">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary px-4 raised d-flex gap-2"><i
+                                            class="material-icons-outlined">save</i>Simpan</button>
+                                </div>
+                                <div class="col">
+                                    <a href="{{ route('working_hour.index') }}"
+                                        class="btn btn-danger px-4 raised d-flex gap-2">
+                                        <i class="material-icons-outlined">cancel</i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+
+@section('js')
+    {{-- SweetAlert --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- On Key Up --}}
+    <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
+@endsection

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\GolonganController;
+use App\Http\Controllers\Admin\MinimalSalaryController;
+use App\Http\Controllers\Admin\WorkingHourController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -34,6 +36,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('division', DivisionController::class);
     Route::resource('position', PositionController::class);
     Route::resource('golongan', GolonganController::class);
+    Route::resource('minimal_salary', MinimalSalaryController::class);
+    Route::resource('working_hour', WorkingHourController::class);
 });
 // Route Admin Area
 
