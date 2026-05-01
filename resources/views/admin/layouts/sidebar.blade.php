@@ -53,7 +53,8 @@
                         <li><a href="{{ route('maksimal_upah_bpjskesehatan.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
                                 Kesehatan</a>
-                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
+                        <li><a href="{{ route('maksimal_upah_bpjstk.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
                                 Ketenagakerjaan</a>
                         </li>
                     </ul>

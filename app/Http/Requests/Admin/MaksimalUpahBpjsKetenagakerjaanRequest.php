@@ -12,7 +12,7 @@ class MaksimalUpahBpjsKetenagakerjaanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class MaksimalUpahBpjsKetenagakerjaanRequest extends FormRequest
     {
         return [
             //
+            'maksimal_upah_bpjsketenagakerjaan'     => 'required|numeric',
         ];
     }
 }

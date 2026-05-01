@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\GolonganController;
 use App\Http\Controllers\Admin\WorkingHourController;
 use App\Http\Controllers\Admin\MinimalSalaryController;
 use App\Http\Controllers\Admin\MaksimalUpahBpjsKesehatanController;
+use App\Http\Controllers\Admin\MaksimalUpahBpjsKetenagakerjaanController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -40,6 +41,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('working_hour', WorkingHourController::class);
     Route::resource('minimal_salary', MinimalSalaryController::class);
     Route::resource('maksimal_upah_bpjskesehatan', MaksimalUpahBpjsKesehatanController::class);
+    Route::resource('maksimal_upah_bpjstk', MaksimalUpahBpjsKetenagakerjaanController::class);
 });
 // Route Admin Area
 
