@@ -116,15 +116,6 @@ class MinimalSalaryController extends Controller
             abort(403);
         }
 
-        // $minimal_salary  = MinimalSalaries::findOrFail($id);        
-        // $minimal_salary->update([
-        //     'hapus_oleh'    => auth()->user()->name
-        // ]);
-        // $minimal_salary->delete();
-        // Alert::error('Menghapus Data Minimal Upah','Oleh '.auth()->user()->name);
-        // return redirect()->route('minimal_salary.index');
-
-
         DB::transaction(function () use ($id) {
             $minimal_salary = MinimalSalaries::findOrFail($id);
             $minimal_salary->update([
@@ -132,7 +123,6 @@ class MinimalSalaryController extends Controller
             ]);
             $minimal_salary->delete();
         });
-
         Alert::error('Menghapus Data Minimal Upah','Oleh '.auth()->user()->name);
         return redirect()->route('minimal_salary.index');
     }

@@ -50,7 +50,8 @@
                                     class="material-icons-outlined">arrow_right</i>Jam Kerja</a>
                         <li><a href="{{ route('minimal_salary.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Minimal Upah</a>
-                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
+                        <li><a href="{{ route('maksimal_upah_bpjskesehatan.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
                                 Kesehatan</a>
                         <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
                                 Ketenagakerjaan</a>
