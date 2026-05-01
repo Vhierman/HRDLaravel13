@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\GolonganRequest;
 use App\Models\Admin\Golongans;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GolonganController extends Controller
 {
@@ -36,6 +37,7 @@ class GolonganController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         return view('admin.pages.golongan.create');
     }
 
@@ -48,12 +50,12 @@ class GolonganController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $data = $request->all();
         Golongans::create([
             'golongan'          => $request->input('golongan'),
             'input_oleh'        => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Golongan','Oleh '.auth()->user()->name);
         return redirect()->route('golongan.index');
     }
@@ -78,6 +80,7 @@ class GolonganController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $golongan = Golongans::findOrFail($id);
         return view('admin.pages.golongan.edit',[
         'golongan' => $golongan
@@ -113,11 +116,13 @@ class GolonganController extends Controller
             abort(403);
         }
 
-        $golongan  = Golongans::findOrFail($id);        
-        $golongan->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        $golongan->delete();
+        DB::transaction(function () use ($id) {
+            $golongan = Golongans::findOrFail($id);
+            $golongan->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $golongan->delete();
+        });
         Alert::error('Menghapus Data Golongan','Oleh '.auth()->user()->name);
         return redirect()->route('golongan.index');
     }

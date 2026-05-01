@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\DivisionRequest;
 use App\Models\Admin\Divisions;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DivisionController extends Controller
 {
@@ -20,9 +21,8 @@ class DivisionController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-        //Tampilkan Semua Data Dari Model Penempatan
+
         $divisions = Divisions::all();
-        //Tampilkan View Penempatan
         return view('admin.pages.division.index',[
             'divisions' => $divisions
         ]);
@@ -49,13 +49,12 @@ class DivisionController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-        $data = $request->all();
 
+        $data = $request->all();
         Divisions::create([
             'penempatan'        => $request->input('penempatan'),
             'input_oleh'        => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Penempatan','Oleh '.auth()->user()->name);
         return redirect()->route('division.index');
     }
@@ -81,10 +80,7 @@ class DivisionController extends Controller
             abort(403);
         }
 
-        //Ambil Semua Data Dari Model Penempatan Berdasarkan ID
         $division = Divisions::findOrFail($id);
-
-        //Tampilkan View Edit Penempatan
         return view('admin.pages.division.edit',[
         'division' => $division
         ]);
@@ -105,7 +101,6 @@ class DivisionController extends Controller
             'penempatan'        => $request->input('penempatan'),
             'edit_oleh'         => Auth::user()->name
             ]);
-
         Alert::success('Success Update Data Penempatan','Oleh '.auth()->user()->name);
         return redirect()->route('division.index');
     }
@@ -120,13 +115,14 @@ class DivisionController extends Controller
             abort(403);
         }
 
-        $division  = Divisions::findOrFail($id);        
-        //Hapus Oleh
-        $division->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        //Hapus Oleh
-        $division->delete();
+        DB::transaction(function () use ($id) {
+            $division = Divisions::findOrFail($id);
+            $division->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $division->delete();
+        });
+
         Alert::error('Menghapus Data Penempatan','Oleh '.auth()->user()->name);
         return redirect()->route('division.index');
     }

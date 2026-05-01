@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\AreaRequest;
 use App\Models\Admin\Areas;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AreaController extends Controller
 {
@@ -21,9 +22,7 @@ class AreaController extends Controller
             abort(403);
         }
 
-        //Tampilkan Semua Data Dari Model Area
         $areas = Areas::all();
-        //Tampilkan View Area
         return view('admin.pages.area.index',[
             'areas' => $areas
         ]);
@@ -52,12 +51,10 @@ class AreaController extends Controller
         }
 
         $data = $request->all();
-
         Areas::create([
             'area'              => $request->input('area'),
             'input_oleh'        => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Area','Oleh '.auth()->user()->name);
         return redirect()->route('area.index');
     }
@@ -83,10 +80,7 @@ class AreaController extends Controller
             abort(403);
         }
 
-        //Ambil Semua Data Dari Model Area Berdasarkan ID
         $area = Areas::findOrFail($id);
-
-        //Tampilkan View Edit Area
         return view('admin.pages.area.edit',[
         'area' => $area
         ]);
@@ -103,12 +97,10 @@ class AreaController extends Controller
         }
 
         $area = Areas::findOrFail($id);
-
         $area->update([
             'area'              => $request->input('area'),
             'edit_oleh'         => Auth::user()->name
             ]);
-
         Alert::success('Success Update Data Area','Oleh '.auth()->user()->name);
         return redirect()->route('area.index');
     }
@@ -123,13 +115,13 @@ class AreaController extends Controller
             abort(403);
         }
 
-        $area  = Areas::findOrFail($id);        
-        //Hapus Oleh
-        $area->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        //Hapus Oleh
-        $area->delete();
+        DB::transaction(function () use ($id) {
+            $area = Areas::findOrFail($id);
+            $area->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $area->delete();
+        });
         Alert::error('Menghapus Data Area','Oleh '.auth()->user()->name);
         return redirect()->route('area.index');
     }

@@ -24,7 +24,7 @@ class DivisionRequest extends FormRequest
     {
         return [
             //
-            'penempatan'  => 'required|string',
+            'penempatan'  => 'required',
         ];
     }
 }

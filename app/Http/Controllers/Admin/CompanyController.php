@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\CompanyRequest;
 use App\Models\Admin\Companies;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -21,9 +22,7 @@ class CompanyController extends Controller
             abort(403);
         }
 
-        //Tampilkan Semua Data Dari Model Company
         $companies = Companies::all();
-        //Tampilkan View Company
         return view('admin.pages.company.index',[
             'companies' => $companies
         ]);
@@ -52,12 +51,10 @@ class CompanyController extends Controller
         }
 
         $data = $request->all();
-
         Companies::create([
             'nama_perusahaan'   => $request->input('nama_perusahaan'),
             'input_oleh'        => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Perusahaan','Oleh '.auth()->user()->name);
         return redirect()->route('company.index');
     }
@@ -82,11 +79,7 @@ class CompanyController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
-        //Ambil Semua Data Dari Model Company Berdasarkan ID
         $company = Companies::findOrFail($id);
-
-        //Tampilkan View Edit Company
         return view('admin.pages.company.edit',[
         'company' => $company
         ]);
@@ -103,7 +96,6 @@ class CompanyController extends Controller
         }
 
         $company = Companies::findOrFail($id);
-
         $company->update([
             'nama_perusahaan'   => $request->input('nama_perusahaan'),
             'edit_oleh'         => Auth::user()->name
@@ -123,13 +115,14 @@ class CompanyController extends Controller
             abort(403);
         }
 
-        $company  = Companies::findOrFail($id);        
-        //Hapus Oleh
-        $company->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        //Hapus Oleh
-        $company->delete();
+        DB::transaction(function () use ($id) {
+            $company = Companies::findOrFail($id);
+            $company->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $company->delete();
+        });
+
         Alert::error('Menghapus Data Perusahaan','Oleh '.auth()->user()->name);
         return redirect()->route('company.index');
     }

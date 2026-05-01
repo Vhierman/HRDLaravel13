@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\PositionRequest;
 use App\Models\Admin\Positions;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PositionController extends Controller
 {
@@ -36,6 +37,7 @@ class PositionController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         return view('admin.pages.position.create');
     }
 
@@ -48,12 +50,12 @@ class PositionController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $data = $request->all();
         Positions::create([
             'jabatan'           => $request->input('jabatan'),
             'input_oleh'        => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Jabatan','Oleh '.auth()->user()->name);
         return redirect()->route('position.index');
     }
@@ -114,11 +116,14 @@ class PositionController extends Controller
             abort(403);
         }
 
-        $position  = Positions::findOrFail($id);        
-        $position->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        $position->delete();
+        DB::transaction(function () use ($id) {
+            $position = Positions::findOrFail($id);
+            $position->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $position->delete();
+        });
+
         Alert::error('Menghapus Data Jabatan','Oleh '.auth()->user()->name);
         return redirect()->route('position.index');
     }

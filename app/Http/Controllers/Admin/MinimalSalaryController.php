@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\MinimalSalaryRequest;
+use App\Models\Admin\MinimalSalaries;
+use Alert;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class MinimalSalaryController extends Controller
 {
@@ -13,6 +18,14 @@ class MinimalSalaryController extends Controller
     public function index()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $minimal_salaries = MinimalSalaries::all();
+        return view('admin.pages.minimal_salary.index',[
+            'minimal_salaries' => $minimal_salaries
+        ]);
     }
 
     /**
@@ -21,14 +34,30 @@ class MinimalSalaryController extends Controller
     public function create()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        return view('admin.pages.minimal_salary.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MinimalSalaryRequest $request)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $data = $request->all();
+        MinimalSalaries::create([
+            'minimal_upah'      => $request->input('minimal_upah'),
+            'input_oleh'        => Auth::user()->name
+            ]);
+
+        Alert::success('Success Input Data Minimal Upah','Oleh '.auth()->user()->name);
+        return redirect()->route('minimal_salary.index');
     }
 
     /**
@@ -37,6 +66,9 @@ class MinimalSalaryController extends Controller
     public function show(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -45,14 +77,33 @@ class MinimalSalaryController extends Controller
     public function edit(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $minimal_salary = MinimalSalaries::findOrFail($id);
+        return view('admin.pages.minimal_salary.edit',[
+        'minimal_salary' => $minimal_salary
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(MinimalSalaryRequest $request, string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $minimal_salary = MinimalSalaries::findOrFail($id);
+        $minimal_salary->update([
+            'minimal_upah'      => $request->input('minimal_upah'),
+            'edit_oleh'         => Auth::user()->name
+            ]);
+        Alert::success('Success Update Data Minimal Upah','Oleh '.auth()->user()->name);
+        return redirect()->route('minimal_salary.index');
     }
 
     /**
@@ -61,5 +112,28 @@ class MinimalSalaryController extends Controller
     public function destroy(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        // $minimal_salary  = MinimalSalaries::findOrFail($id);        
+        // $minimal_salary->update([
+        //     'hapus_oleh'    => auth()->user()->name
+        // ]);
+        // $minimal_salary->delete();
+        // Alert::error('Menghapus Data Minimal Upah','Oleh '.auth()->user()->name);
+        // return redirect()->route('minimal_salary.index');
+
+
+        DB::transaction(function () use ($id) {
+            $minimal_salary = MinimalSalaries::findOrFail($id);
+            $minimal_salary->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $minimal_salary->delete();
+        });
+
+        Alert::error('Menghapus Data Minimal Upah','Oleh '.auth()->user()->name);
+        return redirect()->route('minimal_salary.index');
     }
 }

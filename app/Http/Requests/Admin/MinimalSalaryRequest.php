@@ -12,7 +12,7 @@ class MinimalSalaryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class MinimalSalaryRequest extends FormRequest
     {
         return [
             //
+            'minimal_upah'     => 'required|numeric',
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\WorkingHourRequest;
 use App\Models\Admin\WorkingHours;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class WorkingHourController extends Controller
 {
@@ -36,6 +37,7 @@ class WorkingHourController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         return view('admin.pages.working_hour.create');
     }
 
@@ -48,13 +50,13 @@ class WorkingHourController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $data = $request->all();
         WorkingHours::create([
             'jam_masuk'     => $request->input('jam_masuk'),
             'jam_pulang'    => $request->input('jam_pulang'),
             'input_oleh'    => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Jam Kerja','Oleh '.auth()->user()->name);
         return redirect()->route('working_hour.index');
     }
@@ -79,6 +81,7 @@ class WorkingHourController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $working_hour = WorkingHours::findOrFail($id);
         return view('admin.pages.working_hour.edit',[
         'working_hour' => $working_hour
@@ -94,6 +97,7 @@ class WorkingHourController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $working_hour = WorkingHours::findOrFail($id);
         $working_hour->update([
             'jam_masuk'     => $request->input('jam_masuk'),
@@ -114,11 +118,13 @@ class WorkingHourController extends Controller
             abort(403);
         }
 
-        $working_hour  = WorkingHours::findOrFail($id);        
-        $working_hour->update([
-            'hapus_oleh'    => auth()->user()->name
-        ]);
-        $working_hour->delete();
+        DB::transaction(function () use ($id) {
+            $working_hour = WorkingHours::findOrFail($id);
+            $working_hour->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $working_hour->delete();
+        });
         Alert::error('Menghapus Data Jam Kerja','Oleh '.auth()->user()->name);
         return redirect()->route('working_hour.index');
     }

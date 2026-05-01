@@ -1,5 +1,5 @@
 @extends('admin.layouts.base')
-@section('title', 'Tambah Jam Kerja');
+@section('title', 'Tambah Minimal Upah');
 
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Jam Kerja</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Minimal Upah</li>
                 </ol>
             </nav>
         </div>
@@ -30,21 +30,14 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Tambah Jam Kerja</h5>
-            <form action="{{ route('working_hour.store') }}" method="post" enctype="multipart/form-data">
+            <h5 class="mb-4">Form Tambah Minimal Upah</h5>
+            <form action="{{ route('minimal_salary.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Jam Masuk</label>
+                    <label for="input35" class="col-sm-3 col-form-label">Minimal Upah</label>
                     <div class="col-sm-9">
-                        <input type="time" class="form-control" name="jam_masuk" value="{{ old('jam_masuk') }}"
-                            id="input35" placeholder="Jam Masuk" />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Jam Pulang</label>
-                    <div class="col-sm-9">
-                        <input type="time" class="form-control" name="jam_pulang" value="{{ old('jam_pulang') }}"
-                            id="input35" placeholder="Jam Pulang" />
+                        <input type="text" class="form-control" onkeyup="angka(this);" name="minimal_upah"
+                            value="{{ old('minimal_upah') }}" id="input35" placeholder="Minimal Upah" />
                     </div>
                 </div>
 
@@ -58,7 +51,7 @@
                                             class="material-icons-outlined">save</i>Simpan</button>
                                 </div>
                                 <div class="col">
-                                    <a href="{{ route('working_hour.index') }}"
+                                    <a href="{{ route('minimal_salary.index') }}"
                                         class="btn btn-danger px-4 raised d-flex gap-2">
                                         <i class="material-icons-outlined">cancel</i>Cancel
                                     </a>

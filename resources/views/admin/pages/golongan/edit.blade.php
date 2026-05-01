@@ -1,5 +1,5 @@
 @extends('admin.layouts.base')
-@section('title', 'Edit Jabatan');
+@section('title', 'Edit Golongan');
 
 @section('content')
 
