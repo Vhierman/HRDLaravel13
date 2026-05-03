@@ -10,15 +10,15 @@
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Data Maksimal Upah BPJS Ketenagakerjaan');
+@section('title', 'Data Karyawan');
 
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Master</div>
+        <div class="breadcrumb-title pe-3">Karyawan</div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Maksimal Upah BPJS Ketenagakerjaan</li>
+                    <li class="breadcrumb-item active" aria-current="page">Karyawan Aktif</li>
                 </ol>
             </nav>
         </div>
@@ -27,8 +27,8 @@
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
-                    <a href="{{ route('maksimal_upah_bpjstk.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Maksimal Upah BPJS Ketenagakerjaan
+                    <a href="{{ route('employee.create') }}" class="btn btn-primary px-5 raised">
+                        Tambah Data Karyawan
                     </a>
                 </div>
             </div>
@@ -38,13 +38,13 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Maksimal Upah BPJS Ketenagakerjaan</th>
+                            <th>Nama Karyawan</th>
                             <th>Action</th>
                         </tr>
                         <tr class="search-row">
                             <th></th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Maksimal Upah BPJS Ketenagakerjaan..." />
+                                    placeholder="Cari Nama Karyawan..." />
                             </th>
                             <th></th>
                         </tr>
@@ -53,23 +53,21 @@
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($maksimal_upah_bpjsketenagakerjaans as $maksimal_upah_bpjsketenagakerjaan)
+                        @foreach ($employees as $employee)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ 'Rp.' . number_format($maksimal_upah_bpjsketenagakerjaan->maksimal_upah_bpjsketenagakerjaan) }}
+                                <td>{{ 'Rp.' . number_format($employee->employee) }}
                                 </td>
                                 <td>
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">
-                                            <a href="{{ route('maksimal_upah_bpjstk.edit', $maksimal_upah_bpjsketenagakerjaan->id) }}"
+                                            <a href="{{ route('employee.edit', $employee->id) }}"
                                                 class="btn btn-success raised d-flex gap-2">
                                                 <i class="material-icons-outlined">edit</i>
                                             </a>
                                         </div>
                                         <div class="col">
-                                            <form
-                                                action="{{ route('maksimal_upah_bpjstk.destroy', $maksimal_upah_bpjsketenagakerjaan->id) }}"
-                                                method="POST">
+                                            <form action="{{ route('employee.destroy', $employee->id) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-danger raised d-flex gap-2">

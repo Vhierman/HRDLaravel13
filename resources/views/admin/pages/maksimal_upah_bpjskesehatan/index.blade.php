@@ -56,7 +56,8 @@
                         @foreach ($maksimal_upah_bpjskesehatans as $maksimal_upah_bpjskesehatan)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $maksimal_upah_bpjskesehatan->maksimal_upah_bpjskesehatan }}</td>
+                                <td>{{ 'Rp.' . number_format($maksimal_upah_bpjskesehatan->maksimal_upah_bpjskesehatan) }}
+                                </td>
                                 <td>
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">

@@ -56,7 +56,7 @@
                         @foreach ($minimal_salaries as $minimal_salary)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $minimal_salary->minimal_upah }}</td>
+                                <td>{{ 'Rp.' . number_format($minimal_salary->minimal_upah) }}</td>
                                 <td>
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">
