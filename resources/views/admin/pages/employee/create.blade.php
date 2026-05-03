@@ -100,6 +100,7 @@
                             <p class="mb-4">Deskripsi Pekerjaan</p>
 
                             <div class="row g-3">
+
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label">Perusahaan</label>
                                     <select name="companies_id" class="form-select">
@@ -113,6 +114,18 @@
                                     </select>
                                 </div>
 
+                                <div class="col-12 col-lg-6">
+                                    <label class="form-label">Area</label>
+                                    <select name="areas_id" class="form-select">
+                                        <option value="">Pilih Area</option>
+                                        @foreach ($areas as $area)
+                                            <option value="{{ $area->id }}"
+                                                {{ old('areas_id') == $area->id ? 'selected' : '' }}>
+                                                {{ $area->area }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label">Golongan</label>
                                     <select name="golongans_id" class="form-select">

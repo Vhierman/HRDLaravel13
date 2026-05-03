@@ -38,11 +38,14 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Area</th>
                             <th>Minimal Upah</th>
                             <th>Action</th>
                         </tr>
                         <tr class="search-row">
                             <th></th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Area..." />
+                            </th>
                             <th><input type="text" class="form-control form-control-sm"
                                     placeholder="Cari Minimal Upah..." />
                             </th>
@@ -56,6 +59,7 @@
                         @foreach ($minimal_salaries as $minimal_salary)
                             <tr>
                                 <td>{{ $no++ }}</td>
+                                <td>{{ $minimal_salary->areas->area }}</td>
                                 <td>{{ 'Rp.' . number_format($minimal_salary->minimal_upah) }}</td>
                                 <td>
                                     <div class="row row-cols-auto g-3">

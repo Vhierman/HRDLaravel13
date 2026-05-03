@@ -25,6 +25,7 @@ class MinimalSalaryRequest extends FormRequest
         return [
             //
             'minimal_upah'     => 'required|numeric',
+            'areas_id'         => 'required|exists:areas,id',
         ];
     }
 }

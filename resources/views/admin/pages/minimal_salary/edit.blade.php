@@ -34,17 +34,29 @@
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
-                <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Minimal Upah</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" onkeyup="angka(this);" name="minimal_upah"
-                            value="{{ $minimal_salary->minimal_upah }}" id="input35" placeholder="Minimal Upah" />
+                <div class="row g-3">
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label">Area</label>
+                        <select name="areas_id" class="form-select">
+                            <option value="{{ $minimal_salary->areas_id }}">Pilih Area</option>
+                            @foreach ($areas as $area)
+                                <option value="{{ $area->id }}"
+                                    @if ($minimal_salary->areas_id == $area->id) {{ 'selected="selected"' }} @endif>
+                                    {{ $area->area }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label">Minimal Upah</label>
+                        <input type="text" name="minimal_upah" onkeyup="angka(this);"
+                            value="{{ $minimal_salary->minimal_upah }}" class="form-control"
+                            placeholder="Masukan Minimal Upah">
                     </div>
                 </div>
-
-                <div class="row">
-                    <label class="col-sm-3 col-form-label"></label>
-                    <div class="col-sm-9">
+                <br>
+                <div class="row g-3">
+                    <div class="col-sm-12">
                         <div class="d-md-flex d-grid align-items-center gap-3">
                             <div class="row row-cols-auto g-3">
                                 <div class="col">

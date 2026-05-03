@@ -17,6 +17,7 @@ class MinimalSalaries extends Model
 
     protected $fillable = [
         'minimal_upah',
+        'areas_id',
         'input_oleh',
         'edit_oleh',
         'hapus_oleh'
@@ -25,4 +26,8 @@ class MinimalSalaries extends Model
     protected $hidden =[
         
     ];
+
+    public function areas() {
+        return $this->belongsTo(Areas::class,'areas_id','id');
+    }
 }

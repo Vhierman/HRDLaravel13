@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\MinimalSalaryRequest;
 use App\Models\Admin\MinimalSalaries;
+use App\Models\Admin\Areas;
 use Alert;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,10 @@ class MinimalSalaryController extends Controller
             abort(403);
         }
 
-        $minimal_salaries = MinimalSalaries::all();
+        $minimal_salaries = MinimalSalaries::with([
+                'areas'
+                ])->get();
+
         return view('admin.pages.minimal_salary.index',[
             'minimal_salaries' => $minimal_salaries
         ]);
@@ -37,7 +41,11 @@ class MinimalSalaryController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-        return view('admin.pages.minimal_salary.create');
+
+        $areas      = Areas::all();
+        return view('admin.pages.minimal_salary.create',[
+            'areas'         => $areas
+        ]);
     }
 
     /**
@@ -53,6 +61,7 @@ class MinimalSalaryController extends Controller
         $data = $request->all();
         MinimalSalaries::create([
             'minimal_upah'      => $request->input('minimal_upah'),
+            'areas_id'          => $request->input('areas_id'),
             'input_oleh'        => Auth::user()->name
             ]);
 
@@ -81,9 +90,12 @@ class MinimalSalaryController extends Controller
             abort(403);
         }
 
+        $areas          = Areas::all();
         $minimal_salary = MinimalSalaries::findOrFail($id);
+        
         return view('admin.pages.minimal_salary.edit',[
-        'minimal_salary' => $minimal_salary
+        'minimal_salary' => $minimal_salary,
+        'areas'          => $areas
         ]);
     }
 
@@ -100,6 +112,7 @@ class MinimalSalaryController extends Controller
         $minimal_salary = MinimalSalaries::findOrFail($id);
         $minimal_salary->update([
             'minimal_upah'      => $request->input('minimal_upah'),
+            'areas_id'          => $request->input('areas_id'),
             'edit_oleh'         => Auth::user()->name
             ]);
         Alert::success('Success Update Data Minimal Upah','Oleh '.auth()->user()->name);
