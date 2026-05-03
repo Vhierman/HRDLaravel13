@@ -38,7 +38,6 @@ class EmployeeRequest extends FormRequest
             'nama_karyawan'             => 'required|string',
             'email_karyawan'            => 'required|email',
             'nomor_absen'               => 'required',
-            'nomor_npwp'                => 'required|numeric',
             'nomor_handphone'           => 'required|numeric',
             'tempat_lahir'              => 'required',
             'tanggal_lahir'             => 'required|date',
@@ -49,7 +48,6 @@ class EmployeeRequest extends FormRequest
             'status_nikah'              => 'required|string|in:Single,Menikah,Janda,Duda',
             'nama_ayah'                 => 'required|string',
             'nama_ibu'                  => 'required|string',
-            'nomor_kartu_keluarga'      => 'required|numeric',
             'alamat'                    => 'required',
             'rt'                        => 'required|numeric',
             'rw'                        => 'required|numeric',
@@ -58,12 +56,10 @@ class EmployeeRequest extends FormRequest
             'kota'                      => 'required',
             'provinsi'                  => 'required',
             'kode_pos'                  => 'required|numeric|min:5',
-            'nomor_bpjskesehatan'       => 'required|numeric|min:13',
-            'nomor_bpjsketenagakerjaan' => 'required|numeric|min:16',
-            'foto_karyawan'             => 'required|image',
-            'foto_ktp'                  => 'required|image',
-            'foto_npwp'                 => 'required|image',
-            'foto_kk'                   => 'required|image'
+            'foto_karyawan'             => 'required|image|mimes:jpeg,jpg,png|max:1024',
+            'foto_ktp'                  => 'required|image|mimes:jpeg,jpg,png|max:1024',
+            'foto_npwp'                 => 'required|image|mimes:jpeg,jpg,png|max:1024',
+            'foto_kk'                   => 'required|image|mimes:jpeg,jpg,png|max:1024'
         ];
     }
 }

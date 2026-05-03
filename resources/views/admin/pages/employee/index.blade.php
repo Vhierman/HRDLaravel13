@@ -56,7 +56,7 @@
                         @foreach ($employees as $employee)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ 'Rp.' . number_format($employee->employee) }}
+                                <td>{{ $employee->nama_karyawan }}
                                 </td>
                                 <td>
                                     <div class="row row-cols-auto g-3">

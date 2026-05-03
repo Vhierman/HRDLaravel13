@@ -226,9 +226,10 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <button type="button" class="btn btn-info" onclick="stepper1.next()">Next</button>
-                                </div>
+                            </div>
+                            <br>
+                            <div class="col-12 col-lg-6">
+                                <button type="button" class="btn btn-info" onclick="stepper1.next()">Next</button>
                             </div>
                         </div>
                         {{-- End Tab Divisi --}}
@@ -417,9 +418,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label">Kelurahan</label>
-                                    <input type="text" name="kelurahan" maxlength="3"
-                                        value="{{ old('kelurahan') }}" class="form-control"
-                                        placeholder="Masukan Nama Kelurahan">
+                                    <input type="text" name="kelurahan" value="{{ old('kelurahan') }}"
+                                        class="form-control" placeholder="Masukan Nama Kelurahan">
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label">Kecamatan</label>
