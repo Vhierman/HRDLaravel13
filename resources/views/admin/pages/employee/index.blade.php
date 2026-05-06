@@ -38,13 +38,39 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Karyawan</th>
+                            <th>Nama</th>
+                            <th>NIK</th>
+                            <th>Jabatan</th>
+                            <th>Penempatan</th>
+                            <th>Area</th>
+                            <th>Golongan</th>
+                            <th>Status</th>
+                            <th>Awal Kerja</th>
+                            <th>Akhir Kerja</th>
                             <th>Action</th>
                         </tr>
                         <tr class="search-row">
                             <th></th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Nama..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari NIK..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Jabatan..." />
+                            </th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Nama Karyawan..." />
+                                    placeholder="Cari Penempatan..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Area..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Golongan..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Status..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm"
+                                    placeholder="Cari Awal Kerja..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm"
+                                    placeholder="Cari Akhir Kerja..." />
                             </th>
                             <th></th>
                         </tr>
@@ -54,16 +80,63 @@
                             $no = 1;
                         @endphp
                         @foreach ($employees as $employee)
+                            @if ($employee->status_kerja == 'PKWTT')
+                                @php
+                                    $tanggal_akhir_kerja = $employee->status_kerja;
+                                    $status_kerja = 'Tetap';
+                                @endphp
+                            @elseif($employee->status_kerja == 'PKWT')
+                                @php
+                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
+                                        $employee->tanggal_akhir_kerja,
+                                    )->isoformat('DD-MM-Y');
+                                    $status_kerja = 'Kontrak';
+                                @endphp
+                            @elseif($employee->status_kerja == 'Harian')
+                                @php
+                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
+                                        $employee->tanggal_akhir_kerja,
+                                    )->isoformat('DD-MM-Y');
+                                    $status_kerja = 'Harian';
+                                @endphp
+                            @elseif($employee->status_kerja == 'Outsourcing')
+                                @php
+                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
+                                        $employee->tanggal_akhir_kerja,
+                                    )->isoformat('DD-MM-Y');
+                                    $status_kerja = 'Outsourcing';
+                                @endphp
+                            @else
+                                @php
+                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
+                                        $employee->tanggal_akhir_kerja,
+                                    )->isoformat('DD-MM-Y');
+
+                                @endphp
+                            @endif
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $employee->nama_karyawan }}
-                                </td>
+                                <td>{{ $employee->nama_karyawan }}</td>
+                                <td>{{ $employee->nik_karyawan }}</td>
+                                <td>{{ $employee->positions->jabatan }}</td>
+                                <td>{{ $employee->divisions->penempatan }}</td>
+                                <td>{{ $employee->areas->area }}</td>
+                                <td>{{ $employee->golongans->golongan }}</td>
+                                <td>{{ $status_kerja }}</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->tanggal_mulai_kerja)->isoformat('DD-MM-Y') }}</td>
+                                <td>{{ $tanggal_akhir_kerja }}</td>
                                 <td>
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">
                                             <a href="{{ route('employee.edit', $employee->id) }}"
                                                 class="btn btn-success raised d-flex gap-2">
                                                 <i class="material-icons-outlined">edit</i>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="{{ route('employee.show', $employee->id) }}"
+                                                class="btn btn-primary raised d-flex gap-2">
+                                                <i class="material-icons-outlined">visibility</i>
                                             </a>
                                         </div>
                                         <div class="col">

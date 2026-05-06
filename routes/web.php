@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\MinimalSalaryController;
 use App\Http\Controllers\Admin\MaksimalUpahBpjsKesehatanController;
 use App\Http\Controllers\Admin\MaksimalUpahBpjsKetenagakerjaanController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\HistoryContractController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -44,6 +45,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('maksimal_upah_bpjskesehatan', MaksimalUpahBpjsKesehatanController::class);
     Route::resource('maksimal_upah_bpjstk', MaksimalUpahBpjsKetenagakerjaanController::class);
     Route::resource('employee', EmployeeController::class);
+
+    Route::get('history_contract/pkwt/{nik_karyawan}', [HistoryContractController::class, 'pkwt'])->name('cetak.pkwt');
+    Route::resource('history_contract', HistoryContractController::class);
+    
 });
 // Route Admin Area
 

@@ -24,12 +24,13 @@
 
         <ul class="navbar-nav gap-1 nav-right-links align-items-center">
             <li class="nav-item d-lg-none mobile-search-btn">
-                <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">search</i></a>
+                <a class="nav-link" href="javascript:;"><i class="material-icons-outlined"></i></a>
             </li>
 
             <li class="nav-item dropdown position-static  d-md-flex d-none">
                 <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-auto-close="outside"
                     data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">done_all</i></a>
+
                 <div class="dropdown-menu dropdown-menu-end mega-menu shadow-lg p-4 p-lg-5">
                     <div class="mega-menu-widgets">
                         <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4 g-lg-5">

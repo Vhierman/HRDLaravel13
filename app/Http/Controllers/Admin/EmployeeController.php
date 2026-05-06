@@ -14,7 +14,9 @@ use App\Models\Admin\Positions;
 use App\Models\Admin\Golongans;
 use App\Models\Admin\Areas;
 use App\Models\Admin\MinimalSalaries;
+use App\Models\Admin\HistoryContracts;
 use Alert;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,7 +34,13 @@ class EmployeeController extends Controller
             abort(403);
         }
 
-        $employees = Employees::all();
+        $employees = Employees::with([
+                    'areas',
+                    'golongans',
+                    'divisions',
+                    'positions'
+                    ])->get();
+
         return view('admin.pages.employee.index',[
             'employees' => $employees
         ]);
@@ -82,30 +90,34 @@ class EmployeeController extends Controller
         
         $data       = $request->except(['_token', '_method']);
 
-        //Foto Karyawan
-        $foto_karyawan = $request->hasFile('foto_karyawan');
-        $originalfoto_karyawan = Str::random(10).$foto_karyawan->getClientOriginalName();
-        $foto_karyawan->storeAs('assets/foto/karyawan', $originalfoto_karyawan, 'public');
-        $data['foto_karyawan'] = $originalfoto_karyawan;
-        //Foto KTP
-        $foto_ktp = $request->hasFile('foto_ktp');
-        $originalfoto_ktp = Str::random(10).$foto_ktp->getClientOriginalName();
-        $foto_ktp->storeAs('assets/foto/ktp', $originalfoto_ktp, 'public');
-        $data['foto_ktp'] = $originalfoto_ktp;
-        //Foto NPWP
-        $foto_npwp = $request->hasFile('foto_npwp');
-        $originalfoto_npwp = Str::random(10).$foto_npwp->getClientOriginalName();
-        $foto_npwp->storeAs('assets/foto/npwp', $originalfoto_npwp, 'public');
-        $data['foto_npwp'] = $originalfoto_npwp;
-        //Foto KK
-        $foto_kk = $request->hasFile('foto_kk');
-        $originalfoto_kk = Str::random(10).$foto_kk->getClientOriginalName();
-        $foto_kk->storeAs('assets/foto/kk', $originalfoto_kk, 'public');
-        $data['foto_kk'] = $originalfoto_kk;
+        $fileFields = [
+            'foto_karyawan' => 'assets/foto/karyawan',
+            'foto_ktp'      => 'assets/foto/ktp',
+            'foto_npwp'     => 'assets/foto/npwp',
+            'foto_kk'       => 'assets/foto/kk',
+        ];
+
+        foreach ($fileFields as $field => $path) {
+            if ($request->hasFile($field)) {
+                // Ambil objek filenya, bukan status boolean-nya
+                $file = $request->file($field);
+                
+                // Buat nama unik
+                $fileName = Str::random(10) . $file->getClientOriginalName();
+                
+                // Simpan file
+                $file->storeAs($path, $fileName, 'public');
+                
+                // Masukkan nama file ke array data untuk disimpan ke database
+                $data[$field] = $fileName;
+            } else {
+                // Jika tidak ada file diunggah (saat create), pastikan nilainya null atau sesuai kebutuhan
+                $data[$field] = null;
+            }
+        }
 
         Employees::create($data);
-        // dd($data);
-
+        
         Alert::success('Success Input Data Karyawan','Oleh '.auth()->user()->name);
         return redirect()->route('employee.index');
 
@@ -120,6 +132,36 @@ class EmployeeController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
+        $employee               = Employees::findOrFail($id);
+        $golongans              = Golongans::all();
+        $companies              = Companies::all();
+        $divisions              = Divisions::all();
+        $positions              = Positions::all();
+        $working_hours          = WorkingHours::all();
+        $areas                  = Areas::all();
+
+        $today                  = Carbon::today();
+        $tanggal_lahir          = Carbon::parse($employee->tanggal_lahir);
+        $tanggal_mulai_kerja    = Carbon::parse($employee->tanggal_mulai_kerja);
+
+        $UmurLengkap            = $tanggal_lahir->diff($today)->format('%y Tahun, %m Bulan');
+        $MasaKerja              = $tanggal_mulai_kerja->diff($today)->format('%y Tahun, %m Bulan');
+
+        $history_contracts      = HistoryContracts::with(['employees'])->get();
+
+        return view ('admin.pages.employee.show',[
+            'employee'                  => $employee,
+            'golongans'                 => $golongans,
+            'companies'                 => $companies,
+            'divisions'                 => $divisions,
+            'positions'                 => $positions,
+            'working_hours'             => $working_hours,
+            'UmurLengkap'               => $UmurLengkap,
+            'MasaKerja'                 => $MasaKerja,
+            'areas'                     => $areas,
+            'history_contracts'         => $history_contracts
+        ]);
     }
 
     /**

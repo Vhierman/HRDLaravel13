@@ -12,7 +12,7 @@ class HistoryContractRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,9 @@ class HistoryContractRequest extends FormRequest
     {
         return [
             //
+            'awal_kontrak'      => 'required|date',
+            'akhir_kontrak'     => 'required|date|after_or_equal:awal_kontrak',
+            'status_kerja'      => 'required'
         ];
     }
 }
