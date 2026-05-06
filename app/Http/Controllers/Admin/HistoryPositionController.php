@@ -4,6 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\HistoryPositionRequest;
+use App\Models\Admin\Employees;
+use App\Models\Admin\HistoryPositions;
+use App\Models\Admin\Companies;
+use App\Models\Admin\WorkingHours;
+use App\Models\Admin\Divisions;
+use App\Models\Admin\Positions;
+use App\Models\Admin\Areas;
+use DB;
+use Alert;
+use Carbon\Carbon;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 class HistoryPositionController extends Controller
 {
@@ -13,6 +25,10 @@ class HistoryPositionController extends Controller
     public function index()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        
     }
 
     /**
@@ -21,14 +37,56 @@ class HistoryPositionController extends Controller
     public function create()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(HistoryPositionRequest $request)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        // try {
+
+        $employees_id           = $request->input('employees_id');
+        $nik_karyawan           = $request->input('nik_karyawan');
+        $companies_id           = $request->input('companies_id');
+        $areas_id               = $request->input('areas_id');
+        $divisions_id           = $request->input('divisions_id');
+        $positions_id           = $request->input('positions_id');
+        $tanggal_mutasi         = $request->input('tanggal_mutasi');
+
+    
+        HistoryPositions::create([
+            'employees_id'              => $employees_id,
+            'nik_karyawan'              => $nik_karyawan,
+            'companies_id_history'     => $companies_id,
+            'areas_id_history'         => $areas_id,
+            'divisions_id_history'     => $divisions_id,
+            'positions_id_history'     => $positions_id,
+            'tanggal_mutasi'            => $tanggal_mutasi,
+            'input_oleh'                => auth()->user()->name
+        ]);
+
+        $employees                  = Employees::where('nik_karyawan', $request->input('nik_karyawan'))->first();
+        $employees->update([
+            'companies_id'          => $companies_id,
+            'areas_id'              => $areas_id,
+            'divisions_id'          => $divisions_id,
+            'positions_id'          => $positions_id,
+            'edit_oleh'             => auth()->user()->name
+        ]);
+        
+        Alert::success('Success Input Data History Jabatan','Oleh '.auth()->user()->name);
+        return redirect()->route('employee.show',$employees->id);
+
+    
     }
 
     /**
@@ -37,6 +95,9 @@ class HistoryPositionController extends Controller
     public function show(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -45,14 +106,20 @@ class HistoryPositionController extends Controller
     public function edit(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(HistoryPositionRequest $request, string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -61,5 +128,47 @@ class HistoryPositionController extends Controller
     public function destroy(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $history_positions = HistoryPositions::findOrFail($id);
+        $employeeId = $history_positions->employees_id; 
+
+        if (!$employeeId) {
+            return redirect()->back()->with('error', 'Gagal menemukan ID Karyawan.');
+        }
+
+        DB::transaction(function () use ($history_positions) {
+            $history_positions->update([
+                'hapus_oleh' => auth()->user()->name
+            ]);
+            $history_positions->delete();
+        });
+
+        Alert::error('Menghapus Data History Jabatan', 'Oleh ' . auth()->user()->name);
+        return redirect()->route('employee.show', ['employee' => $employeeId]);
+    }
+
+
+    public function surat_mutasi($id)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        abort(403);
+        }
+
+        $this->fpdf = new FPDF('P', 'mm', 'A4');
+        $this->fpdf->setTopMargin(2);
+        $this->fpdf->setLeftMargin(2);
+        $this->fpdf->SetAutoPageBreak(false);
+        $this->fpdf->AddPage();
+        $this->fpdf->SetFont('Arial', 'B', '8');
+        $this->fpdf->Ln(25);
+        $this->fpdf->SetFont('Arial', '', '12');
+        $this->fpdf->Cell(10);
+        $this->fpdf->Cell(40, 7, 'Kepada Yth :', 0, 0, 'L');
+
+        $this->fpdf->Output();
+        exit;
     }
 }

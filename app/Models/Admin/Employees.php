@@ -87,4 +87,13 @@ class Employees extends Model
         return $this->belongsTo(WorkingHours::class,'working_hours_id','id');
     }
     // To Table Karyawan
+
+    // From Table Karyawan
+    public function history_contracts() {
+        return $this->hasMany(HistoryContracts::class,'employees_id','id');
+    }
+    public function history_positions() {
+        return $this->hasMany(HistoryPositions::class,'employees_id','id');
+    }
+    // From Table Karyawan
 }

@@ -15,7 +15,9 @@ use App\Models\Admin\Golongans;
 use App\Models\Admin\Areas;
 use App\Models\Admin\MinimalSalaries;
 use App\Models\Admin\HistoryContracts;
+use App\Models\Admin\HistoryPositions;
 use Alert;
+use Codedge\Fpdf\Fpdf\Fpdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -149,6 +151,15 @@ class EmployeeController extends Controller
         $MasaKerja              = $tanggal_mulai_kerja->diff($today)->format('%y Tahun, %m Bulan');
 
         $history_contracts      = HistoryContracts::with(['employees'])->get();
+        // $history_positions      = HistoryPositions::with(['employees'])->get();
+
+        $history_positions = HistoryPositions::with([
+                            'employees',
+                            'divisions',
+                            'positions',
+                            'companies',
+                            'areas'
+                            ])->where('employees_id', $employee->id)->get();
 
         return view ('admin.pages.employee.show',[
             'employee'                  => $employee,
@@ -160,7 +171,8 @@ class EmployeeController extends Controller
             'UmurLengkap'               => $UmurLengkap,
             'MasaKerja'                 => $MasaKerja,
             'areas'                     => $areas,
-            'history_contracts'         => $history_contracts
+            'history_contracts'         => $history_contracts,
+            'history_positions'         => $history_positions
         ]);
     }
 
@@ -281,5 +293,160 @@ class EmployeeController extends Controller
         // Notifikasi dan Redirect
         Alert::success('Success Hapus Data Karyawan','Oleh '.auth()->user()->name);
         return redirect()->route('employee.index');
+    }
+
+    public function aktif_kerja($id)
+    {
+        $item           = Employees::findOrFail($id);
+        $companies      = Companies::all();
+        $divisions      = Divisions::all();
+        $positions      = Positions::all();
+        $workinghours   = WorkingHours::all();
+        $areas          = Areas::all();
+
+        //Create Nomor Dokumen
+        $nik_karyawan   = $item->nik_karyawan;
+        $nomor          = substr($nik_karyawan, 6,6);
+        $mytime         = Carbon::now();
+        $bulan          = substr($mytime, 5, -12);
+        $tahun          = substr($mytime, 0,4);
+        if ($bulan == 1) {
+            $romawi = 'I';
+        }
+        elseif ($bulan == 2) {
+            $romawi = 'II';
+        } 
+        elseif ($bulan == 3) {
+            $romawi = 'III';
+        } 
+        elseif ($bulan == 4) {
+            $romawi = 'IV';
+        } 
+        elseif ($bulan == 5) {
+            $romawi = 'V';
+        } 
+        elseif ($bulan == 6) {
+            $romawi = 'VI';
+        } 
+        elseif ($bulan == 7) {
+            $romawi = 'VII';
+        } 
+        elseif ($bulan == 8) {
+            $romawi = 'VIII';
+        } 
+        elseif ($bulan == 9) {
+            $romawi = 'IX';
+        } 
+        elseif ($bulan == 10) {
+            $romawi = 'X';
+        } 
+        elseif ($bulan == 11) {
+            $romawi = 'XI';
+        } 
+        elseif ($bulan == 12) {
+            $romawi = 'XII';
+        } 
+        else {
+            $romawi = 'SALAH';
+        }
+        //Create Nomor Dokumen
+
+        $this->fpdf = new FPDF('P', 'mm', 'A4');
+        $this->fpdf->setTopMargin(2);
+        $this->fpdf->setLeftMargin(2);
+        $this->fpdf->SetAutoPageBreak(false);
+        $this->fpdf->AddPage();
+
+        $this->fpdf->Cell(205, 293, '', 0, 0, 'C');
+        $this->fpdf->SetFont('Arial', 'B', '8');
+        //KOP SURAT
+        // $this->fpdf->Cell(-200);
+        // $this->fpdf->Ln(5);
+        // $this->fpdf->Cell(5);
+        // $this->fpdf->Image('backend/assets/logo/logopanjang.jpg' , 10,8,100);
+        //KOP SURAT
+        
+        $this->fpdf->Ln(30);
+        $this->fpdf->SetFont('Arial', 'BU', '18');
+        $this->fpdf->Cell(3);
+        $this->fpdf->Cell(200, 10, 'SURAT KETERANGAN', 0, 0, 'C'); 
+        $this->fpdf->Ln(6);
+        $this->fpdf->SetFont('Arial', 'B', '14');
+        $this->fpdf->Cell(3);
+        $this->fpdf->Cell(200, 10, 'No.' . $nomor . '/HRD/PK/'. $romawi . '/'.$tahun.'', 0, 0, 'C');
+        $this->fpdf->Ln(30);
+
+        $this->fpdf->SetFont('Arial', '', '12');
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(100, 10, 'Kami Yang Bertanda Tangan Dibawah Ini :', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'Nama', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, ' : Achmad Firmansyah', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'Jabatan', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, ' : Manager (HRD-GA)', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'Menerangkan Bahwa', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, '  ', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'Nama', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, ' : ' . $item->nama_karyawan . '', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'NIK ', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, ' : ' . $item->nik_karyawan. '', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'Jabatan / Penempatan ', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, ' : ' . $item->positions->jabatan . ' / ' . $item->divisions->penempatan . '', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(50, 10, 'Tanggal Mulai Kerja', 0, 0, 'L');
+        $this->fpdf->Cell(100, 10, ' : ' . \Carbon\Carbon::parse($item->tanggal_mulai_kerja)->isoformat('D MMMM Y') . '', 0, 0, 'L');
+        $this->fpdf->Ln(9);
+
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'Adalah benar yang bersangkutan masih bekerja dan aktif menjadi karyawan kami,', 0, 0, 'L');
+        $this->fpdf->Ln(5);
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'dengan jabatan dan masa kerja di atas.', 0, 0, 'L');
+
+        $this->fpdf->Ln(5);
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'Demikianlah surat keterangan ini kami buat untuk digunakan dengan seperlunya.', 0, 0, 'L');
+
+        $this->fpdf->Ln(10);
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'Tangerang Selatan, ' . \Carbon\Carbon::now()->isoformat('D MMMM Y') . '', 0, 0, 'L');
+
+        $this->fpdf->Ln(5);
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'Hormat kami,', 0, 0, 'L');
+
+        $this->fpdf->Ln(38);
+
+        $this->fpdf->SetFont('Arial', 'BU', '12');
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'Achmad Firmansyah', 0, 0, 'L');
+
+        $this->fpdf->Ln(5);
+        $this->fpdf->SetFont('Arial', 'B', '12');
+        $this->fpdf->Cell(15);
+        $this->fpdf->Cell(180, 10, 'Manager (HRD-GA)', 0, 0, 'L');
+
+        $this->fpdf->Output();
+
+        exit;
     }
 }

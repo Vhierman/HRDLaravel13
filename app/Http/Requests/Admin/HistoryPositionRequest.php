@@ -12,7 +12,7 @@ class HistoryPositionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,13 @@ class HistoryPositionRequest extends FormRequest
     {
         return [
             //
+            'employees_id'      => 'required',
+            'nik_karyawan'      => 'required',
+            'companies_id'      => 'required',
+            'areas_id'          => 'required',
+            'divisions_id'      => 'required',
+            'positions_id'      => 'required',
+            'tanggal_mutasi'    => 'required|date'
         ];
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\MaksimalUpahBpjsKesehatanController;
 use App\Http\Controllers\Admin\MaksimalUpahBpjsKetenagakerjaanController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\HistoryContractController;
+use App\Http\Controllers\Admin\HistoryPositionController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -44,10 +45,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('minimal_salary', MinimalSalaryController::class);
     Route::resource('maksimal_upah_bpjskesehatan', MaksimalUpahBpjsKesehatanController::class);
     Route::resource('maksimal_upah_bpjstk', MaksimalUpahBpjsKetenagakerjaanController::class);
+
+    Route::get('employee/aktif_kerja/{nik_karyawan}', [EmployeeController::class, 'aktif_kerja'])->name('cetak.aktif_kerja');
     Route::resource('employee', EmployeeController::class);
 
     Route::get('history_contract/pkwt/{nik_karyawan}', [HistoryContractController::class, 'pkwt'])->name('cetak.pkwt');
     Route::resource('history_contract', HistoryContractController::class);
+    Route::get('history_position/surat_mutasi/{nik_karyawan}', [HistoryPositionController::class, 'surat_mutasi'])->name('cetak.surat_mutasi');
+    Route::resource('history_position', HistoryPositionController::class);
     
 });
 // Route Admin Area

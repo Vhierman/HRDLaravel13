@@ -52,6 +52,7 @@ class HistoryContractController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+        
         $employees_id   = $request->input('employees_id');
         $nik_karyawan   = $request->input('nik_karyawan');
         $nama_karyawan  = $request->input('nama_karyawan');

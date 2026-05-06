@@ -339,6 +339,34 @@
                                             <i class="bi bi-person-vcard"></i>
                                         </div>
                                         <div class="detail-info">
+                                            <h6 class="fw-bold mb-1">Nama Perusahaan</h6>
+                                            <p class="mb-0">
+                                                {{ $employee->companies->nama_perusahaan }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex align-items-start gap-3 border p-3 rounded">
+                                        <div class="detail-icon fs-5">
+                                            <i class="bi bi-house-vcard"></i>
+                                        </div>
+                                        <div class="detail-info">
+                                            <h6 class="fw-bold mb-1">Area</h6>
+                                            <p class="mb-0">
+                                                {{ $employee->areas->area }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
+                                <div class="col">
+                                    <div class="d-flex align-items-start gap-3 border p-3 rounded">
+                                        <div class="detail-icon fs-5">
+                                            <i class="bi bi-person-vcard"></i>
+                                        </div>
+                                        <div class="detail-info">
                                             <h6 class="fw-bold mb-1">Tanggal Mulai Kerja</h6>
                                             <p class="mb-0">
                                                 {{ \Carbon\Carbon::parse($employee->tanggal_mulai_kerja)->isoformat('D MMMM Y') }}
@@ -689,6 +717,7 @@
                         {{-- Tab History --}}
                         <div class="tab-pane fade" id="primary-pills-history" role="tabpanel">
                             <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
+                                {{-- History Kontrak --}}
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
                                         <div class="detail-info w-100">
@@ -696,16 +725,6 @@
                                                 class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
                                                 data-bs-toggle="modal" data-bs-target="#ScrollableModalHistoryKontrak">
                                                 <i class="material-icons-outlined">search</i>History Kontrak
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
-                                        <div class="detail-info w-100">
-                                            <button type="button"
-                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center">
-                                                <i class="material-icons-outlined">search</i>History Jabatan
                                             </button>
                                         </div>
                                     </div>
@@ -745,7 +764,6 @@
                                                                 </div>
                                                                 {{-- End Head --}}
                                                             @endif
-
 
                                                             {{-- Body --}}
                                                             <div class="card border bg-transparent shadow-none">
@@ -804,13 +822,6 @@
                                                                                         <td>
                                                                                             <div
                                                                                                 class="row row-cols-auto g-3 justify-content-center">
-                                                                                                {{-- <div class="col">
-                                                                                                    <a href="#"
-                                                                                                        class="btn btn-success raised d-flex gap-2">
-                                                                                                        <i
-                                                                                                            class="material-icons-outlined">edit</i>
-                                                                                                    </a>
-                                                                                                </div> --}}
                                                                                                 <div class="col">
                                                                                                     <a href="{{ route('cetak.pkwt', $history_contract->id) }}"
                                                                                                         class="btn btn-primary raised d-flex gap-2"
@@ -846,11 +857,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {{-- Modal Body --}}
                                         </div>
+                                        {{-- Modal Content --}}
                                     </div>
+                                    {{-- Modal Dialog --}}
                                 </div>
+                                {{-- Modal Fade --}}
                                 {{-- End Modal Table History Kontrak --}}
-
                                 {{-- Modal Add History Kontrak --}}
                                 <div class="modal fade" id="ScrollableModalTambahHistoryKontrak">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -886,42 +900,48 @@
                                                     </div>
                                                 @endif
                                                 <div class="form-body">
-                                                    <form action="{{ route('history_contract.store') }}" method="post"
+                                                    <form action="{{ route('history_contract.store') }}"
+                                                        id="inputHistoryContract" method="post"
                                                         enctype="multipart/form-data" class="row g-3">
                                                         @csrf
                                                         <input type="hidden" name="employees_id" class="form-control"
-                                                            value="{{ $employee->id }}" id="input1" readonly
-                                                            placeholder="Employees ID">
+                                                            value="{{ $employee->id }}" id="inputHistoryContract"
+                                                            readonly placeholder="Employees ID">
                                                         <div class="col-md-6">
-                                                            <label for="input1" class="form-label">NIK Karyawan</label>
+                                                            <label for="inputHistoryContract" class="form-label">NIK
+                                                                Karyawan</label>
                                                             <input type="text" name="nik_karyawan"
                                                                 class="form-control"
-                                                                value="{{ $employee->nik_karyawan }}" id="input1"
-                                                                readonly placeholder="First Name">
+                                                                value="{{ $employee->nik_karyawan }}"
+                                                                id="inputHistoryContract" readonly
+                                                                placeholder="First Name">
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label for="input2" class="form-label">Nama Karyawan</label>
+                                                            <label for="inputHistoryContract" class="form-label">Nama
+                                                                Karyawan</label>
                                                             <input type="text" name="nama_karyawan"
                                                                 value="{{ $employee->nama_karyawan }}"
-                                                                class="form-control" id="input2" readonly
+                                                                class="form-control" id="inputHistoryContract" readonly
                                                                 placeholder="Nama Karyawan">
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label for="input1" class="form-label">Awal Kontrak</label>
+                                                            <label for="inputHistoryContract" class="form-label">Awal
+                                                                Kontrak</label>
                                                             <input type="date" name="awal_kontrak"
-                                                                class="form-control" id="input1"
+                                                                class="form-control" id="inputHistoryContract"
                                                                 placeholder="dd/mm/yyyy">
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label for="input2" class="form-label">Akhir Kontrak</label>
+                                                            <label for="inputHistoryContract" class="form-label">Akhir
+                                                                Kontrak</label>
                                                             <input type="date" name="akhir_kontrak"
-                                                                class="form-control" id="input2"
+                                                                class="form-control" id="inputHistoryContract"
                                                                 placeholder="dd/mm/yyyy">
                                                         </div>
 
                                                         <div class="col-md-12">
                                                             <label class="form-label">Status Kerja</label>
-                                                            <select id="input39" class="form-select"
+                                                            <select id="inputHistoryContract" class="form-select"
                                                                 name="status_kerja">
                                                                 <option value="">Pilih Status Kerja</option>
                                                                 <option value="PKWTT"
@@ -952,29 +972,294 @@
                                     </div>
                                 </div>
                                 {{-- End Modal Add History Kontrak --}}
-                            </div>
-                            <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
+                                {{-- History Kontrak --}}
+
+                                {{-- History Jabatan --}}
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
                                         <div class="detail-info w-100">
                                             <button type="button"
-                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center">
-                                                <i class="material-icons-outlined">search</i>History Training Internal
+                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
+                                                data-bs-toggle="modal" data-bs-target="#ScrollableModalHistoryJabatan">
+                                                <i class="material-icons-outlined">search</i>History Jabatan
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
-                                        <div class="detail-info w-100">
-                                            <button type="button"
-                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center">
-                                                <i class="material-icons-outlined">search</i>History Training Eksternal
-                                            </button>
+                                {{-- Modal Table History Jabatan --}}
+                                <div class="modal fade" id="ScrollableModalHistoryJabatan">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-bottom-0 bg-grd-primary py-2">
+                                                <h5 class="modal-title">Form History Jabatan
+                                                </h5>
+                                                <a href="#" class="primaery-menu-close" data-bs-dismiss="modal">
+                                                    <i class="material-icons-outlined">close</i>
+                                                </a>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="order-summary">
+                                                    <div class="card mb-0">
+                                                        <div class="card-body">
+
+
+                                                            {{-- Head --}}
+                                                            <div class="card border bg-transparent shadow-none mb-3">
+                                                                <div class="card-body">
+                                                                    <p class="fs-5">
+                                                                        {{ $employee->nama_karyawan }}
+                                                                    </p>
+                                                                    <button type="button"
+                                                                        class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#ScrollableModalTambahHistoryJabatan">
+                                                                        <i class="material-icons-outlined">add</i>Tambah
+                                                                        Data History Jabatan
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            {{-- End Head --}}
+
+
+                                                            {{-- Body --}}
+                                                            <div class="card border bg-transparent shadow-none">
+                                                                <div class="card-body ">
+                                                                    <div class="table-responsive">
+                                                                        <table id="example2"
+                                                                            class="table table-striped table-bordered w-100"
+                                                                            style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>No</th>
+                                                                                    <th>Perusahaan</th>
+                                                                                    <th>Area</th>
+                                                                                    <th>Penempatan</th>
+                                                                                    <th>Jabatan</th>
+                                                                                    <th>Tanggal Mutasi</th>
+                                                                                    <th>Action</th>
+                                                                                </tr>
+                                                                                <tr class="search-row">
+                                                                                    <th></th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Perusahaan..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Area..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Penempatan..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Jabatan..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Tanggal Mutasi..." />
+                                                                                    </th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @php
+                                                                                    $no = 1;
+                                                                                @endphp
+                                                                                @foreach ($history_positions as $history_position)
+                                                                                    <tr>
+                                                                                        <td>{{ $no++ }}</td>
+                                                                                        <td>{{ $history_position->companies->nama_perusahaan }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_position->areas->area }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_position->divisions->penempatan }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_position->positions->jabatan }}
+                                                                                        </td>
+                                                                                        <td>{{ \Carbon\Carbon::parse($history_position->tanggal_mutasi)->isoformat('DD-MM-Y') }}
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="row row-cols-auto g-3 justify-content-center">
+                                                                                                <div class="col">
+                                                                                                    <form
+                                                                                                        action="{{ route('history_position.destroy', $history_position->id) }}"
+                                                                                                        method="POST">
+                                                                                                        @csrf
+                                                                                                        @method('delete')
+                                                                                                        <button
+                                                                                                            class="btn btn-danger raised d-flex gap-2">
+                                                                                                            <i
+                                                                                                                class="material-icons-outlined">delete</i>
+                                                                                                        </button>
+                                                                                                    </form>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{-- End Body --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- Modal Body --}}
+                                        </div>
+                                        {{-- Modal Content --}}
+                                    </div>
+                                    {{-- Modal Dialog --}}
+                                </div>
+                                {{-- Modal Fade --}}
+                                {{-- End Modal Table History Jabatan --}}
+                                {{-- Modal Add History Jabatan --}}
+                                <div class="modal fade" id="ScrollableModalTambahHistoryJabatan">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+                                                <h5 class="modal-title">Form Tambah History Jabatan</h5>
+                                                <a href="javascript:;" class="primaery-menu-close"
+                                                    data-bs-dismiss="modal">
+                                                    <i class="material-icons-outlined">close</i>
+                                                </a>
+                                            </div>
+                                            <div class="modal-body">
+                                                @if ($errors->any())
+                                                    <div class="alert alert-danger alert-dismissible fade show"
+                                                        role="alert">
+                                                        <ul class="mb-0">
+                                                            @foreach ($errors->all() as $error)
+                                                                <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                @endif
+
+                                                <!-- Area Pesan Error Manual (Session) -->
+                                                @if (session('error'))
+                                                    <div class="alert alert-danger alert-dismissible fade show"
+                                                        role="alert">
+                                                        {{ session('error') }}
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                @endif
+                                                <div class="form-body">
+                                                    <form action="{{ route('history_position.store') }}"
+                                                        id="inputHistoryPosition" method="post"
+                                                        enctype="multipart/form-data" class="row g-3">
+                                                        @csrf
+                                                        <input type="hidden" name="employees_id" class="form-control"
+                                                            value="{{ $employee->id }}" id="inputHistoryPosition"
+                                                            readonly placeholder="Employees ID">
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryPosition" class="form-label">NIK
+                                                                Karyawan</label>
+                                                            <input type="text" name="nik_karyawan"
+                                                                class="form-control"
+                                                                value="{{ $employee->nik_karyawan }}"
+                                                                id="inputHistoryPosition" readonly
+                                                                placeholder="First Name">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryPosition" class="form-label">Nama
+                                                                Karyawan</label>
+                                                            <input type="text" name="nama_karyawan"
+                                                                value="{{ $employee->nama_karyawan }}"
+                                                                class="form-control" id="inputHistoryPosition" readonly
+                                                                placeholder="Nama Karyawan">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryPosition" class="form-label">Nama
+                                                                Perusahaan</label>
+                                                            <select name="companies_id" id="inputHistoryPosition"
+                                                                class="form-select">
+                                                                <option value="">Pilih Perusahaan</option>
+                                                                @foreach ($companies as $company)
+                                                                    <option value="{{ $company->id }}"
+                                                                        {{ old('companies_id') == $company->id ? 'selected' : '' }}>
+                                                                        {{ $company->nama_perusahaan }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryPosition" id="inputHistoryPosition"
+                                                                class="form-label">Nama
+                                                                Area</label>
+                                                            <select name="areas_id" id="inputHistoryPosition"
+                                                                class="form-select">
+                                                                <option value="">Pilih Area</option>
+                                                                @foreach ($areas as $area)
+                                                                    <option value="{{ $area->id }}"
+                                                                        {{ old('areas_id') == $area->id ? 'selected' : '' }}>
+                                                                        {{ $area->area }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryPosition" id="inputHistoryPosition"
+                                                                class="form-label">Nama
+                                                                Penempatan</label>
+                                                            <select name="divisions_id" id="inputHistoryPosition"
+                                                                class="form-select">
+                                                                <option value="">Pilih Penempatan</option>
+                                                                @foreach ($divisions as $division)
+                                                                    <option value="{{ $division->id }}"
+                                                                        {{ old('divisions_id') == $division->id ? 'selected' : '' }}>
+                                                                        {{ $division->penempatan }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryPosition" class="form-label">Nama
+                                                                Jabatan</label>
+                                                            <select name="positions_id" id="inputHistoryPosition"
+                                                                class="form-select">
+                                                                <option value="">Pilih Jabatan</option>
+                                                                @foreach ($positions as $position)
+                                                                    <option value="{{ $position->id }}"
+                                                                        {{ old('positions_id') == $position->id ? 'selected' : '' }}>
+                                                                        {{ $position->jabatan }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <label for="inputHistoryPosition" class="form-label">Tanggal
+                                                                Mutasi</label>
+                                                            <input type="date" name="tanggal_mutasi"
+                                                                value="{{ old('tanggal_mutasi') }}" class="form-control"
+                                                                id="inputHistoryPosition" placeholder="dd/mm/yyyy">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="d-md-flex d-grid align-items-center gap-3">
+                                                                <button type="submit"
+                                                                    class="btn btn-grd-danger px-4">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                {{-- End Modal Add History Jabatan --}}
+                                {{-- History Jabatan --}}
                             </div>
+
                             <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
@@ -989,11 +1274,13 @@
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
                                         <div class="detail-info w-100">
-                                            <button type="button"
-                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center">
+                                            <a href="{{ route('cetak.aktif_kerja', $employee->id) }}"
+                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
+                                                target="_blank">
                                                 <i class="material-icons-outlined">print</i>Cetak Surat Keterangan Aktif
                                                 Kerja
-                                            </button>
+                                            </a>
+
                                         </div>
                                     </div>
                                 </div>
