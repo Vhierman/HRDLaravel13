@@ -52,8 +52,6 @@ class HistoryPositionController extends Controller
             abort(403);
         }
 
-        // try {
-
         $employees_id           = $request->input('employees_id');
         $nik_karyawan           = $request->input('nik_karyawan');
         $companies_id           = $request->input('companies_id');
@@ -85,8 +83,6 @@ class HistoryPositionController extends Controller
         
         Alert::success('Success Input Data History Jabatan','Oleh '.auth()->user()->name);
         return redirect()->route('employee.show',$employees->id);
-
-    
     }
 
     /**

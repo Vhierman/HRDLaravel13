@@ -13,6 +13,9 @@ class PrintController extends Controller
     public function index()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -21,6 +24,9 @@ class PrintController extends Controller
     public function create()
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -29,6 +35,9 @@ class PrintController extends Controller
     public function store(Request $request)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -37,6 +46,9 @@ class PrintController extends Controller
     public function show(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -45,6 +57,9 @@ class PrintController extends Controller
     public function edit(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -53,6 +68,9 @@ class PrintController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 
     /**
@@ -61,5 +79,8 @@ class PrintController extends Controller
     public function destroy(string $id)
     {
         //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
     }
 }

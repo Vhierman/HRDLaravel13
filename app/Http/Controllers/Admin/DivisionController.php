@@ -37,6 +37,7 @@ class DivisionController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+        
         return view('admin.pages.division.create');
     }
 

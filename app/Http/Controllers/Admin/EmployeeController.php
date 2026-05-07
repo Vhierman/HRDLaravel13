@@ -151,7 +151,6 @@ class EmployeeController extends Controller
         $MasaKerja              = $tanggal_mulai_kerja->diff($today)->format('%y Tahun, %m Bulan');
 
         $history_contracts      = HistoryContracts::with(['employees'])->get();
-        // $history_positions      = HistoryPositions::with(['employees'])->get();
 
         $history_positions = HistoryPositions::with([
                             'employees',
@@ -203,7 +202,6 @@ class EmployeeController extends Controller
             'working_hours' => $working_hours,
             'areas'         => $areas
         ]);
-
     }
 
     /**
@@ -297,6 +295,10 @@ class EmployeeController extends Controller
 
     public function aktif_kerja($id)
     {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        
         $item           = Employees::findOrFail($id);
         $companies      = Companies::all();
         $divisions      = Divisions::all();
@@ -359,13 +361,6 @@ class EmployeeController extends Controller
 
         $this->fpdf->Cell(205, 293, '', 0, 0, 'C');
         $this->fpdf->SetFont('Arial', 'B', '8');
-        //KOP SURAT
-        // $this->fpdf->Cell(-200);
-        // $this->fpdf->Ln(5);
-        // $this->fpdf->Cell(5);
-        // $this->fpdf->Image('backend/assets/logo/logopanjang.jpg' , 10,8,100);
-        //KOP SURAT
-        
         $this->fpdf->Ln(30);
         $this->fpdf->SetFont('Arial', 'BU', '18');
         $this->fpdf->Cell(3);
