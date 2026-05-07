@@ -52,34 +52,28 @@ class HistoryPositionController extends Controller
             abort(403);
         }
 
-        $employees_id           = $request->input('employees_id');
-        $nik_karyawan           = $request->input('nik_karyawan');
-        $companies_id           = $request->input('companies_id');
-        $areas_id               = $request->input('areas_id');
-        $divisions_id           = $request->input('divisions_id');
-        $positions_id           = $request->input('positions_id');
-        $tanggal_mutasi         = $request->input('tanggal_mutasi');
+        $employees = null;
+        DB::transaction(function () use ($request, &$employees) {
+            HistoryPositions::create([
+                'employees_id'          => $request->input('employees_id'),
+                'nik_karyawan'          => $request->input('nik_karyawan'),
+                'companies_id_history'  => $request->input('companies_id'),
+                'areas_id_history'      => $request->input('areas_id'),
+                'divisions_id_history'  => $request->input('divisions_id'),
+                'positions_id_history'  => $request->input('positions_id'),
+                'tanggal_mutasi'        => $request->input('tanggal_mutasi'),
+                'input_oleh'            => auth()->user()->name
+            ]);
 
-    
-        HistoryPositions::create([
-            'employees_id'              => $employees_id,
-            'nik_karyawan'              => $nik_karyawan,
-            'companies_id_history'     => $companies_id,
-            'areas_id_history'         => $areas_id,
-            'divisions_id_history'     => $divisions_id,
-            'positions_id_history'     => $positions_id,
-            'tanggal_mutasi'            => $tanggal_mutasi,
-            'input_oleh'                => auth()->user()->name
-        ]);
-
-        $employees                  = Employees::where('nik_karyawan', $request->input('nik_karyawan'))->first();
-        $employees->update([
-            'companies_id'          => $companies_id,
-            'areas_id'              => $areas_id,
-            'divisions_id'          => $divisions_id,
-            'positions_id'          => $positions_id,
-            'edit_oleh'             => auth()->user()->name
-        ]);
+            $employees                  = Employees::where('nik_karyawan', $request->input('nik_karyawan'))->first();
+            $employees->update([
+                'companies_id'          => $request->input('companies_id'),
+                'areas_id'              => $request->input('areas_id'),
+                'divisions_id'          => $request->input('divisions_id'),
+                'positions_id'          => $request->input('positions_id'),
+                'edit_oleh'             => auth()->user()->name
+            ]);
+        });
         
         Alert::success('Success Input Data History Jabatan','Oleh '.auth()->user()->name);
         return redirect()->route('employee.show',$employees->id);
@@ -146,25 +140,4 @@ class HistoryPositionController extends Controller
         return redirect()->route('employee.show', ['employee' => $employeeId]);
     }
 
-
-    public function surat_mutasi($id)
-    {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
-        abort(403);
-        }
-
-        $this->fpdf = new FPDF('P', 'mm', 'A4');
-        $this->fpdf->setTopMargin(2);
-        $this->fpdf->setLeftMargin(2);
-        $this->fpdf->SetAutoPageBreak(false);
-        $this->fpdf->AddPage();
-        $this->fpdf->SetFont('Arial', 'B', '8');
-        $this->fpdf->Ln(25);
-        $this->fpdf->SetFont('Arial', '', '12');
-        $this->fpdf->Cell(10);
-        $this->fpdf->Cell(40, 7, 'Kepada Yth :', 0, 0, 'L');
-
-        $this->fpdf->Output();
-        exit;
-    }
 }

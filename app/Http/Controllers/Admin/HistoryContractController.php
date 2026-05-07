@@ -53,18 +53,10 @@ class HistoryContractController extends Controller
             abort(403);
         }
         
-        $employees_id   = $request->input('employees_id');
-        $nik_karyawan   = $request->input('nik_karyawan');
-        $nama_karyawan  = $request->input('nama_karyawan');
-        $status_kerja   = $request->input('status_kerja');
         $awal_kontrak   = date_create($request->input('awal_kontrak'));
         $akhir_kontrak  = date_create($request->input('akhir_kontrak'));
         $interval = date_diff($awal_kontrak, $akhir_kontrak);
-
-        // total bulan
         $totalBulan = ($interval->y * 12) + $interval->m;
-
-        // jika ingin menghitung bulan berjalan tambahkan +1
         $totalBulan += 1;
 
         if ($totalBulan == 12) {
@@ -82,26 +74,25 @@ class HistoryContractController extends Controller
             $masa_kontrak = $totalBulan . " Bulan";
         }
 
-        // dd($masa_kontrak);
-
-        HistoryContracts::create([
-            'employees_id'          => $employees_id,
-            'nik_karyawan'          => $nik_karyawan,
-            'tanggal_awal_kontrak'  => $request->input('awal_kontrak'),
-            'tanggal_akhir_kontrak' => $request->input('akhir_kontrak'),
-            'status_kontrak_kerja'  => $status_kerja,
-            'masa_kontrak'          => $masa_kontrak,
-            'jumlah_kontrak'        => 1,
-            'input_oleh'            => auth()->user()->name
-        ]);
-
-        $employees                  = Employees::where('nik_karyawan', $request->input('nik_karyawan'))->first();
-
-        $employees->update([
-            'tanggal_akhir_kerja'   => $request->input('akhir_kontrak'),
-            'status_kerja'          => $status_kerja,
-            'edit_oleh'             => auth()->user()->name
-        ]);
+        $employees = null;
+        DB::transaction(function () use ($request, $masa_kontrak, &$employees) {
+            HistoryContracts::create([
+                'employees_id'          => $request->input('employees_id'),
+                'nik_karyawan'          => $request->input('nik_karyawan'),
+                'tanggal_awal_kontrak'  => $request->input('awal_kontrak'),
+                'tanggal_akhir_kontrak' => $request->input('akhir_kontrak'),
+                'status_kontrak_kerja'  => $request->input('status_kerja'),
+                'masa_kontrak'          => $masa_kontrak,
+                'jumlah_kontrak'        => 1,
+                'input_oleh'            => auth()->user()->name
+            ]);
+            $employees                  = Employees::where('nik_karyawan', $request->input('nik_karyawan'))->first();
+            $employees->update([
+                'tanggal_akhir_kerja'   => $request->input('akhir_kontrak'),
+                'status_kerja'          => $request->input('status_kerja'),
+                'edit_oleh'             => auth()->user()->name
+            ]);
+        });
 
         Alert::success('Success Input Data History Kontrak','Oleh '.auth()->user()->name);
         return redirect()->route('employee.show',$employees->id);

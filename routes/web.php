@@ -52,7 +52,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::get('history_contract/pkwt/{nik_karyawan}', [HistoryContractController::class, 'pkwt'])->name('cetak.pkwt');
     Route::resource('history_contract', HistoryContractController::class);
-    Route::get('history_position/surat_mutasi/{nik_karyawan}', [HistoryPositionController::class, 'surat_mutasi'])->name('cetak.surat_mutasi');
     Route::resource('history_position', HistoryPositionController::class);
     Route::resource('history_family', HistoryFamilyController::class);
     
