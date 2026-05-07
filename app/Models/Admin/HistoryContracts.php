@@ -31,6 +31,7 @@ class HistoryContracts extends Model
         
     ];
 
+    //To Table History Contracts
     public function employees(){
         return $this->belongsTo(Employees::class,'employees_id','id');
     }

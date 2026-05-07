@@ -47,6 +47,7 @@ class RekapSalaries extends Model
         
     ];
 
+    //To Table Rekap Salaries
     public function employees(){
         return $this->belongsTo(Employees::class,'employees_id','id');
     }

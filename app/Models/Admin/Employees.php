@@ -63,8 +63,7 @@ class Employees extends Model
         'hapus_oleh'
     ];
 
-    protected $hidden =[
-        
+    protected $hidden =[    
     ];
 
     // To Table Karyawan
@@ -89,11 +88,38 @@ class Employees extends Model
     // To Table Karyawan
 
     // From Table Karyawan
+    public function attendances() {
+        return $this->hasMany(Attendances::class,'employees_id','id');
+    }
     public function history_contracts() {
         return $this->hasMany(HistoryContracts::class,'employees_id','id');
     }
     public function history_positions() {
         return $this->hasMany(HistoryPositions::class,'employees_id','id');
+    }
+    public function history_families() {
+        return $this->hasMany(HistoryFamilies::class,'employees_id','id');
+    }
+    public function history_salaries() {
+        return $this->hasMany(HistorySalaries::class,'employees_id','id');
+    }
+    public function history_training_eksternals() {
+        return $this->hasMany(HistoryTrainingEksternals::class,'employees_id','id');
+    }
+    public function history_training_internals() {
+        return $this->hasMany(HistoryTrainingInternals::class,'employees_id','id');
+    }
+    public function inventory_cars() {
+        return $this->hasMany(InventoryCars::class,'employees_id','id');
+    }
+    public function inventory_motorcycles() {
+        return $this->hasMany(InventoryMotorcycles::class,'employees_id','id');
+    }
+    public function overtimes() {
+        return $this->hasMany(Overtimes::class,'employees_id','id');
+    }
+    public function rekap_salaries() {
+        return $this->hasMany(RekapSalaries::class,'employees_id','id');
     }
     // From Table Karyawan
 }

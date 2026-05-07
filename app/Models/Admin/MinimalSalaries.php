@@ -27,6 +27,7 @@ class MinimalSalaries extends Model
         
     ];
 
+    // To Table Minimal Salaries
     public function areas() {
         return $this->belongsTo(Areas::class,'areas_id','id');
     }
