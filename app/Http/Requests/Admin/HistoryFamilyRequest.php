@@ -12,7 +12,7 @@ class HistoryFamilyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,16 @@ class HistoryFamilyRequest extends FormRequest
     {
         return [
             //
+            'employees_id'                          => 'required|integer|exists:employees,id',
+            'nik_karyawan'                          => 'required|numeric|min:16',
+            'hubungan_keluarga'                     => 'required|string|in:Suami,Istri,Anak',
+            'nik_history_keluarga'                  => 'required|numeric|min:16',
+            'nomor_bpjs_kesehatan_history_keluarga' => 'required|numeric|min:13',
+            'nama_history_keluarga'                 => 'required|string',
+            'jenis_kelamin_history_keluarga'        => 'required|string|in:Pria,Wanita',
+            'tempat_lahir_history_keluarga'         => 'required',
+            'tanggal_lahir_history_keluarga'        => 'required|date',
+            'golongan_darah_history_keluarga'       => 'required|string|in:A,B,AB,O'
         ];
     }
 }

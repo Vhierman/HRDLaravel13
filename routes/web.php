@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\MaksimalUpahBpjsKetenagakerjaanController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\HistoryContractController;
 use App\Http\Controllers\Admin\HistoryPositionController;
+use App\Http\Controllers\Admin\HistoryFamilyController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -53,6 +54,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('history_contract', HistoryContractController::class);
     Route::get('history_position/surat_mutasi/{nik_karyawan}', [HistoryPositionController::class, 'surat_mutasi'])->name('cetak.surat_mutasi');
     Route::resource('history_position', HistoryPositionController::class);
+    Route::resource('history_family', HistoryFamilyController::class);
     
 });
 // Route Admin Area

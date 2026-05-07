@@ -13,7 +13,6 @@
 @section('title', 'Detail Karyawan')
 
 @section('content')
-
     <!-- Breadcrumb -->
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-4">
         <div class="breadcrumb-title pe-3">Karyawan</div>
@@ -863,7 +862,6 @@
                                     </div>
                                     {{-- Modal Dialog --}}
                                 </div>
-                                {{-- Modal Fade --}}
                                 {{-- End Modal Table History Kontrak --}}
                                 {{-- Modal Add History Kontrak --}}
                                 <div class="modal fade" id="ScrollableModalTambahHistoryKontrak">
@@ -913,8 +911,7 @@
                                                             <input type="text" name="nik_karyawan"
                                                                 class="form-control"
                                                                 value="{{ $employee->nik_karyawan }}"
-                                                                id="inputHistoryContract" readonly
-                                                                placeholder="First Name">
+                                                                id="inputHistoryContract" readonly placeholder="NIK">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="inputHistoryContract" class="form-label">Nama
@@ -1117,7 +1114,6 @@
                                     </div>
                                     {{-- Modal Dialog --}}
                                 </div>
-                                {{-- Modal Fade --}}
                                 {{-- End Modal Table History Jabatan --}}
                                 {{-- Modal Add History Jabatan --}}
                                 <div class="modal fade" id="ScrollableModalTambahHistoryJabatan">
@@ -1167,8 +1163,7 @@
                                                             <input type="text" name="nik_karyawan"
                                                                 class="form-control"
                                                                 value="{{ $employee->nik_karyawan }}"
-                                                                id="inputHistoryPosition" readonly
-                                                                placeholder="First Name">
+                                                                id="inputHistoryPosition" readonly placeholder="NIK">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="inputHistoryPosition" class="form-label">Nama
@@ -1265,12 +1260,494 @@
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
                                         <div class="detail-info w-100">
                                             <button type="button"
-                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center">
+                                                class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
+                                                data-bs-toggle="modal" data-bs-target="#ScrollableModalHistoryKeluarga">
                                                 <i class="material-icons-outlined">search</i>History Keluarga
                                             </button>
                                         </div>
                                     </div>
                                 </div>
+                                {{-- Modal Table History Keluarga --}}
+                                <div class="modal fade" id="ScrollableModalHistoryKeluarga">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-bottom-0 bg-grd-primary py-2">
+                                                <h5 class="modal-title">Form History Keluarga
+                                                </h5>
+                                                <a href="#" class="primaery-menu-close" data-bs-dismiss="modal">
+                                                    <i class="material-icons-outlined">close</i>
+                                                </a>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="order-summary">
+                                                    <div class="card mb-0">
+                                                        <div class="card-body">
+                                                            {{-- Head --}}
+                                                            <div class="card border bg-transparent shadow-none mb-3">
+                                                                <div class="card-body">
+                                                                    <p class="fs-5">
+                                                                        {{ $employee->nama_karyawan }}
+                                                                    </p>
+                                                                    <button type="button"
+                                                                        class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#ScrollableModalTambahHistoryKeluarga">
+                                                                        <i class="material-icons-outlined">add</i>Tambah
+                                                                        Data History Keluarga
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            {{-- End Head --}}
+
+                                                            {{-- Body --}}
+                                                            <div class="card border bg-transparent shadow-none">
+                                                                <div class="card-body ">
+                                                                    <div class="table-responsive">
+                                                                        <table id="example2"
+                                                                            class="table table-striped table-bordered w-100"
+                                                                            style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>No</th>
+                                                                                    <th>Status</th>
+                                                                                    <th>NIK</th>
+                                                                                    <th>Nomor BPJS</th>
+                                                                                    <th>Nama</th>
+                                                                                    <th>Jenis Kelamin</th>
+                                                                                    <th>Tempat Tanggal Lahir</th>
+                                                                                    <th>Action</th>
+                                                                                </tr>
+                                                                                <tr class="search-row">
+                                                                                    <th></th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Status..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari NIK..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari No BPJS..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Nama..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Jenis Kelamin..." />
+                                                                                    </th>
+                                                                                    <th><input type="text"
+                                                                                            class="form-control form-control-sm"
+                                                                                            placeholder="Cari Tempat Tanggal Lahir..." />
+                                                                                    </th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @php
+                                                                                    $no = 1;
+                                                                                @endphp
+                                                                                @foreach ($history_families as $history_family)
+                                                                                    <tr>
+                                                                                        <td>{{ $no++ }}</td>
+                                                                                        <td>{{ $history_family->hubungan_keluarga }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_family->nik_history_keluarga }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_family->nomor_bpjs_kesehatan_history_keluarga }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_family->nama_history_keluarga }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_family->jenis_kelamin_history_keluarga }}
+                                                                                        </td>
+                                                                                        <td>{{ $history_family->tempat_lahir_history_keluarga }},{{ \Carbon\Carbon::parse($history_family->tanggal_lahir_history_keluarga)->isoformat('DD-MM-Y') }}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="row row-cols-auto g-3 justify-content-center">
+                                                                                                <div class="col">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-success raised d-flex gap-2"
+                                                                                                        data-bs-toggle="modal"
+                                                                                                        data-bs-target="#ScrollableModalEditHistoryKeluarga">
+                                                                                                        <i
+                                                                                                            class="material-icons-outlined">edit</i>
+                                                                                                    </button>
+                                                                                                </div>
+                                                                                                <div class="col">
+                                                                                                    <form
+                                                                                                        action="{{ route('history_family.destroy', $history_family->id) }}"
+                                                                                                        method="POST">
+                                                                                                        @csrf
+                                                                                                        @method('delete')
+                                                                                                        <button
+                                                                                                            class="btn btn-danger raised d-flex gap-2">
+                                                                                                            <i
+                                                                                                                class="material-icons-outlined">delete</i>
+                                                                                                        </button>
+                                                                                                    </form>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{-- End Body --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- Modal Body --}}
+                                        </div>
+                                        {{-- Modal Content --}}
+                                    </div>
+                                    {{-- Modal Dialog --}}
+                                </div>
+                                {{-- End Modal Table History Keluarga --}}
+                                {{-- Modal Add History Keluarga --}}
+                                <div class="modal fade" id="ScrollableModalTambahHistoryKeluarga">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+                                                <h5 class="modal-title">Form Tambah History Keluarga</h5>
+                                                <a href="javascript:;" class="primary-menu-close"
+                                                    data-bs-dismiss="modal">
+                                                    <i class="material-icons-outlined">close</i>
+                                                </a>
+                                            </div>
+                                            <div class="modal-body">
+                                                @if ($errors->any())
+                                                    <div class="alert alert-danger alert-dismissible fade show"
+                                                        role="alert">
+                                                        <ul class="mb-0">
+                                                            @foreach ($errors->all() as $error)
+                                                                <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                @endif
+
+                                                <!-- Area Pesan Error Manual (Session) -->
+                                                @if (session('error'))
+                                                    <div class="alert alert-danger alert-dismissible fade show"
+                                                        role="alert">
+                                                        {{ session('error') }}
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                @endif
+                                                <div class="form-body">
+                                                    <form action="{{ route('history_family.store') }}"
+                                                        id="inputHistoryKeluarga" method="post"
+                                                        enctype="multipart/form-data" class="row g-3">
+                                                        @csrf
+                                                        <input type="hidden" name="employees_id" class="form-control"
+                                                            value="{{ $employee->id }}" id="inputHistoryKeluarga"
+                                                            readonly placeholder="Employees ID">
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">NIK
+                                                                Karyawan</label>
+                                                            <input type="text" name="nik_karyawan"
+                                                                class="form-control"
+                                                                value="{{ $employee->nik_karyawan }}"
+                                                                id="inputHistoryKeluarga" readonly
+                                                                placeholder="First Name">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">Nama
+                                                                Karyawan</label>
+                                                            <input type="text" name="nama_karyawan"
+                                                                value="{{ $employee->nama_karyawan }}"
+                                                                class="form-control" id="inputHistoryKeluarga" readonly
+                                                                placeholder="Nama Karyawan">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Hubungan Keluarga</label>
+                                                            <select id="inputHistoryKeluarga" class="form-select"
+                                                                name="hubungan_keluarga">
+                                                                <option value="">Pilih Hubungan Keluarga</option>
+                                                                <option value="Istri"
+                                                                    {{ old('hubungan_keluarga') == 'PKWTT' ? 'selected' : '' }}>
+                                                                    Istri</option>
+                                                                <option value="Suami"
+                                                                    {{ old('hubungan_keluarga') == 'PKWT' ? 'selected' : '' }}>
+                                                                    Suami</option>
+                                                                <option value="Anak"
+                                                                    {{ old('hubungan_keluarga') == 'Harian' ? 'selected' : '' }}>
+                                                                    Anak</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">NIK
+                                                                KTP</label>
+                                                            <input type="text" name="nik_history_keluarga"
+                                                                maxlength="16" onkeyup="angka(this);"
+                                                                class="form-control" id="inputHistoryKeluarga"
+                                                                placeholder="Masukan NIK KTP">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">Nama
+                                                                Lengkap</label>
+                                                            <input type="text" name="nama_history_keluarga"
+                                                                onkeyup="huruf(this);" class="form-control"
+                                                                id="inputHistoryKeluarga"
+                                                                placeholder="Masukan Nama Lengkap">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">No BPJS
+                                                                Kesehatan</label>
+                                                            <input type="text"
+                                                                name="nomor_bpjs_kesehatan_history_keluarga"
+                                                                onkeyup="angka(this);" maxlength="13"
+                                                                class="form-control" id="inputHistoryKeluarga"
+                                                                placeholder="Masukan Nomor BPJS Kesehatan">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Jenis Kelamin</label>
+                                                            <select id="inputHistoryKeluarga" class="form-select"
+                                                                name="jenis_kelamin_history_keluarga">
+                                                                <option value="">Pilih Jenis Kelamin</option>
+                                                                <option value="Pria"
+                                                                    {{ old('jenis_kelamin_history_keluarga') == 'Pria' ? 'selected' : '' }}>
+                                                                    Pria</option>
+                                                                <option value="Wanita"
+                                                                    {{ old('jenis_kelamin_history_keluarga') == 'Wanita' ? 'selected' : '' }}>
+                                                                    Wanita</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">Tempat
+                                                                Lahir Lahir</label>
+                                                            <input type="text" name="tempat_lahir_history_keluarga"
+                                                                class="form-control" id="inputHistoryKeluarga"
+                                                                placeholder="Masukan Tempat Lahir">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="inputHistoryKeluarga" class="form-label">Tanggal
+                                                                Lahir</label>
+                                                            <input type="date" name="tanggal_lahir_history_keluarga"
+                                                                class="form-control" id="inputHistoryKeluarga"
+                                                                placeholder="dd/mm/yyyy">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Golongan Darah</label>
+                                                            <select id="inputHistoryKeluarga" class="form-select"
+                                                                name="golongan_darah_history_keluarga">
+                                                                <option value="">Pilih Golongan Darah</option>
+                                                                <option value="A"
+                                                                    {{ old('golongan_darah_history_keluarga') == 'A' ? 'selected' : '' }}>
+                                                                    A</option>
+                                                                <option value="B"
+                                                                    {{ old('golongan_darah_history_keluarga') == 'B' ? 'selected' : '' }}>
+                                                                    B</option>
+                                                                <option value="AB"
+                                                                    {{ old('golongan_darah_history_keluarga') == 'AB' ? 'selected' : '' }}>
+                                                                    AB</option>
+                                                                <option value="O"
+                                                                    {{ old('golongan_darah_history_keluarga') == 'O' ? 'selected' : '' }}>
+                                                                    O</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="d-md-flex d-grid align-items-center gap-3">
+                                                                <button type="submit"
+                                                                    class="btn btn-grd-danger px-4">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- End Modal Add History Keluarga --}}
+                                {{-- Modal Edit History Keluarga --}}
+                                @if (isset($history_family) && $history_family != null)
+                                    <div class="modal fade" id="ScrollableModalEditHistoryKeluarga">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+                                                    <h5 class="modal-title">Form Edit History Keluarga</h5>
+                                                    <a href="javascript:;" class="primary-menu-close"
+                                                        data-bs-dismiss="modal">
+                                                        <i class="material-icons-outlined">close</i>
+                                                    </a>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @if ($errors->any())
+                                                        <div class="alert alert-danger alert-dismissible fade show"
+                                                            role="alert">
+                                                            <ul class="mb-0">
+                                                                @foreach ($errors->all() as $error)
+                                                                    <li>{{ $error }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Area Pesan Error Manual (Session) -->
+                                                    @if (session('error'))
+                                                        <div class="alert alert-danger alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ session('error') }}
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>
+                                                    @endif
+                                                    <div class="form-body">
+                                                        <form
+                                                            action="{{ route('history_family.update', $history_family->id) }}"
+                                                            id="editHistoryKeluarga" method="post"
+                                                            enctype="multipart/form-data" class="row g-3">
+                                                            @method('PUT')
+                                                            @csrf
+                                                            <input type="hidden" name="employees_id"
+                                                                class="form-control" value="{{ $employee->id }}"
+                                                                id="editHistoryKeluarga" readonly
+                                                                placeholder="Employees ID">
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga" class="form-label">NIK
+                                                                    Karyawan</label>
+                                                                <input type="text" name="nik_karyawan"
+                                                                    class="form-control"
+                                                                    value="{{ $employee->nik_karyawan }}"
+                                                                    id="editHistoryKeluarga" readonly
+                                                                    placeholder="First Name">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga" class="form-label">Nama
+                                                                    Karyawan</label>
+                                                                <input type="text" name="nama_karyawan"
+                                                                    value="{{ $employee->nama_karyawan }}"
+                                                                    class="form-control" id="editHistoryKeluarga" readonly
+                                                                    placeholder="Nama Karyawan">
+                                                            </div>
+
+
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Hubungan Keluarga</label>
+                                                                <select id="editHistoryKeluarga" class="form-select"
+                                                                    name="hubungan_keluarga">
+                                                                    <option value="">Pilih Hubungan Keluarga</option>
+                                                                    <option value="Suami"
+                                                                        @if ($history_family->hubungan_keluarga == 'Suami') {{ 'selected="selected"' }} @endif>
+                                                                        Suami</option>
+                                                                    <option value="Istri"
+                                                                        @if ($history_family->hubungan_keluarga == 'Istri') {{ 'selected="selected"' }} @endif>
+                                                                        Istri</option>
+                                                                    <option value="Anak"
+                                                                        @if ($history_family->hubungan_keluarga == 'Anak') {{ 'selected="selected"' }} @endif>
+                                                                        Anak</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga" class="form-label">NIK
+                                                                    KTP</label>
+                                                                <input type="text" name="nik_history_keluarga"
+                                                                    maxlength="16"
+                                                                    value="{{ $history_family->nik_history_keluarga }}"
+                                                                    onkeyup="angka(this);" class="form-control"
+                                                                    id="editHistoryKeluarga"
+                                                                    placeholder="Masukan NIK KTP">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga" class="form-label">Nama
+                                                                    Lengkap</label>
+                                                                <input type="text" name="nama_history_keluarga"
+                                                                    onkeyup="huruf(this);"
+                                                                    value="{{ $history_family->nama_history_keluarga }}"
+                                                                    class="form-control" id="editHistoryKeluarga"
+                                                                    placeholder="Masukan Nama Lengkap">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga" class="form-label">No
+                                                                    BPJS
+                                                                    Kesehatan</label>
+                                                                <input type="text"
+                                                                    name="nomor_bpjs_kesehatan_history_keluarga"
+                                                                    onkeyup="angka(this);" maxlength="13"
+                                                                    value="{{ $history_family->nomor_bpjs_kesehatan_history_keluarga }}"
+                                                                    class="form-control" id="editHistoryKeluarga"
+                                                                    placeholder="Masukan Nomor BPJS Kesehatan">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Jenis Kelamin</label>
+                                                                <select id="editHistoryKeluarga" class="form-select"
+                                                                    name="jenis_kelamin_history_keluarga">
+                                                                    <option value="">Pilih Jenis Kelamin</option>
+                                                                    <option value="Pria"
+                                                                        @if ($history_family->jenis_kelamin_history_keluarga == 'Pria') {{ 'selected="selected"' }} @endif>
+                                                                        Pria</option>
+                                                                    <option value="Wanita"
+                                                                        @if ($history_family->jenis_kelamin_history_keluarga == 'Wanita') {{ 'selected="selected"' }} @endif>
+                                                                        Wanita</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga"
+                                                                    class="form-label">Tempat
+                                                                    Lahir Lahir</label>
+                                                                <input type="text"
+                                                                    name="tempat_lahir_history_keluarga"
+                                                                    class="form-control"
+                                                                    value="{{ $history_family->tempat_lahir_history_keluarga }}"
+                                                                    id="editHistoryKeluarga"
+                                                                    placeholder="Masukan Tempat Lahir">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="editHistoryKeluarga"
+                                                                    class="form-label">Tanggal
+                                                                    Lahir</label>
+                                                                <input type="date"
+                                                                    name="tanggal_lahir_history_keluarga"
+                                                                    class="form-control"
+                                                                    value="{{ $history_family->tanggal_lahir_history_keluarga }}"
+                                                                    id="editHistoryKeluarga" placeholder="dd/mm/yyyy">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Golongan Darah</label>
+                                                                <select id="editHistoryKeluarga" class="form-select"
+                                                                    name="golongan_darah_history_keluarga">
+                                                                    <option value="">Pilih Jenis Kelamin</option>
+                                                                    <option value="A"
+                                                                        @if ($history_family->golongan_darah_history_keluarga == 'A') {{ 'selected="selected"' }} @endif>
+                                                                        A</option>
+                                                                    <option value="B"
+                                                                        @if ($history_family->golongan_darah_history_keluarga == 'B') {{ 'selected="selected"' }} @endif>
+                                                                        B</option>
+                                                                    <option value="AB"
+                                                                        @if ($history_family->golongan_darah_history_keluarga == 'AB') {{ 'selected="selected"' }} @endif>
+                                                                        AB</option>
+                                                                    <option value="O"
+                                                                        @if ($history_family->golongan_darah_history_keluarga == 'O') {{ 'selected="selected"' }} @endif>
+                                                                        O</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="d-md-flex d-grid align-items-center gap-3">
+                                                                    <button type="submit"
+                                                                        class="btn btn-grd-danger px-4">Submit</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                {{-- End Modal Edit History Keluarga --}}
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
                                         <div class="detail-info w-100">
@@ -1300,7 +1777,6 @@
 
 {{-- Datatables --}}
 @section('js')
-
     {{-- <script src="{{ asset('template_admin/assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script> --}}
     <script src="{{ asset('template_admin/assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script>
@@ -1335,8 +1811,7 @@
     </script>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
+    {{-- On Key Up --}}
+    <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
 @endsection
-
 {{-- Datatables --}}

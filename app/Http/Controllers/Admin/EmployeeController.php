@@ -16,6 +16,7 @@ use App\Models\Admin\Areas;
 use App\Models\Admin\MinimalSalaries;
 use App\Models\Admin\HistoryContracts;
 use App\Models\Admin\HistoryPositions;
+use App\Models\Admin\HistoryFamilies;
 use Alert;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Carbon\Carbon;
@@ -151,14 +152,16 @@ class EmployeeController extends Controller
         $MasaKerja              = $tanggal_mulai_kerja->diff($today)->format('%y Tahun, %m Bulan');
 
         $history_contracts      = HistoryContracts::with(['employees'])->get();
+        $history_families       = HistoryFamilies::with(['employees'])->get();
+        $history_family         = HistoryFamilies::with(['employees'])->where('employees_id', $employee->id)->first();
 
-        $history_positions = HistoryPositions::with([
-                            'employees',
-                            'divisions',
-                            'positions',
-                            'companies',
-                            'areas'
-                            ])->where('employees_id', $employee->id)->get();
+        $history_positions      = HistoryPositions::with([
+                                    'employees',
+                                    'divisions',
+                                    'positions',
+                                    'companies',
+                                    'areas'
+                                    ])->where('employees_id', $employee->id)->get();
 
         return view ('admin.pages.employee.show',[
             'employee'                  => $employee,
@@ -171,7 +174,9 @@ class EmployeeController extends Controller
             'MasaKerja'                 => $MasaKerja,
             'areas'                     => $areas,
             'history_contracts'         => $history_contracts,
-            'history_positions'         => $history_positions
+            'history_positions'         => $history_positions,
+            'history_families'          => $history_families,
+            'history_family'            => $history_family
         ]);
     }
 
