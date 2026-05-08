@@ -1,13 +1,5 @@
 @section('css')
     <link href="{{ asset('template_admin/assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
-    <style>
-        .employee-card {
-            background: #1e293b;
-            border-radius: 40px;
-            border: none;
-            overflow: hidden;
-        }
-    </style>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 @endsection
 @extends('admin.layouts.base')
@@ -58,19 +50,13 @@
 
                     <!-- Quick Stats -->
                     <div class="row mt-4 text-center">
-                        <div class="col-4">
-                            <h5 class="text-info">Masa Kerja</h5>
-                            <p class="mb-0">{{ $MasaKerja }}</p>
+                        <div class="col-6">
+                            <h5 class="text-primary">Nama Perusahaan</h5>
+                            <p class="mb-0">{{ $employee->companies->nama_perusahaan }}</p>
                         </div>
-
-                        <div class="col-4">
-                            <h5 class="text-success">Umur</h5>
-                            <p class="mb-0">{{ $UmurLengkap }}</p>
-                        </div>
-
-                        <div class="col-4">
-                            <h5 class="text-warning">Status Kerja</h5>
-                            <p class="mb-0">{{ $employee->status_kerja }}</p>
+                        <div class="col-6">
+                            <h5 class="text-danger">Area</h5>
+                            <p class="mb-0">{{ $employee->areas->area }}</p>
                         </div>
                     </div>
 
@@ -78,205 +64,21 @@
 
                     <!-- Documents -->
                     <div class="text-center">
-                        <h6 class="mb-3 text-white">Dokumen Karyawan</h6>
-
                         <div class="row row-cols-auto g-3 justify-content-center">
-                            {{-- Modal KTP --}}
-                            <div class="col">
-                                <!-- Button buka modal pertama -->
-                                <button type="button"
-                                    class="btn btn-primary p-3 px-4 raised d-flex align-items-center gap-2"
-                                    data-bs-toggle="modal" data-bs-target="#BasicModalKTP">
-                                    <i class="material-icons-outlined">search</i>
-                                    KTP
-                                </button>
-                                <!-- Button buka modal pertama -->
-                                <!-- Modal Pertama -->
-                                <div class="modal fade" id="BasicModalKTP" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-
-                                            <div class="modal-header border-bottom-0 py-2">
-                                                <h5 class="modal-title">Identitas KTP</h5>
-                                                <a href="javascript:;" data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="card rounded-4">
-                                                    <div class="card-body text-center">
-
-                                                        <!-- Gambar kecil -->
-                                                        <img src="{{ asset('storage/assets/foto/ktp/' . $employee->foto_ktp) }}"
-                                                            class="img-fluid rounded-4 preview-image" alt="Foto KTP"
-                                                            style="cursor:pointer; max-height:300px;" data-bs-toggle="modal"
-                                                            data-bs-target="#imagePreviewModalKTP">
-
-                                                        <div class="mt-3">
-                                                            <h5 class="mb-0 fw-bold">
-                                                                {{ $employee->nama_karyawan }}
-                                                            </h5>
-                                                            <p class="mb-0">Identitas NPWP</p>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Pertama -->
-                                <!-- Modal Kedua (Preview Gambar Besar) -->
-                                <div class="modal fade" id="imagePreviewModalKTP" tabindex="-1">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                                        <div class="modal-content bg-transparent border-0">
-
-                                            <div class="modal-body text-center p-0">
-                                                <img src="{{ asset('storage/assets/foto/ktp/' . $employee->foto_ktp) }}"
-                                                    class="img-fluid rounded-4 shadow-lg" alt="Preview KTP"
-                                                    style="max-height:90vh; object-fit:contain;">
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Kedua (Preview Gambar Besar) -->
-
+                            <div class="col-4">
+                                <h5 class="text-info">Masa Kerja</h5>
+                                <p class="mb-0">{{ $MasaKerja }}</p>
                             </div>
-                            {{-- End Modal KTP --}}
-                            {{-- Modal NPWP --}}
-                            <div class="col">
-                                <!-- Button buka modal pertama -->
-                                <button type="button"
-                                    class="btn btn-primary p-3 px-4 raised d-flex align-items-center gap-2"
-                                    data-bs-toggle="modal" data-bs-target="#BasicModalNPWP">
-                                    <i class="material-icons-outlined">search</i>
-                                    NPWP
-                                </button>
-                                <!-- Button buka modal pertama -->
-                                <!-- Modal Pertama -->
-                                <div class="modal fade" id="BasicModalNPWP" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
 
-                                            <div class="modal-header border-bottom-0 py-2">
-                                                <h5 class="modal-title">Identitas NPWP</h5>
-                                                <a href="javascript:;" data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="card rounded-4">
-                                                    <div class="card-body text-center">
-
-                                                        <!-- Gambar kecil -->
-                                                        <img src="{{ asset('storage/assets/foto/npwp/' . $employee->foto_npwp) }}"
-                                                            class="img-fluid rounded-4 preview-image" alt="Foto NPWP"
-                                                            style="cursor:pointer; max-height:300px;"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#imagePreviewModalNPWP">
-
-                                                        <div class="mt-3">
-                                                            <h5 class="mb-0 fw-bold">
-                                                                {{ $employee->nama_karyawan }}
-                                                            </h5>
-                                                            <p class="mb-0">Identitas NPWP</p>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Pertama -->
-                                <!-- Modal Kedua (Preview Gambar Besar) -->
-                                <div class="modal fade" id="imagePreviewModalNPWP" tabindex="-1">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                                        <div class="modal-content bg-transparent border-0">
-
-                                            <div class="modal-body text-center p-0">
-                                                <img src="{{ asset('storage/assets/foto/npwp/' . $employee->foto_npwp) }}"
-                                                    class="img-fluid rounded-4 shadow-lg" alt="Preview NPWP"
-                                                    style="max-height:90vh; object-fit:contain;">
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Kedua (Preview Gambar Besar) -->
-
+                            <div class="col-4">
+                                <h5 class="text-success">Umur</h5>
+                                <p class="mb-0">{{ $UmurLengkap }}</p>
                             </div>
-                            {{-- End Modal NPWP --}}
-                            {{-- Modal KK --}}
-                            <div class="col">
-                                <!-- Button buka modal pertama -->
-                                <button type="button"
-                                    class="btn btn-primary p-3 px-4 raised d-flex align-items-center gap-2"
-                                    data-bs-toggle="modal" data-bs-target="#BasicModalKK">
-                                    <i class="material-icons-outlined">search</i>
-                                    KK
-                                </button>
-                                <!-- Button buka modal pertama -->
-                                <!-- Modal Pertama -->
-                                <div class="modal fade" id="BasicModalKK" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
 
-                                            <div class="modal-header border-bottom-0 py-2">
-                                                <h5 class="modal-title">Identitas KK</h5>
-                                                <a href="javascript:;" data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="card rounded-4">
-                                                    <div class="card-body text-center">
-
-                                                        <!-- Gambar kecil -->
-                                                        <img src="{{ asset('storage/assets/foto/kk/' . $employee->foto_kk) }}"
-                                                            class="img-fluid rounded-4 preview-image" alt="Foto KK"
-                                                            style="cursor:pointer; max-height:300px;"
-                                                            data-bs-toggle="modal" data-bs-target="#imagePreviewModalKK">
-
-                                                        <div class="mt-3">
-                                                            <h5 class="mb-0 fw-bold">
-                                                                {{ $employee->nama_karyawan }}
-                                                            </h5>
-                                                            <p class="mb-0">Identitas KK</p>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Pertama -->
-                                <!-- Modal Kedua (Preview Gambar Besar) -->
-                                <div class="modal fade" id="imagePreviewModalKK" tabindex="-1">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                                        <div class="modal-content bg-transparent border-0">
-
-                                            <div class="modal-body text-center p-0">
-                                                <img src="{{ asset('storage/assets/foto/kk/' . $employee->foto_kk) }}"
-                                                    class="img-fluid rounded-4 shadow-lg" alt="Preview KK"
-                                                    style="max-height:90vh; object-fit:contain;">
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Kedua (Preview Gambar Besar) -->
-
+                            <div class="col-4">
+                                <h5 class="text-warning">Status Kerja</h5>
+                                <p class="mb-0">{{ $employee->status_kerja }}</p>
                             </div>
-                            {{-- End Modal KK --}}
                         </div>
                     </div>
                 </div>
@@ -286,13 +88,13 @@
         <!-- END PROFILE SECTION -->
 
         <!-- DETAIL SECTION -->
-        <div class="col">
+        <div class="col" data-aos="fade-left">
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-pills mb-3" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-bs-toggle="pill" href="#primary-pills-karyawan"
-                                role="tab" aria-selected="true">
+                            <a class="nav-link active" data-bs-toggle="pill" href="#primary-pills-karyawan" role="tab"
+                                aria-selected="true">
                                 <div class="d-flex align-items-center">
                                     <div class="tab-icon"><i class="bi bi-person me-1 fs-6"></i>
                                     </div>
@@ -334,34 +136,6 @@
                     <div class="tab-content" id="pills-tabContent">
                         {{-- Tab Karyawan --}}
                         <div class="tab-pane fade show active" id="primary-pills-karyawan" role="tabpanel">
-                            <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
-                                <div class="col">
-                                    <div class="d-flex align-items-start gap-3 border p-3 rounded">
-                                        <div class="detail-icon fs-5">
-                                            <i class="bi bi-person-vcard"></i>
-                                        </div>
-                                        <div class="detail-info">
-                                            <h6 class="fw-bold mb-1">Nama Perusahaan</h6>
-                                            <p class="mb-0">
-                                                {{ $employee->companies->nama_perusahaan }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="d-flex align-items-start gap-3 border p-3 rounded">
-                                        <div class="detail-icon fs-5">
-                                            <i class="bi bi-house-vcard"></i>
-                                        </div>
-                                        <div class="detail-info">
-                                            <h6 class="fw-bold mb-1">Area</h6>
-                                            <p class="mb-0">
-                                                {{ $employee->areas->area }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded">
@@ -1698,11 +1472,9 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label for="editHistoryKeluarga"
-                                                                    class="form-label">Tempat
+                                                                <label for="editHistoryKeluarga" class="form-label">Tempat
                                                                     Lahir Lahir</label>
-                                                                <input type="text"
-                                                                    name="tempat_lahir_history_keluarga"
+                                                                <input type="text" name="tempat_lahir_history_keluarga"
                                                                     class="form-control"
                                                                     value="{{ $history_family->tempat_lahir_history_keluarga }}"
                                                                     id="editHistoryKeluarga"

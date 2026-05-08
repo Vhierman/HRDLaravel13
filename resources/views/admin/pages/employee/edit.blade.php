@@ -536,38 +536,6 @@
                                     <input type="file" name="foto_karyawan" class="form-control"
                                         placeholder="Foto Karyawan">
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <label class="form-label">Foto KTP</label>
-                                    @if ($employee->foto_ktp)
-                                        <div class="mb-2">
-                                            <img src="{{ asset('storage/assets/foto/ktp/' . $employee->foto_ktp) }}"
-                                                class="img-thumbnail" width="100">
-                                        </div>
-                                    @endif
-                                    <input type="file" name="foto_ktp" class="form-control" placeholder="Foto KTP">
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <label class="form-label">Foto NPWP</label>
-                                    @if ($employee->foto_npwp)
-                                        <div class="mb-2">
-                                            <img src="{{ asset('storage/assets/foto/npwp/' . $employee->foto_npwp) }}"
-                                                class="img-thumbnail" width="100">
-                                        </div>
-                                    @endif
-                                    <input type="file" name="foto_npwp" class="form-control" placeholder="Foto NPWP">
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <label class="form-label">Foto Kartu Keluarga</label>
-                                    @if ($employee->foto_kk)
-                                        <div class="mb-2">
-                                            <img src="{{ asset('storage/assets/foto/kk/' . $employee->foto_kk) }}"
-                                                class="img-thumbnail" width="100">
-                                        </div>
-                                    @endif
-                                    <input type="file" name="foto_kk" class="form-control"
-                                        placeholder="Foto Kartu Keluarga">
-                                </div>
-
                                 <div class="col-12">
                                     <div class="d-flex align-items-center gap-3">
                                         <button type="button" class="btn btn-primary"

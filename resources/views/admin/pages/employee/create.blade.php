@@ -501,20 +501,6 @@
                                     <input type="file" name="foto_karyawan" class="form-control"
                                         placeholder="Foto Karyawan">
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <label class="form-label">Foto KTP</label>
-                                    <input type="file" name="foto_ktp" class="form-control" placeholder="Foto KTP">
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <label class="form-label">Foto NPWP</label>
-                                    <input type="file" name="foto_npwp" class="form-control" placeholder="Foto NPWP">
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <label class="form-label">Foto Kartu Keluarga</label>
-                                    <input type="file" name="foto_kk" class="form-control"
-                                        placeholder="Foto Kartu Keluarga">
-                                </div>
-
                                 <div class="col-12">
                                     <div class="d-flex align-items-center gap-3">
                                         <button type="button" class="btn btn-primary"

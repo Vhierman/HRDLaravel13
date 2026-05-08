@@ -56,10 +56,7 @@ class EmployeeRequest extends FormRequest
             'kota'                      => 'required',
             'provinsi'                  => 'required',
             'kode_pos'                  => 'required|numeric|min:5',
-            'foto_karyawan'             => 'required|image|mimes:jpeg,jpg,png|max:1024',
-            'foto_ktp'                  => 'required|image|mimes:jpeg,jpg,png|max:1024',
-            'foto_npwp'                 => 'required|image|mimes:jpeg,jpg,png|max:1024',
-            'foto_kk'                   => 'required|image|mimes:jpeg,jpg,png|max:1024'
+            'foto_karyawan'             => 'required|image|mimes:jpeg,jpg,png|max:1024'
         ];
     }
 }

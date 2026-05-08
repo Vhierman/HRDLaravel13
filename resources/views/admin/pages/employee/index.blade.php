@@ -27,12 +27,25 @@
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
-                    <a href="{{ route('employee.create') }}" class="btn btn-primary px-5 raised">
+                    {{-- <a href="{{ route('employee.create') }}" class="btn btn-primary px-5 raised">
                         Tambah Data Karyawan
                     </a>
                     <a href="{{ route('exportExcel') }}" target="_blank" class="btn btn-success px-5 raised">
                         Download Data Karyawan
-                    </a>
+                    </a> --}}
+                    <div class="btn-group position-static">
+                        <a href="{{ route('employee.create') }}" class="btn-group position-static">
+                            <button type="button" class="btn btn-primary">
+                                <i class="bi bi-person-plus"></i> Tambah Data Karyawan
+                            </button>
+                        </a>
+                        <a href="{{ route('exportExcel') }}" target="_blank" class="btn-group position-static">
+                            <button type="button" class="btn btn-success">
+                                <i class="bi bi-cloud-arrow-down"></i> Download Database Karyawan
+                            </button>
+                        </a>
+
+                    </div>
                 </div>
             </div>
             <br>
@@ -132,13 +145,13 @@
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">
                                             <a href="{{ route('employee.edit', $employee->id) }}"
-                                                class="btn btn-success raised d-flex gap-2">
+                                                class="btn btn-sm btn-success raised d-flex gap-2">
                                                 <i class="material-icons-outlined">edit</i>
                                             </a>
                                         </div>
                                         <div class="col">
                                             <a href="{{ route('employee.show', $employee->id) }}"
-                                                class="btn btn-primary raised d-flex gap-2">
+                                                class="btn btn-sm btn-primary raised d-flex gap-2">
                                                 <i class="material-icons-outlined">visibility</i>
                                             </a>
                                         </div>
@@ -146,7 +159,7 @@
                                             <form action="{{ route('employee.destroy', $employee->id) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger raised d-flex gap-2">
+                                                <button class="btn btn-sm btn-danger raised d-flex gap-2">
                                                     <i class="material-icons-outlined">delete</i>
                                                 </button>
                                             </form>
