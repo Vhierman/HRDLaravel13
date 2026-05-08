@@ -30,6 +30,9 @@
                     <a href="{{ route('employee.create') }}" class="btn btn-primary px-5 raised">
                         Tambah Data Karyawan
                     </a>
+                    <a href="{{ route('exportExcel') }}" target="_blank" class="btn btn-success px-5 raised">
+                        Download Data Karyawan
+                    </a>
                 </div>
             </div>
             <br>

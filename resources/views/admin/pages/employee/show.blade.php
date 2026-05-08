@@ -8,6 +8,7 @@
             overflow: hidden;
         }
     </style>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 @endsection
 @extends('admin.layouts.base')
 @section('title', 'Detail Karyawan')
@@ -28,7 +29,8 @@
     <div class="row g-4">
 
         <!-- PROFILE SECTION -->
-        <div class="col-lg-4 col-12">
+
+        <div data-aos="zoom-in" class="col-lg-4 col-12">
             <div class="card employee-card shadow-lg">
 
                 <div class="position-relative">
@@ -280,6 +282,7 @@
                 </div>
             </div>
         </div>
+
         <!-- END PROFILE SECTION -->
 
         <!-- DETAIL SECTION -->
@@ -1813,5 +1816,9 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- On Key Up --}}
     <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 @endsection
 {{-- Datatables --}}

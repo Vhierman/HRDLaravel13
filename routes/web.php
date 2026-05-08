@@ -48,6 +48,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('maksimal_upah_bpjstk', MaksimalUpahBpjsKetenagakerjaanController::class);
 
     Route::get('employee/aktif_kerja/{nik_karyawan}', [EmployeeController::class, 'aktif_kerja'])->name('cetak.aktif_kerja');
+    Route::get('employee/exportExcel', [EmployeeController::class, 'exportExcel'])->name('exportExcel');
     Route::resource('employee', EmployeeController::class);
 
     Route::get('history_contract/pkwt/{nik_karyawan}', [HistoryContractController::class, 'pkwt'])->name('cetak.pkwt');

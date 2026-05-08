@@ -136,20 +136,6 @@
             </li>
             {{-- Sertifikasi --}}
 
-            {{-- Kaizen --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">workspace_premium</i>
-                    </div>
-                    <div class="menu-title">Kaizen</div>
-                </a>
-                <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>QCC Internal</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>QCC Eksternal</a></li>
-                </ul>
-            </li>
-            {{-- Kaizen --}}
-
             {{-- Proses --}}
             <li>
                 <a href="#" class="has-arrow">
