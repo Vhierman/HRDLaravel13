@@ -27,12 +27,6 @@
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
-                    {{-- <a href="{{ route('employee.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Karyawan
-                    </a>
-                    <a href="{{ route('exportExcel') }}" target="_blank" class="btn btn-success px-5 raised">
-                        Download Data Karyawan
-                    </a> --}}
                     <div class="btn-group position-static">
                         <a href="{{ route('employee.create') }}" class="btn-group position-static">
                             <button type="button" class="btn btn-primary">
@@ -44,7 +38,6 @@
                                 <i class="bi bi-cloud-arrow-down"></i> Download Database Karyawan
                             </button>
                         </a>
-
                     </div>
                 </div>
             </div>

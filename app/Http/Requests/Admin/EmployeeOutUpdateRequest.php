@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class EmployeeOutRequest extends FormRequest
+class EmployeeOutUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class EmployeeOutRequest extends FormRequest
     {
         return [
             //
-            'employee_id'                       => 'required|integer|exists:employees,id',
-            'keterangan_keluar'                 => 'required|string|in:Berakhir Kontrak Kerja,Pengunduran Diri,Pemutusan Hubungan Kerja,Memasuki Usia Pensiun',
+            'nik_karyawan_keluar'               => 'required',
+            'nama_karyawan_keluar'              => 'required|string',
+            'keterangan_keluar'                 => 'required',
             'tanggal_keluar_karyawan_keluar'    => 'required|date',
         ];
     }

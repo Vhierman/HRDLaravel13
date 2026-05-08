@@ -27,12 +27,18 @@
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
-                    <a href="{{ route('employee_out.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Karyawan Keluar
-                    </a>
-                    <a href="{{ route('exportExcel') }}" target="_blank" class="btn btn-success px-5 raised">
-                        Download Data Karyawan Keluar
-                    </a>
+                    <div class="btn-group position-static">
+                        <a href="{{ route('employee_out.create') }}" class="btn-group position-static">
+                            <button type="button" class="btn btn-primary">
+                                <i class="bi bi-person-plus"></i> Tambah Data Karyawan Keluar
+                            </button>
+                        </a>
+                        <a href="{{ route('EmployeeOutExportExcel') }}" target="_blank" class="btn-group position-static">
+                            <button type="button" class="btn btn-success">
+                                <i class="bi bi-cloud-arrow-down"></i> Download Database Karyawan Keluar
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
             <br>
@@ -98,7 +104,7 @@
                                         </div>
                                         <div class="col">
                                             <a href="{{ route('employee_out.show', $employee_out->id) }}"
-                                                class="btn btn-primary raised d-flex gap-2">
+                                                class="btn btn-primary raised d-flex gap-2" target="_blank">
                                                 <i class="material-icons-outlined">print</i>
                                             </a>
                                         </div>

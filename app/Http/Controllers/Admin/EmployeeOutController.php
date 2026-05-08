@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\EmployeeOutRequest;
+use App\Http\Requests\Admin\EmployeeOutUpdateRequest;
 use App\Models\Admin\EmployeesOuts;
 use App\Models\Admin\Employees;
 use App\Models\Admin\HistoryContracts;
@@ -21,6 +22,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class EmployeeOutController extends Controller
 {
@@ -166,6 +174,20 @@ class EmployeeOutController extends Controller
             $overtime->delete();
         }
         } else {}
+
+
+        //Menghapus Foto
+        $fileFields = [
+                'foto_karyawan' => 'assets/foto/karyawan'
+                ];
+
+                // Proses penghapusan file fisik dari storage
+                foreach ($fileFields as $field => $path) {
+                    if ($employee->$field) {
+                        Storage::disk('public')->delete($path . '/' . $employee->$field);
+                    }
+                }
+        //Menghapus Foto
 
         DB::commit();
 
@@ -372,7 +394,7 @@ class EmployeeOutController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EmployeeOutRequest $request, string $id)
+    public function update(EmployeeOutUpdateRequest $request, string $id)
     {
         //
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
@@ -406,4 +428,208 @@ class EmployeeOutController extends Controller
         Alert::error('Menghapus Data Karyawan Keluar','Oleh '.auth()->user()->name);
         return redirect()->route('employee_out.index');
     }
+
+    public function EmployeeOutExportExcel()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        // Header
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Perusahaan');
+        $sheet->setCellValue('C1', 'Area');
+        $sheet->setCellValue('D1', 'Golongan');
+        $sheet->setCellValue('E1', 'Jabatan');
+        $sheet->setCellValue('F1', 'Penempatan');
+        $sheet->setCellValue('G1', 'NIK');
+        $sheet->setCellValue('H1', 'Nama');
+        $sheet->setCellValue('I1', 'Email');
+        $sheet->setCellValue('J1', 'NPWP');
+        $sheet->setCellValue('K1', 'Tempat Lahir');
+        $sheet->setCellValue('L1', 'Tanggal Lahir');
+        $sheet->setCellValue('M1', 'Agama');
+        $sheet->setCellValue('N1', 'Jenis Kelamin');
+        $sheet->setCellValue('O1', 'Nomor Handphone');
+        $sheet->setCellValue('P1', 'Pendidikan Terakhir');
+        $sheet->setCellValue('Q1', 'Golongan Darah');
+        $sheet->setCellValue('R1', 'Nomor BPJS Kesehatan');
+        $sheet->setCellValue('S1', 'Nomor BPJS Ketenagakerjaan');
+        $sheet->setCellValue('T1', 'Nomor Kartu Keluarga');
+        $sheet->setCellValue('U1', 'Status Nikah');
+        $sheet->setCellValue('V1', 'Nama Ayah');
+        $sheet->setCellValue('W1', 'Nama Ibu');
+        $sheet->setCellValue('X1', 'Nomor Rekening');
+        $sheet->setCellValue('Y1', 'Status Kerja');
+        $sheet->setCellValue('Z1', 'Tanggal Mulai Kerja');
+        $sheet->setCellValue('AA1', 'Tanggal Akhir Kerja');
+        $sheet->setCellValue('AB1', 'Alamat');
+        $sheet->setCellValue('AC1', 'RT');
+        $sheet->setCellValue('AD1', 'RW');
+        $sheet->setCellValue('AE1', 'Kelurahan');
+        $sheet->setCellValue('AF1', 'Kecamatan');
+        $sheet->setCellValue('AG1', 'Kabupaten/Kota');
+        $sheet->setCellValue('AH1', 'Provinsi');
+        $sheet->setCellValue('AI1', 'Kode POS');
+        // Header
+
+        //Style
+        $sheet->getStyle('A1:AI1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => [
+                    'rgb' => 'FFFFFF'
+                ],
+                'size' => 12
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => '4CAF50'
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+            ]);
+            $sheet->getRowDimension(1)->setRowHeight(30);
+        //Style
+
+        $employees_outs  = EmployeesOuts::with(['golongans','areas','divisions','positions','companies'])->get();
+
+        $row = 2;
+        $no = 1;
+        foreach ($employees_outs as $employees_out) {
+                $sheet->getRowDimension($row)->setRowHeight(25);
+                $sheet->setCellValue('A'.$row, $no);
+                $sheet->setCellValue('B'.$row, $employees_out->companies->nama_perusahaan);
+                $sheet->setCellValue('C'.$row, $employees_out->areas->area);
+                $sheet->setCellValue('D'.$row, $employees_out->golongans->golongan);
+                $sheet->setCellValue('E'.$row, $employees_out->positions->jabatan);
+                $sheet->setCellValue('F'.$row, $employees_out->divisions->penempatan);
+                $sheet->setCellValue('G'.$row, $employees_out->nik_karyawan_keluar);
+                $sheet->setCellValue('H'.$row, $employees_out->nama_karyawan_keluar);
+                $sheet->setCellValue('I'.$row, $employees_out->email_karyawan_keluar);
+                $sheet->setCellValue('J'.$row, "'".$employees_out->nomor_npwp_karyawan_keluar);
+                $sheet->setCellValue('K'.$row, $employees_out->tempat_lahir_karyawan_keluar);
+                $sheet->setCellValue('L'.$row, $employees_out->tanggal_lahir_karyawan_keluar);
+                $sheet->setCellValue('M'.$row, $employees_out->agama_karyawan_keluar);
+                $sheet->setCellValue('N'.$row, $employees_out->jenis_kelamin_karyawan_keluar);
+                $sheet->setCellValue('O'.$row, "'".$employees_out->nomor_handphone_karyawan_keluar);
+                $sheet->setCellValue('P'.$row, $employees_out->pendidikan_terakhir_karyawan_keluar);
+                $sheet->setCellValue('Q'.$row, $employees_out->golongan_darah_karyawan_keluar);
+                $sheet->setCellValue('R'.$row, "'".$employees_out->nomor_bpjskesehatan_karyawan_keluar);
+                $sheet->setCellValue('S'.$row, "'".$employees_out->nomor_bpjsketenagakerjaan_karyawan_keluar);
+                $sheet->setCellValue('T'.$row, "'".$employees_out->nomor_kartu_keluarga_karyawan_keluar);
+                $sheet->setCellValue('U'.$row, $employees_out->status_nikah_karyawan_keluar);
+                $sheet->setCellValue('V'.$row, $employees_out->nama_ayah_karyawan_keluar);
+                $sheet->setCellValue('W'.$row, $employees_out->nama_ibu_karyawan_keluar);
+                $sheet->setCellValue('X'.$row, "'".$employees_out->nomor_rekening_karyawan_keluar);
+                $sheet->setCellValue('Y'.$row, $employees_out->status_kerja_karyawan_keluar);
+                $sheet->setCellValue('Z'.$row, $employees_out->tanggal_masuk_karyawan_keluar);
+                $sheet->setCellValue('AA'.$row, $employees_out->tanggal_keluar_karyawan_keluar);
+                $sheet->setCellValue('AB'.$row, $employees_out->alamat_karyawan_keluar);
+                $sheet->setCellValue('AC'.$row, "'".$employees_out->rt_karyawan_keluar);
+                $sheet->setCellValue('AD'.$row, "'".$employees_out->rw_karyawan_keluar);
+                $sheet->setCellValue('AE'.$row, $employees_out->kelurahan_karyawan_keluar);
+                $sheet->setCellValue('AF'.$row, $employees_out->kecamatan_karyawan_keluar);
+                $sheet->setCellValue('AG'.$row, $employees_out->kota_karyawan_keluar);
+                $sheet->setCellValue('AH'.$row, $employees_out->provinsi_karyawan_keluar);
+                $sheet->setCellValue('AI'.$row, "'".$employees_out->kode_pos_karyawan_keluar);
+                $row++;
+                $no++;
+        }
+
+         // Border seluruh data
+        $lastRow = $row - 1;
+        $sheet->getStyle("A1:AI{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+
+                $sheet->getStyle("A1:AI{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        
+                $sheet->getStyle("A2:A{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("D2:D{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("G2:G{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("J2:J{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("M2:M{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("N2:N{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("O2:O{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("P2:P{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("Q2:Q{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("R2:R{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("S2:S{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("T2:T{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("U2:U{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("X2:X{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("Y2:Y{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("AC2:AC{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("AD2:AD{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("AE2:AE{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("AI2:AI{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                // Auto width
+        $highestColumn = $sheet->getHighestColumn(); 
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $columnLetter = Coordinate::stringFromColumnIndex($col);
+            $sheet->getColumnDimension($columnLetter)->setAutoSize(true);
+        }
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = 'DatabaseKaryawanKeluar.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+    
 }

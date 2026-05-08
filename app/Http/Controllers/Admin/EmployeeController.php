@@ -100,10 +100,7 @@ class EmployeeController extends Controller
         $data       = $request->except(['_token', '_method']);
 
         $fileFields = [
-            'foto_karyawan' => 'assets/foto/karyawan',
-            'foto_ktp'      => 'assets/foto/ktp',
-            'foto_npwp'     => 'assets/foto/npwp',
-            'foto_kk'       => 'assets/foto/kk',
+            'foto_karyawan' => 'assets/foto/karyawan'
         ];
 
         foreach ($fileFields as $field => $path) {
@@ -228,10 +225,7 @@ class EmployeeController extends Controller
         $data       = $request->except(['_token', '_method']);
         $employee   = Employees::findOrFail($id);
         $fileFields = [
-            'foto_karyawan' => 'assets/foto/karyawan',
-            'foto_ktp'      => 'assets/foto/ktp',
-            'foto_npwp'     => 'assets/foto/npwp',
-            'foto_kk'       => 'assets/foto/kk',
+            'foto_karyawan' => 'assets/foto/karyawan'
         ];
 
         foreach ($fileFields as $field => $path) {
@@ -283,10 +277,7 @@ class EmployeeController extends Controller
             ]);
 
             $fileFields = [
-                'foto_karyawan' => 'assets/foto/karyawan',
-                'foto_ktp'      => 'assets/foto/ktp',
-                'foto_npwp'     => 'assets/foto/npwp',
-                'foto_kk'       => 'assets/foto/kk',
+                'foto_karyawan' => 'assets/foto/karyawan'
             ];
 
             // Proses penghapusan file fisik dari storage
@@ -458,6 +449,10 @@ class EmployeeController extends Controller
 
     public function exportExcel()
     {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 

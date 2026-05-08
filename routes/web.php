@@ -56,9 +56,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('history_contract', HistoryContractController::class);
     Route::resource('history_position', HistoryPositionController::class);
     Route::resource('history_family', HistoryFamilyController::class);
-
+    Route::get('employee_out/EmployeeOutExportExcel', [EmployeeOutController::class, 'EmployeeOutExportExcel'])->name('EmployeeOutExportExcel');
     Route::resource('employee_out', EmployeeOutController::class);
-    
 });
 // Route Admin Area
 

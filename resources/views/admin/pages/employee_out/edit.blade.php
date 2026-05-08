@@ -41,7 +41,6 @@
                     enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
-
                     <div class="row mb-3">
                         <label for="input35" class="col-sm-3 col-form-label">NIK Karyawan</label>
                         <div class="col-sm-9">
