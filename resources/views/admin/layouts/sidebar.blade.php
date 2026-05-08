@@ -73,7 +73,8 @@
                     <li><a href="{{ route('employee.index') }}"><i
                                 class="material-icons-outlined">emoji_people</i>Karyawan Aktif</a>
                     </li>
-                    <li><a href="#"><i class="material-icons-outlined">follow_the_signs</i>Karyawan Keluar</a>
+                    <li><a href="{{ route('employee_out.index') }}"><i
+                                class="material-icons-outlined">follow_the_signs</i>Karyawan Keluar</a>
                     </li>
                 </ul>
             </li>

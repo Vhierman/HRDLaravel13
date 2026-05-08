@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\MinimalSalaryController;
 use App\Http\Controllers\Admin\MaksimalUpahBpjsKesehatanController;
 use App\Http\Controllers\Admin\MaksimalUpahBpjsKetenagakerjaanController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\EmployeeOutController;
 use App\Http\Controllers\Admin\HistoryContractController;
 use App\Http\Controllers\Admin\HistoryPositionController;
 use App\Http\Controllers\Admin\HistoryFamilyController;
@@ -55,6 +56,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('history_contract', HistoryContractController::class);
     Route::resource('history_position', HistoryPositionController::class);
     Route::resource('history_family', HistoryFamilyController::class);
+
+    Route::resource('employee_out', EmployeeOutController::class);
     
 });
 // Route Admin Area

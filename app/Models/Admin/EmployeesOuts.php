@@ -62,6 +62,9 @@ class EmployeesOuts extends Model
     ];
 
     //To Table Employees Outs
+    public function employees() {
+        return $this->belongsTo(Employees::class,'employees_id','id');
+    }
     public function companies() {
         return $this->belongsTo(Companies::class,'companies_id','id');
     }
