@@ -12,7 +12,7 @@ class AttendanceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,9 @@ class AttendanceRequest extends FormRequest
     {
         return [
             //
+            'employees_id'      => 'required|integer|exists:employees,id',
+            'tanggal_absen'     => 'required|date',
+            'keterangan_absen'  => 'required'
         ];
     }
 }

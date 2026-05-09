@@ -88,7 +88,8 @@
                     <div class="menu-title">Absensi</div>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
+                    <li><a href="{{ route('attendance.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
                 </ul>
             </li>
             {{-- Absensi --}}

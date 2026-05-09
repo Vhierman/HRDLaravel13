@@ -1,5 +1,8 @@
 @section('css')
-    <link href="{{ asset('template_admin/assets/plugins/bs-stepper/css/bs-stepper.css') }}" rel="stylesheet">
+    {{-- Select2 --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
 @endsection
 
 @extends('admin.layouts.base')
@@ -43,7 +46,8 @@
                     <div class="row mb-3">
                         <label for="input35" class="col-sm-3 col-form-label">Nama</label>
                         <div class="col-sm-9">
-                            <select name="employee_id" class="form-select">
+                            <select name="employee_id" class="form-select" id="nama_karyawan_keluar-select"
+                                data-placeholder="Pilih Karyawan">
                                 <option value="">Pilih Karyawan</option>
                                 @foreach ($employees as $employee)
                                     <option value="{{ $employee->id }}"
@@ -119,7 +123,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- On Key Up --}}
     <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
-
-    <script src="{{ asset('template_admin/assets/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-    <script src="{{ asset('template_admin/assets/plugins/bs-stepper/js/main.js') }}"></script>
+    {{-- Select2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('template_admin/assets/plugins/select2/js/select2-custom.js') }}"></script>
+    <script>
+        $('#nama_karyawan_keluar-select').select2({
+            theme: 'bootstrap-5'
+        });
+    </script>
 @endsection

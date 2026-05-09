@@ -15,7 +15,7 @@ class Attendances extends Model
     protected $table = 'attendances';
 
     protected $fillable = [
-        'employees_id ',
+        'employees_id',
         'nik_karyawan',
         'tanggal_absen',
         'keterangan_absen',

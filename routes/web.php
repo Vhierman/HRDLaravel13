@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\EmployeeOutController;
 use App\Http\Controllers\Admin\HistoryContractController;
 use App\Http\Controllers\Admin\HistoryPositionController;
 use App\Http\Controllers\Admin\HistoryFamilyController;
+use App\Http\Controllers\Admin\AttendanceController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -58,6 +59,16 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('history_family', HistoryFamilyController::class);
     Route::get('employee_out/EmployeeOutExportExcel', [EmployeeOutController::class, 'EmployeeOutExportExcel'])->name('EmployeeOutExportExcel');
     Route::resource('employee_out', EmployeeOutController::class);
+
+
+    Route::post('attendance/export_excell_absensi', [AttendanceController::class, 'export_excell_absensi'])->name('attendance.export_excell_absensi');
+    Route::get('attendance/form_tampil', [AttendanceController::class, 'form_tampil'])->name('attendance.form_tampil');
+    Route::get('attendance/form_edit', [AttendanceController::class, 'form_edit'])->name('attendance.form_edit');
+    Route::get('attendance/form_hapus', [AttendanceController::class, 'form_hapus'])->name('attendance.form_hapus');
+    Route::post('attendance/tampil_form_edit', [AttendanceController::class, 'tampil_form_edit'])->name('attendance.tampil_form_edit');
+    Route::post('attendance/tampil_form_hapus', [AttendanceController::class, 'tampil_form_hapus'])->name('attendance.tampil_form_hapus');
+    Route::post('attendance/tampil_absen', [AttendanceController::class, 'tampil_absen'])->name('attendance.tampil_absen');
+    Route::resource('attendance', AttendanceController::class);
 });
 // Route Admin Area
 

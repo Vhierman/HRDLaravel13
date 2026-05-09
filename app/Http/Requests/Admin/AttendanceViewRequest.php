@@ -12,7 +12,7 @@ class AttendanceViewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,8 @@ class AttendanceViewRequest extends FormRequest
     {
         return [
             //
+            'tanggal_awal'      => 'required|date',
+            'tanggal_akhir'     => 'required|date'
         ];
     }
 }

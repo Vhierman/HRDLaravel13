@@ -12,7 +12,7 @@ class AttendanceUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,8 @@ class AttendanceUpdateRequest extends FormRequest
     {
         return [
             //
+            'employees_id'      => 'required',
+            'tanggal_absen'     => 'required'
         ];
     }
 }
