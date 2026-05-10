@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\HistoryContractController;
 use App\Http\Controllers\Admin\HistoryPositionController;
 use App\Http\Controllers\Admin\HistoryFamilyController;
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\InventoryMotorcycleController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -64,6 +65,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('attendance/tampil_form_hapus', [AttendanceController::class, 'tampil_form_hapus'])->name('attendance.tampil_form_hapus');
     Route::post('attendance/tampil_absen', [AttendanceController::class, 'tampil_absen'])->name('attendance.tampil_absen');
     Route::resource('attendance', AttendanceController::class);
+    Route::get('inventory_motorcycle/exportExcel', [InventoryMotorcycleController::class, 'exportExcel'])->name('inventory_motorcycle.exportExcel');
+    Route::resource('inventory_motorcycle', InventoryMotorcycleController::class);
 });
 // Route Admin Area
 

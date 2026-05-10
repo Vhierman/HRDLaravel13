@@ -24,7 +24,7 @@ class HistoryPositionRequest extends FormRequest
     {
         return [
             //
-            'employees_id'      => 'required',
+            'employees_id'      => 'required|integer|exists:employees,id',
             'nik_karyawan'      => 'required',
             'companies_id'      => 'required',
             'areas_id'          => 'required',

@@ -24,7 +24,7 @@ class AttendanceUpdateRequest extends FormRequest
     {
         return [
             //
-            'employees_id'      => 'required',
+            'employees_id'      => 'required|integer|exists:employees,id',
             'tanggal_absen'     => 'required'
         ];
     }
