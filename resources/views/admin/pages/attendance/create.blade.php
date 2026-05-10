@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Master</div>
+        <div class="breadcrumb-title pe-3">Absensi</div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
@@ -75,6 +75,9 @@
                             </option>
                             <option value="Cuti Khusus" {{ old('keterangan_absen') == 'Cuti Khusus' ? 'selected' : '' }}>
                                 Cuti Khusus
+                            </option>
+                            <option value="OFF" {{ old('keterangan_absen') == 'OFF' ? 'selected' : '' }}>
+                                OFF
                             </option>
                         </select>
                     </div>

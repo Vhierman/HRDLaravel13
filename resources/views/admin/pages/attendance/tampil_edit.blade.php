@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Master</div>
+        <div class="breadcrumb-title pe-3">Absensi</div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
@@ -68,6 +68,9 @@
                             <option value="Cuti Khusus"
                                 @if ($item_attendance->keterangan_absen == 'Cuti Khusus') {{ 'selected="selected"' }} @endif>
                                 Cuti Khusus
+                            </option>
+                            <option value="OFF" @if ($item_attendance->keterangan_absen == 'OFF') {{ 'selected="selected"' }} @endif>
+                                OFF
                             </option>
                         </select>
                     </div>

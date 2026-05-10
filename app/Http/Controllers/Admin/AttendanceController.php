@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\AttendanceRequest;
@@ -25,7 +24,6 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-
 class AttendanceController extends Controller
 {
     /**
@@ -38,7 +36,147 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.attendance.index');
+        $attendances = Attendances::whereYear(
+        'tanggal_absen',now()->year)->get();
+        
+        //Sakit
+        $item_sakit_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Sakit")->count();
+        $item_sakit_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Sakit")->count();
+        //Sakit
+
+        //Ijin
+        $item_ijin_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Ijin")->count();
+        $item_ijin_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Ijin")->count();
+        //Ijin
+
+        //Alpa
+        $item_alpa_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Alpa")->count();
+        $item_alpa_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Alpa")->count();
+        //Alpa
+
+        //Cuti Tahunan
+        $item_cuti_tahunan_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Cuti Tahunan")->count();
+        $item_cuti_tahunan_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Cuti Tahunan")->count();
+        //Cuti Tahunan
+
+        //OFF
+        $item_off_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"OFF")->count();
+        $item_off_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"OFF")->count();
+        $item_off_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"OFF")->count();
+        $item_off_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"OFF")->count();
+        $item_off_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"OFF")->count();
+        $item_off_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"OFF")->count();
+        $item_off_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"OFF")->count();
+        $item_off_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"OFF")->count();
+        $item_off_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"OFF")->count();
+        $item_off_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"OFF")->count();
+        $item_off_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"OFF")->count();
+        $item_off_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"OFF")->count();
+        //OFF
+
+        return view('admin.pages.attendance.index',[
+            'attendances' => $attendances,
+            'item_sakit_januari' => $item_sakit_januari,
+            'item_sakit_februari' => $item_sakit_februari,
+            'item_sakit_maret' => $item_sakit_maret,
+            'item_sakit_april' => $item_sakit_april,
+            'item_sakit_mei' => $item_sakit_mei,
+            'item_sakit_juni' => $item_sakit_juni,
+            'item_sakit_juli' => $item_sakit_juli,
+            'item_sakit_agustus' => $item_sakit_agustus,
+            'item_sakit_september' => $item_sakit_september,
+            'item_sakit_oktober' => $item_sakit_oktober,
+            'item_sakit_november' => $item_sakit_november,
+            'item_sakit_desember' => $item_sakit_desember,
+            'item_ijin_januari' => $item_ijin_januari,
+            'item_ijin_februari' => $item_ijin_februari,
+            'item_ijin_maret' => $item_ijin_maret,
+            'item_ijin_april' => $item_ijin_april,
+            'item_ijin_mei' => $item_ijin_mei,
+            'item_ijin_juni' => $item_ijin_juni,
+            'item_ijin_juli' => $item_ijin_juli,
+            'item_ijin_agustus' => $item_ijin_agustus,
+            'item_ijin_september' => $item_ijin_september,
+            'item_ijin_oktober' => $item_ijin_oktober,
+            'item_ijin_november' => $item_ijin_november,
+            'item_ijin_desember' => $item_ijin_desember,
+            'item_alpa_januari' => $item_alpa_januari,
+            'item_alpa_februari' => $item_alpa_februari,
+            'item_alpa_maret' => $item_alpa_maret,
+            'item_alpa_april' => $item_alpa_april,
+            'item_alpa_mei' => $item_alpa_mei,
+            'item_alpa_juni' => $item_alpa_juni,
+            'item_alpa_juli' => $item_alpa_juli,
+            'item_alpa_agustus' => $item_alpa_agustus,
+            'item_alpa_september' => $item_alpa_september,
+            'item_alpa_oktober' => $item_alpa_oktober,
+            'item_alpa_november' => $item_alpa_november,
+            'item_alpa_desember' => $item_alpa_desember,
+            'item_cuti_tahunan_januari' => $item_cuti_tahunan_januari,
+            'item_cuti_tahunan_februari' => $item_cuti_tahunan_februari,
+            'item_cuti_tahunan_maret' => $item_cuti_tahunan_maret,
+            'item_cuti_tahunan_april' => $item_cuti_tahunan_april,
+            'item_cuti_tahunan_mei' => $item_cuti_tahunan_mei,
+            'item_cuti_tahunan_juni' => $item_cuti_tahunan_juni,
+            'item_cuti_tahunan_juli' => $item_cuti_tahunan_juli,
+            'item_cuti_tahunan_agustus' => $item_cuti_tahunan_agustus,
+            'item_cuti_tahunan_september' => $item_cuti_tahunan_september,
+            'item_cuti_tahunan_oktober' => $item_cuti_tahunan_oktober,
+            'item_cuti_tahunan_november' => $item_cuti_tahunan_november,
+            'item_cuti_tahunan_desember' => $item_cuti_tahunan_desember,
+            'item_off_januari' => $item_off_januari,
+            'item_off_februari' => $item_off_februari,
+            'item_off_maret' => $item_off_maret,
+            'item_off_april' => $item_off_april,
+            'item_off_mei' => $item_off_mei,
+            'item_off_juni' => $item_off_juni,
+            'item_off_juli' => $item_off_juli,
+            'item_off_agustus' => $item_off_agustus,
+            'item_off_september' => $item_off_september,
+            'item_off_oktober' => $item_off_oktober,
+            'item_off_november' => $item_off_november,
+            'item_off_desember' => $item_off_desember
+        ]);
     }
 
     /**
@@ -50,6 +188,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+        
         $employees      = Employees::all();
         return view('admin.pages.attendance.create',[
             'employees' => $employees
@@ -123,7 +262,7 @@ class AttendanceController extends Controller
             'keterangan_cuti_khusus'    => $request->input('keterangan_cuti_khusus'),
             'edit_oleh'                 => auth()->user()->name
         ]);
-        Alert::info('Success Edit Data Absensi','Oleh '.auth()->user()->name);
+        Alert::success('Success Edit Data Absensi','Oleh '.auth()->user()->name);
         return redirect()->route('attendance.index');
     }
 
