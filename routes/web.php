@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\HistoryPositionController;
 use App\Http\Controllers\Admin\HistoryFamilyController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\InventoryMotorcycleController;
+use App\Http\Controllers\Admin\InventoryCarController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -67,6 +68,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('attendance', AttendanceController::class);
     Route::get('inventory_motorcycle/exportExcel', [InventoryMotorcycleController::class, 'exportExcel'])->name('inventory_motorcycle.exportExcel');
     Route::resource('inventory_motorcycle', InventoryMotorcycleController::class);
+    Route::get('inventory_car/exportExcel', [InventoryCarController::class, 'exportExcel'])->name('inventory_car.exportExcel');
+    Route::resource('inventory_car', InventoryCarController::class);
 });
 // Route Admin Area
 

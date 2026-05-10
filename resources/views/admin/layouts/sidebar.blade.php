@@ -104,7 +104,8 @@
                 <ul>
                     <li><a href="{{ route('inventory_motorcycle.index') }}"><i
                                 class="material-icons-outlined">two_wheeler</i>Inventaris Motor</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">directions_car</i>Inventaris Mobil</a></li>
+                    <li><a href="{{ route('inventory_car.index') }}"><i
+                                class="material-icons-outlined">directions_car</i>Inventaris Mobil</a></li>
                 </ul>
             </li>
             {{-- Inventaris --}}

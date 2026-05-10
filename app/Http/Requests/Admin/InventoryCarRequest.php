@@ -12,7 +12,7 @@ class InventoryCarRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,15 @@ class InventoryCarRequest extends FormRequest
     {
         return [
             //
+            'employees_id'                  => 'required|integer|exists:employees,id',
+            'merk_mobil'                    => 'required',
+            'type_mobil'                    => 'required',
+            'nomor_polisi'                  => 'required',
+            'warna_mobil'                   => 'required',
+            'nomor_rangka_mobil'            => 'required',
+            'nomor_mesin_mobil'             => 'required',
+            'tanggal_akhir_pajak_mobil'     => 'required|date',
+            'tanggal_akhir_plat_mobil'      => 'required|date'
         ];
     }
 }

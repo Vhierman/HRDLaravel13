@@ -10,7 +10,7 @@
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Data Inventaris Motor');
+@section('title', 'Data Inventaris Mobil');
 
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -18,7 +18,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Inventaris Motor</li>
+                    <li class="breadcrumb-item active" aria-current="page">Inventaris Mobil</li>
                 </ol>
             </nav>
         </div>
@@ -28,15 +28,15 @@
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <div class="btn-group position-static">
-                        <a href="{{ route('inventory_motorcycle.create') }}" class="btn-group position-static">
+                        <a href="{{ route('inventory_car.create') }}" class="btn-group position-static">
                             <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Data Inventaris Motor
+                                <i class="bi bi-person-plus"></i> Tambah Data Inventaris Mobil
                             </button>
                         </a>
-                        <a href="{{ route('inventory_motorcycle.exportExcel') }}" target="_blank"
+                        <a href="{{ route('inventory_car.exportExcel') }}" target="_blank"
                             class="btn-group position-static">
                             <button type="button" class="btn btn-success">
-                                <i class="bi bi-cloud-arrow-down"></i> Download Data Inventaris Motor
+                                <i class="bi bi-cloud-arrow-down"></i> Download Data Inventaris Mobil
                             </button>
                         </a>
                     </div>
@@ -51,7 +51,7 @@
                             <th>Nama Karyawan</th>
                             <th>Jabatan</th>
                             <th>Penempatan</th>
-                            <th>Motor</th>
+                            <th>mobil</th>
                             <th>Nomor Polisi</th>
                             <th>Akhir Pajak</th>
                             <th>Akhir Plat</th>
@@ -67,7 +67,7 @@
                             </th>
                             <th><input type="text"
                                     class="form-control form-control-sm"placeholder="Cari Penempatan..." /></th>
-                            <th><input type="text" class="form-control form-control-sm"placeholder="Cari Motor..." />
+                            <th><input type="text" class="form-control form-control-sm"placeholder="Cari mobil..." />
                             </th>
                             <th><input type="text"
                                     class="form-control form-control-sm"placeholder="Cari Nomor Polisi..." /></th>
@@ -82,29 +82,28 @@
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($inventory_motorcycles as $inventory_motorcycle)
+                        @foreach ($inventory_cars as $inventory_car)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $inventory_motorcycle->employees->nama_karyawan }}</td>
-                                <td>{{ $inventory_motorcycle->employees->positions->jabatan }}</td>
-                                <td>{{ $inventory_motorcycle->employees->divisions->penempatan }}</td>
-                                <td>{{ $inventory_motorcycle->merk_motor }}/{{ $inventory_motorcycle->type_motor }}</td>
-                                <td>{{ $inventory_motorcycle->nomor_polisi }}</td>
-                                <td>{{ \Carbon\Carbon::parse($inventory_motorcycle->tanggal_akhir_pajak_motor)->isoformat('DD-MM-Y') }}
+                                <td>{{ $inventory_car->employees->nama_karyawan }}</td>
+                                <td>{{ $inventory_car->employees->positions->jabatan }}</td>
+                                <td>{{ $inventory_car->employees->divisions->penempatan }}</td>
+                                <td>{{ $inventory_car->merk_mobil }}/{{ $inventory_car->type_mobil }}</td>
+                                <td>{{ $inventory_car->nomor_polisi }}</td>
+                                <td>{{ \Carbon\Carbon::parse($inventory_car->tanggal_akhir_pajak_mobil)->isoformat('DD-MM-Y') }}
                                 </td>
-                                <td>{{ \Carbon\Carbon::parse($inventory_motorcycle->tanggal_akhir_plat_motor)->isoformat('DD-MM-Y') }}
+                                <td>{{ \Carbon\Carbon::parse($inventory_car->tanggal_akhir_plat_mobil)->isoformat('DD-MM-Y') }}
                                 </td>
                                 <td>
                                     <div class="row row-cols-auto g-3">
                                         <div class="col">
-                                            <a href="{{ route('inventory_motorcycle.edit', $inventory_motorcycle->id) }}"
+                                            <a href="{{ route('inventory_car.edit', $inventory_car->id) }}"
                                                 class="btn btn-success raised d-flex gap-2">
                                                 <i class="material-icons-outlined">edit</i>
                                             </a>
                                         </div>
                                         <div class="col">
-                                            <form
-                                                action="{{ route('inventory_motorcycle.destroy', $inventory_motorcycle->id) }}"
+                                            <form action="{{ route('inventory_car.destroy', $inventory_car->id) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('delete')
