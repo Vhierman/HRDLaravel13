@@ -118,7 +118,8 @@
                     <div class="menu-title">Training</div>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Internal</a></li>
+                    <li><a href="{{ route('training_internal.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Training Internal</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
                     </li>
                 </ul>

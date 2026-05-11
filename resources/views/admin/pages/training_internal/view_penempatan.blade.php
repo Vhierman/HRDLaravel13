@@ -10,15 +10,15 @@
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Data Absensi');
+@section('title', 'Data Training');
 
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Absensi</div>
+        <div class="breadcrumb-title pe-3">Training</div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Absensi karyawan</li>
+                    <li class="breadcrumb-item active" aria-current="page">Training Internal</li>
                 </ol>
             </nav>
         </div>
@@ -27,14 +27,11 @@
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
-                    <form action="{{ route('attendance.export_excell_absensi') }}" method="POST" class="d-inline">
+                    <form action="{{ route('training_internal.excell_view_penempatan') }}" method="POST" class="d-inline">
                         @csrf
-                        <input type="hidden" name="tanggal_awal" class="form-control" value="{{ $tanggal_awal }}">
-                        <input type="hidden" name="tanggal_akhir" class="form-control" value="{{ $tanggal_akhir }}">
+                        <input type="hidden" name="divisions_id" class="form-control" value="{{ $divisions_id }}">
                         <button type="submit" class="btn btn-success px-5 raised">
-                            Download Rekap Absensi Periode {{ \Carbon\Carbon::parse($tanggal_awal)->isoformat('DD-MM-Y') }}
-                            s/d
-                            {{ \Carbon\Carbon::parse($tanggal_akhir)->isoformat('DD-MM-Y') }}
+                            Download Rekap Training Internal {{ $penempatan }}
                         </button>
                     </form>
                 </div>
@@ -47,12 +44,12 @@
                             <th>No</th>
                             <th>Nama Karyawan</th>
                             <th>NIK Karyawan</th>
-                            <th>Golongan</th>
                             <th>Jabatan</th>
                             <th>Penempatan</th>
-                            <th>Tanggal Absen</th>
-                            <th>Jenis Absen</th>
-                            <th>Keterangan</th>
+                            <th>Tanggal</th>
+                            <th>Lokasi</th>
+                            <th>Materi</th>
+                            <th>Trainer</th>
 
                         </tr>
                         <tr class="search-row">
@@ -63,21 +60,20 @@
                             <th><input type="text" class="form-control form-control-sm"
                                     placeholder="Cari NIK Karyawan..." />
                             </th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Golongan..." />
-                            </th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Jabatan..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm"
                                     placeholder="Cari Penempatan..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Tanggal Absen..." />
+                                    placeholder="Cari Tanggal Training..." />
+                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Lokasi..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Jenis Absen..." />
+                                    placeholder="Cari Materi Training..." />
                             </th>
-                            <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Keterangan..." />
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Trainer..." />
                             </th>
 
                         </tr>
@@ -86,17 +82,18 @@
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($item_attendances as $item_attendance)
+                        @foreach ($item_training_internals as $item_training_internal)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $item_attendance->employees->nama_karyawan }}</td>
-                                <td>{{ $item_attendance->nik_karyawan }}</td>
-                                <td>{{ $item_attendance->employees->golongans->golongan }}</td>
-                                <td>{{ $item_attendance->employees->positions->jabatan }}</td>
-                                <td>{{ $item_attendance->employees->divisions->penempatan }}</td>
-                                <td>{{ \Carbon\Carbon::parse($item_attendance->tanggal_absen)->isoformat('DD-MM-Y') }}</td>
-                                <td>{{ $item_attendance->keterangan_absen }}</td>
-                                <td>{{ $item_attendance->keterangan_cuti_khusus }}</td>
+                                <td>{{ $item_training_internal->employees->nama_karyawan }}</td>
+                                <td>{{ $item_training_internal->nik_karyawan }}</td>
+                                <td>{{ $item_training_internal->employees->positions->jabatan }}</td>
+                                <td>{{ $item_training_internal->employees->divisions->penempatan }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item_training_internal->tanggal_training_internal)->isoformat('DD-MM-Y') }}
+                                </td>
+                                <td>{{ $item_training_internal->lokasi_training_internal }}</td>
+                                <td>{{ $item_training_internal->materi_training_internal }}</td>
+                                <td>{{ $item_training_internal->trainer_training_internal }}</td>
 
                             </tr>
                         @endforeach

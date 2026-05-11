@@ -5,14 +5,14 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class HistoryTrainingInternalRequest extends FormRequest
+class TanggalTrainingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class HistoryTrainingInternalRequest extends FormRequest
     {
         return [
             //
+            'tanggal_training_internal' => 'required|date'
         ];
     }
 }

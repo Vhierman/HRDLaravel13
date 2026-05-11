@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class HistoryTrainingInternals extends Model
+class TrainingInternals extends Model
 {
     //
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'history_training_internals';
+    protected $table = 'training_internals';
 
     protected $fillable = [
         'employees_id',

@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\HistoryFamilyController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\InventoryMotorcycleController;
 use App\Http\Controllers\Admin\InventoryCarController;
+use App\Http\Controllers\Admin\TrainingInternalController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -70,6 +71,26 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('inventory_motorcycle', InventoryMotorcycleController::class);
     Route::get('inventory_car/exportExcel', [InventoryCarController::class, 'exportExcel'])->name('inventory_car.exportExcel');
     Route::resource('inventory_car', InventoryCarController::class);
+
+    Route::post('training_internal/hapus_tanggal', [TrainingInternalController::class, 'hapus_tanggal'])->name('training_internal.hapus_tanggal');
+    Route::post('training_internal/tampil_hapus_tanggal', [TrainingInternalController::class, 'tampil_hapus_tanggal'])->name('training_internal.tampil_hapus_tanggal');
+    Route::get('training_internal/form_hapus_tanggal', [TrainingInternalController::class, 'form_hapus_tanggal'])->name('training_internal.form_hapus_tanggal');
+    Route::post('training_internal/update_tanggal', [TrainingInternalController::class, 'update_tanggal'])->name('training_internal.update_tanggal');
+    Route::post('training_internal/edit_tanggal', [TrainingInternalController::class, 'edit_tanggal'])->name('training_internal.edit_tanggal');
+    Route::get('training_internal/form_edit_tanggal', [TrainingInternalController::class, 'form_edit_tanggal'])->name('training_internal.form_edit_tanggal');
+    Route::post('training_internal/excell_view_materi', [TrainingInternalController::class, 'excell_view_materi'])->name('training_internal.excell_view_materi');
+    Route::post('training_internal/tampil_view_materi', [TrainingInternalController::class, 'tampil_view_materi'])->name('training_internal.tampil_view_materi');
+    Route::get('training_internal/view_materi', [TrainingInternalController::class, 'view_materi'])->name('training_internal.view_materi');
+    Route::post('training_internal/excell_view_nama', [TrainingInternalController::class, 'excell_view_nama'])->name('training_internal.excell_view_nama');
+    Route::post('training_internal/tampil_view_nama', [TrainingInternalController::class, 'tampil_view_nama'])->name('training_internal.tampil_view_nama');
+    Route::get('training_internal/view_nama', [TrainingInternalController::class, 'view_nama'])->name('training_internal.view_nama');
+    Route::post('training_internal/excell_view_penempatan', [TrainingInternalController::class, 'excell_view_penempatan'])->name('training_internal.excell_view_penempatan');
+    Route::post('training_internal/tampil_view_penempatan', [TrainingInternalController::class, 'tampil_view_penempatan'])->name('training_internal.tampil_view_penempatan');
+    Route::get('training_internal/view_penempatan', [TrainingInternalController::class, 'view_penempatan'])->name('training_internal.view_penempatan');
+    Route::post('training_internal/excell_training_internal', [TrainingInternalController::class, 'excell_training_internal'])->name('training_internal.excell_training_internal');
+    Route::post('training_internal/tampil_view_tanggal', [TrainingInternalController::class, 'tampil_view_tanggal'])->name('training_internal.tampil_view_tanggal');
+    Route::get('training_internal/view_tanggal', [TrainingInternalController::class, 'view_tanggal'])->name('training_internal.view_tanggal');
+    Route::resource('training_internal', TrainingInternalController::class);
 });
 // Route Admin Area
 

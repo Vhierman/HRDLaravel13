@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\AttendanceRequest;
 use App\Http\Requests\Admin\AttendanceViewRequest;
 use App\Http\Requests\Admin\AttendanceUpdateRequest;
+use App\Http\Requests\Admin\TanggalAwalAkhirRequest;
 use App\Models\Admin\Attendances;
 use App\Models\Admin\Employees;
 use App\Models\Admin\Divisions;
@@ -369,7 +370,7 @@ class AttendanceController extends Controller
         return view('admin.pages.attendance.tampil_absen');
     }
 
-    public function tampil_absen(AttendanceViewRequest $request)
+    public function tampil_absen(TanggalAwalAkhirRequest $request)
     {
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
