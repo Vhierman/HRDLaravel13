@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\AttendanceUpdateRequest;
 use App\Http\Requests\Admin\TanggalAwalAkhirRequest;
 use App\Models\Admin\Attendances;
 use App\Models\Admin\Employees;
+use App\Models\Admin\Areas;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
 use App\Models\Admin\Golongans;
@@ -206,7 +207,7 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        $data_attendance    = $request->all();
+        $data_attendance    = $request->except('_token');
         $employee           = Employees::where('id',$request->input('employees_id'))->first();
         Attendances::create([
             'employees_id'              => $request->input('employees_id'),
@@ -252,7 +253,8 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-    
+
+        $data                   = $request->except('_token');
         $tanggal_absen          = $request->input('tanggal_absen');
         $keterangan_absen       = $request->input('keterangan_absen');
         $keterangan_cuti_khusus = $request->input('keterangan_cuti_khusus');
@@ -277,6 +279,7 @@ class AttendanceController extends Controller
             abort(403);
         }
 
+        $data = $request->except('_token');
         DB::transaction(function () use ($id) {
             $attendance = Attendances::findOrFail($id);
             $attendance->update([
@@ -305,7 +308,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
+        $data = $request->except('_token');
         $employees_id       = $request->input('employees_id');
         $tanggal_absen      = $request->input('tanggal_absen');
         $item_attendance = Attendances::with([
@@ -341,7 +344,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
+        $data = $request->except('_token');
         $employees_id       = $request->input('employees_id');
         $tanggal_absen      = $request->input('tanggal_absen');
         $item_attendance = Attendances::with([
@@ -375,7 +378,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
+        $data = $request->except('_token');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $item_attendances = Attendances::with([
@@ -401,7 +404,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
+        $data = $request->except('_token');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         // Header
