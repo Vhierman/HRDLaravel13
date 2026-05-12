@@ -52,7 +52,8 @@ class AreaController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data_token = $request->except('_token');
+        $data       = $request->all();
         Areas::create([
             'area'              => $request->input('area'),
             'input_oleh'        => Auth::user()->name
@@ -81,7 +82,7 @@ class AreaController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
+    
         $area = Areas::findOrFail($id);
         return view('admin.pages.area.edit',[
         'area' => $area
@@ -98,12 +99,13 @@ class AreaController extends Controller
             abort(403);
         }
 
+        $data_token = $request->except('_token');
         $area = Areas::findOrFail($id);
         $area->update([
             'area'              => $request->input('area'),
             'edit_oleh'         => Auth::user()->name
             ]);
-        Alert::success('Success Update Data Area','Oleh '.auth()->user()->name);
+        Alert::warning('Success Update Data Area','Oleh '.auth()->user()->name);
         return redirect()->route('area.index');
     }
 
