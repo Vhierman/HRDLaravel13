@@ -9,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Area</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Area</li>
                 </ol>
             </nav>
         </div>
@@ -34,7 +34,7 @@
             <form action="{{ route('area.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Nama Area</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-5">Nama Area</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="huruf(this);" name="area"
                             value="{{ old('area') }}" id="input35" placeholder="Nama Area" />

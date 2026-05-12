@@ -34,7 +34,7 @@
                 @method('PUT')
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Nama Area</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-5">Nama Area</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="huruf(this);" name="area"
                             value="{{ $area->area }}" id="input35" placeholder="Nama Area" />

@@ -28,7 +28,7 @@
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <a href="{{ route('area.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Area
+                        Tambah Area
                     </a>
                 </div>
             </div>
@@ -118,7 +118,6 @@
             });
         });
     </script>
-
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 {{-- Datatables --}}
