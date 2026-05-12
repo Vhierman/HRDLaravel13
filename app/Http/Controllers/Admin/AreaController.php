@@ -52,8 +52,7 @@ class AreaController extends Controller
             abort(403);
         }
 
-        $data_token = $request->except('_token');
-        $data       = $request->all();
+        $data   = $request->except('_token');
         Areas::create([
             'area'              => $request->input('area'),
             'input_oleh'        => Auth::user()->name
