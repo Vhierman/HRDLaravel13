@@ -9,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Perusahaan</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Perusahaan</li>
                 </ol>
             </nav>
         </div>
@@ -30,11 +30,11 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Tambah Perusahaan</h5>
+            <h5 class="mb-4 fs-4">Form Tambah Perusahaan</h5>
             <form action="{{ route('company.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Nama</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Nama</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="huruf(this);" name="nama_perusahaan"
                             value="{{ old('nama_perusahaan') }}" id="input35" placeholder="Nama Perusahaan" />

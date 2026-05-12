@@ -28,7 +28,7 @@
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <a href="{{ route('company.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Perusahaan
+                        Tambah Perusahaan
                     </a>
                 </div>
             </div>
