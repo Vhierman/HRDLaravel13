@@ -120,7 +120,8 @@
                 <ul>
                     <li><a href="{{ route('training_internal.index') }}"><i
                                 class="material-icons-outlined">arrow_right</i>Training Internal</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
+                    <li><a href="{{ route('training_eksternal.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
                     </li>
                 </ul>
             </li>

@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Admin\TrainingInternalRequest;
+use App\Http\Requests\Admin\TrainingEksternalRequest;
 use App\Http\Requests\Admin\TanggalAwalAkhirRequest;
 use App\Http\Requests\Admin\NamaKaryawanRequest;
 use App\Http\Requests\Admin\PenempatanRequest;
-use App\Http\Requests\Admin\MateriTrainingInternalRequest;
-use App\Http\Requests\Admin\TanggalTrainingRequest;
-use App\Models\Admin\TrainingInternals;
+use App\Http\Requests\Admin\MateriTrainingEksternalRequest;
+use App\Http\Requests\Admin\TanggalTrainingEksternalRequest;
+use App\Models\Admin\TrainingEksternals;
 use App\Models\Admin\Employees;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
@@ -18,6 +18,7 @@ use Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -27,7 +28,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class TrainingInternalController extends Controller
+class TrainingEksternalController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,7 +40,7 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.training_internal.index');
+        return view('admin.pages.training_eksternal.index');
     }
 
     /**
@@ -53,38 +54,44 @@ class TrainingInternalController extends Controller
         }
 
         $employees      = Employees::all();
-        return view('admin.pages.training_internal.create',['employees'=> $employees]);
+        return view('admin.pages.training_eksternal.create',['employees'=> $employees]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TrainingInternalRequest $request)
+    public function store(TrainingEksternalRequest $request)
     {
         //
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
 
-        $tanggal    = $request->input('tanggal_training_internal');
-        $hari       = \Carbon\Carbon::parse($tanggal)->isoformat('dddd');
+        $tanggal_awal   = $request->input('tanggal_awal_training_eksternal');
+        $tanggal_akhir  = $request->input('tanggal_akhir_training_eksternal');
+        $hari_awal      = \Carbon\Carbon::parse($tanggal_awal)->isoformat('dddd');
+        $hari_akhir     = \Carbon\Carbon::parse($tanggal_akhir)->isoformat('dddd');
+
         foreach ($request->employees_id as $employeeId) {
             $employee = Employees::find($employeeId);
             $insert = [
-                'employees_id'              => $employee->id,
-                'nik_karyawan'              => $employee->nik_karyawan,
-                'hari_training_internal'    => $hari,
-                'tanggal_training_internal' => $request->tanggal_training_internal,
-                'jam_training_internal'     => $request->jam_training_internal,
-                'lokasi_training_internal'  => $request->lokasi_training_internal,
-                'materi_training_internal'  => $request->materi_training_internal,
-                'trainer_training_internal' => $request->trainer_training_internal,
-                'input_oleh'                => auth()->user()->name
+                'employees_id'                                  => $employee->id,
+                'nik_karyawan'                                  => $employee->nik_karyawan,
+                'hari_awal_training_eksternal'                  => $hari_awal,
+                'hari_akhir_training_eksternal'                 => $hari_akhir,
+                'tanggal_awal_training_eksternal'               => $request->tanggal_awal_training_eksternal,
+                'tanggal_akhir_training_eksternal'              => $request->tanggal_akhir_training_eksternal,
+                'institusi_penyelenggara_training_eksternal'    => $request->institusi_penyelenggara_training_eksternal,
+                'perihal_training_eksternal'                    => $request->perihal_training_eksternal,
+                'jam_training_eksternal'                        => $request->jam_training_eksternal,
+                'lokasi_training_eksternal'                     => $request->lokasi_training_eksternal,
+                'alamat_training_eksternal'                     => $request->alamat_training_eksternal,
+                'input_oleh'                                    => auth()->user()->name
             ];
-            TrainingInternals::create($insert);
+            TrainingEksternals::create($insert);
         }
-        Alert::success('Success Input Data Training Internal','Oleh '.auth()->user()->name);
-        return redirect()->route('training_internal.index');
+        Alert::success('Success Input Data Training Eksternal','Oleh '.auth()->user()->name);
+        return redirect()->route('training_eksternal.index');
     }
 
     /**
@@ -112,7 +119,7 @@ class TrainingInternalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TrainingInternalRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         //
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
@@ -133,12 +140,11 @@ class TrainingInternalController extends Controller
 
     public function view_tanggal()
     {
-        //
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
 
-        return view('admin.pages.training_internal.form_view_tanggal');
+        return view('admin.pages.training_eksternal.form_view_tanggal');
     }
 
     public function tampil_view_tanggal(TanggalAwalAkhirRequest $request)
@@ -149,27 +155,29 @@ class TrainingInternalController extends Controller
 
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.areas',
                             'employees.golongans',
                             'employees.positions',
                             'employees.divisions',
-                            ])->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir])->get();
+                            ])->whereBetween('tanggal_awal_training_eksternal', [$tanggal_awal, $tanggal_akhir])->get();
 
-        if (!$item_training_internals->isEmpty()) {
-            return view('admin.pages.training_internal.view_tanggal',[
+        // dd($item_training_eksternals);
+
+        if (!$item_training_eksternals->isEmpty()) {
+            return view('admin.pages.training_eksternal.view_tanggal',[
                 'tanggal_awal'  => $tanggal_awal,
                 'tanggal_akhir' => $tanggal_akhir,
-                'item_training_internals' => $item_training_internals
+                'item_training_eksternals' => $item_training_eksternals
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');
-            return redirect()->route('training_internal.view_tanggal');
-        }       
+            return redirect()->route('training_eksternal.view_tanggal');
+        }    
     }
 
-    public function excell_training_internal(Request $request)
+    public function excell_training_eksternal(Request $request)
     {
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
@@ -184,14 +192,17 @@ class TrainingInternalController extends Controller
         $sheet->setCellValue('D1', 'Area');
         $sheet->setCellValue('E1', 'Jabatan');
         $sheet->setCellValue('F1', 'Penempatan');
-        $sheet->setCellValue('G1', 'Tanggal');
-        $sheet->setCellValue('H1', 'Lokasi');
-        $sheet->setCellValue('I1', 'Materi');
-        $sheet->setCellValue('J1', 'Trainer');
+        $sheet->setCellValue('G1', 'Institusi');
+        $sheet->setCellValue('H1', 'Training');
+        $sheet->setCellValue('I1', 'Tanggal Awal');
+        $sheet->setCellValue('J1', 'Tanggal Akhir');
+        $sheet->setCellValue('K1', 'Jam');
+        $sheet->setCellValue('L1', 'Lokasi');
+        $sheet->setCellValue('M1', 'Alamat');
         // Header
 
         //Style
-        $sheet->getStyle('A1:J1')->applyFromArray([
+        $sheet->getStyle('A1:M1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => [
@@ -221,7 +232,7 @@ class TrainingInternalController extends Controller
         $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
         $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
 
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.areas',
                             'employees.positions',
@@ -229,7 +240,7 @@ class TrainingInternalController extends Controller
                             ])
                             ->when($request->tanggal_awal && $request->tanggal_akhir, function ($query) use ($request) 
                             {
-                                $query->whereBetween('tanggal_training_internal', [
+                                $query->whereBetween('tanggal_awal_training_eksternal', [
                                 $request->tanggal_awal,
                                 $request->tanggal_akhir
                                 ]);
@@ -237,27 +248,30 @@ class TrainingInternalController extends Controller
         
         $row = 2;
         $no = 1;
-        foreach ($item_training_internals as $item_training_internal) {
+        foreach ($item_training_eksternals as $item_training_eksternal) {
                 $sheet->getRowDimension($row)->setRowHeight(25);
                 $sheet->setCellValue('A'.$row, $no);
-                $sheet->setCellValue('B'.$row, "'".$item_training_internal->nik_karyawan);
-                $sheet->setCellValue('C'.$row, $item_training_internal->employees->nama_karyawan);
-                $sheet->setCellValue('D'.$row, $item_training_internal->employees->areas->area);
-                $sheet->setCellValue('E'.$row, $item_training_internal->employees->positions->jabatan);
-                $sheet->setCellValue('F'.$row, $item_training_internal->employees->divisions->penempatan);
-                $sheet->setCellValue('G'.$row, "'".$item_training_internal->tanggal_training_internal);
-                $sheet->setCellValue('H'.$row, $item_training_internal->lokasi_training_internal);
-                $sheet->setCellValue('I'.$row, $item_training_internal->materi_training_internal);
-                $sheet->setCellValue('J'.$row, $item_training_internal->trainer_training_internal);
+                $sheet->setCellValue('B'.$row, "'".$item_training_eksternal->nik_karyawan);
+                $sheet->setCellValue('C'.$row, $item_training_eksternal->employees->nama_karyawan);
+                $sheet->setCellValue('D'.$row, $item_training_eksternal->employees->areas->area);
+                $sheet->setCellValue('E'.$row, $item_training_eksternal->employees->positions->jabatan);
+                $sheet->setCellValue('F'.$row, $item_training_eksternal->employees->divisions->penempatan);
+                $sheet->setCellValue('G'.$row, $item_training_eksternal->institusi_penyelenggara_training_eksternal);
+                $sheet->setCellValue('H'.$row, $item_training_eksternal->perihal_training_eksternal);
+                $sheet->setCellValue('I'.$row, "'".$item_training_eksternal->tanggal_awal_training_eksternal);
+                $sheet->setCellValue('J'.$row, "'".$item_training_eksternal->tanggal_akhir_training_eksternal);
+                $sheet->setCellValue('K'.$row, "'".$item_training_eksternal->jam_training_eksternal);
+                $sheet->setCellValue('L'.$row, $item_training_eksternal->lokasi_training_eksternal);
+                $sheet->setCellValue('M'.$row, $item_training_eksternal->alamat_training_eksternal);
                 $row++;
                 $no++;
         }
 
          // Border seluruh data
         $lastRow = $row - 1;
-        $sheet->getStyle("A1:J{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+        $sheet->getStyle("A1:M{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
 
-                $sheet->getStyle("A1:J{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle("A1:M{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         
                 $sheet->getStyle("A2:A{$lastRow}")
                 ->getAlignment()
@@ -268,13 +282,13 @@ class TrainingInternalController extends Controller
                 $sheet->getStyle("D2:D{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("H2:H{$lastRow}")
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle("I2:I{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle("J2:J{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("K2:K{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
         
@@ -288,7 +302,7 @@ class TrainingInternalController extends Controller
         }
         $writer = new Xlsx($spreadsheet);
 
-        $filename = 'TrainingInternalBerdasarkanTanggal.xlsx';
+        $filename = 'TrainingEksternalBerdasarkanTanggal.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -303,8 +317,9 @@ class TrainingInternalController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $employees      = Employees::all();
-        return view('admin.pages.training_internal.form_view_nama',[
+        return view('admin.pages.training_eksternal.form_view_nama',[
             'employees' => $employees
         ]);
     }
@@ -318,22 +333,22 @@ class TrainingInternalController extends Controller
         $employees_id   = $request->input('employees_id');
         $employee       = Employees::where('id',$employees_id)->first();
         $nama_karyawan  = $employee->nama_karyawan;
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
                             'employees.golongans',
                             ])->where('employees_id', $employees_id)->get();
-        if (!$item_training_internals->isEmpty()) {
-            return view('admin.pages.training_internal.view_nama',[
+        if (!$item_training_eksternals->isEmpty()) {
+            return view('admin.pages.training_eksternal.view_nama',[
                 'employees_id'              => $employees_id,
                 'nama_karyawan'             => $nama_karyawan,
-                'item_training_internals'   => $item_training_internals
+                'item_training_eksternals'  => $item_training_eksternals
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');
-            return redirect()->route('training_internal.view_nama');
-        }     
+            return redirect()->route('training_eksternal.view_nama');
+        }  
     }
 
     public function excell_view_nama(Request $request)
@@ -350,12 +365,13 @@ class TrainingInternalController extends Controller
         $sheet->setCellValue('C1', 'Tanggal');
         $sheet->setCellValue('D1', 'Jam');
         $sheet->setCellValue('E1', 'Lokasi');
-        $sheet->setCellValue('F1', 'Materi');
-        $sheet->setCellValue('G1', 'Trainer');
+        $sheet->setCellValue('F1', 'Institusi Penyelenggara');
+        $sheet->setCellValue('G1', 'Training');
+        $sheet->setCellValue('H1', 'Alamat');
         // Header
 
         //Style
-        $sheet->getStyle('A1:G1')->applyFromArray([
+        $sheet->getStyle('A1:H1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => [
@@ -382,34 +398,33 @@ class TrainingInternalController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
         
-        $item_training_internals = TrainingInternals::with('employees')
+        $item_training_eksternals = TrainingEksternals::with('employees')
                                 ->where('employees_id', $request->input('employees_id'))
                                 ->get();
         
         $nama_karyawan = $request->input('nama_karyawan');
         
-        // dd($request->input('employees_id'));
-
         $row = 2;
         $no = 1;
-        foreach ($item_training_internals as $item_training_internal) {
+        foreach ($item_training_eksternals as $item_training_eksternal) {
                 $sheet->getRowDimension($row)->setRowHeight(25);
                 $sheet->setCellValue('A'.$row, $no);
-                $sheet->setCellValue('B'.$row, $item_training_internal->hari_training_internal);
-                $sheet->setCellValue('C'.$row, "'".$item_training_internal->tanggal_training_internal);
-                $sheet->setCellValue('D'.$row, $item_training_internal->jam_training_internal);
-                $sheet->setCellValue('E'.$row, $item_training_internal->lokasi_training_internal);
-                $sheet->setCellValue('F'.$row, $item_training_internal->materi_training_internal);
-                $sheet->setCellValue('G'.$row, $item_training_internal->trainer_training_internal);
+                $sheet->setCellValue('B'.$row, $item_training_eksternal->hari_awal_training_eksternal);
+                $sheet->setCellValue('C'.$row, "'".$item_training_eksternal->tanggal_awal_training_eksternal);
+                $sheet->setCellValue('D'.$row, "'".$item_training_eksternal->jam_training_eksternal);
+                $sheet->setCellValue('E'.$row, $item_training_eksternal->lokasi_training_eksternal);
+                $sheet->setCellValue('F'.$row, $item_training_eksternal->institusi_penyelenggara_training_eksternal);
+                $sheet->setCellValue('G'.$row, $item_training_eksternal->perihal_training_eksternal);
+                $sheet->setCellValue('H'.$row, $item_training_eksternal->alamat_training_eksternal);
                 $row++;
                 $no++;
         }
 
          // Border seluruh data
         $lastRow = $row - 1;
-        $sheet->getStyle("A1:G{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+        $sheet->getStyle("A1:H{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
 
-                $sheet->getStyle("A1:G{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle("A1:H{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         
                 $sheet->getStyle("A2:A{$lastRow}")
                 ->getAlignment()
@@ -424,6 +439,9 @@ class TrainingInternalController extends Controller
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle("E2:E{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("F2:F{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle("G2:G{$lastRow}")
@@ -441,7 +459,7 @@ class TrainingInternalController extends Controller
         $writer = new Xlsx($spreadsheet);
 
 
-        $filename = 'TrainingInternal'.$nama_karyawan.'.xlsx';
+        $filename = 'TrainingEksternal'.$nama_karyawan.'.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -456,8 +474,9 @@ class TrainingInternalController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $divisions      = Divisions::all();
-        return view('admin.pages.training_internal.form_view_penempatan',[
+        return view('admin.pages.training_eksternal.form_view_penempatan',[
             'divisions' => $divisions
         ]);
     }
@@ -472,7 +491,7 @@ class TrainingInternalController extends Controller
         $divisions      = Divisions::where('id',$divisions_id)->first();
         $penempatan     = $divisions->penempatan;
 
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
@@ -480,15 +499,15 @@ class TrainingInternalController extends Controller
                             $query->where('divisions_id', $divisions_id);
                             })->get();
 
-        if (!$item_training_internals->isEmpty()) {
-            return view('admin.pages.training_internal.view_penempatan',[
+        if (!$item_training_eksternals->isEmpty()) {
+            return view('admin.pages.training_eksternal.view_penempatan',[
                 'divisions_id'              => $divisions_id,
                 'penempatan'                => $penempatan,
-                'item_training_internals'   => $item_training_internals
+                'item_training_eksternals'   => $item_training_eksternals
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');
-            return redirect()->route('training_internal.view_penempatan');
+            return redirect()->route('training_eksternal.view_penempatan');
         }  
     }
 
@@ -506,14 +525,17 @@ class TrainingInternalController extends Controller
         $sheet->setCellValue('C1', 'Nama Karyawan');
         $sheet->setCellValue('D1', 'Jabatan');
         $sheet->setCellValue('E1', 'Penempatan');
-        $sheet->setCellValue('F1', 'Tanggal');
-        $sheet->setCellValue('G1', 'Lokasi');
-        $sheet->setCellValue('H1', 'Materi');
-        $sheet->setCellValue('I1', 'Trainer');
+        $sheet->setCellValue('F1', 'Tanggal Awal');
+        $sheet->setCellValue('G1', 'Tanggal Akhir');
+        $sheet->setCellValue('H1', 'Jam');
+        $sheet->setCellValue('I1', 'Lokasi');
+        $sheet->setCellValue('J1', 'Institusi');
+        $sheet->setCellValue('K1', 'Training');
+        $sheet->setCellValue('L1', 'Alamat');
         // Header
 
         //Style
-        $sheet->getStyle('A1:I1')->applyFromArray([
+        $sheet->getStyle('A1:L1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => [
@@ -544,7 +566,7 @@ class TrainingInternalController extends Controller
         $divisions      = Divisions::where('id',$divisions_id)->first();
         $penempatan     = $divisions->penempatan;
 
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
@@ -554,26 +576,29 @@ class TrainingInternalController extends Controller
 
         $row = 2;
         $no = 1;
-        foreach ($item_training_internals as $item_training_internal) {
+        foreach ($item_training_eksternals as $item_training_eksternal) {
                 $sheet->getRowDimension($row)->setRowHeight(25);
                 $sheet->setCellValue('A'.$row, $no);
-                $sheet->setCellValue('B'.$row, "'".$item_training_internal->nik_karyawan);
-                $sheet->setCellValue('C'.$row, $item_training_internal->employees->nama_karyawan);
-                $sheet->setCellValue('D'.$row, $item_training_internal->employees->positions->jabatan);
-                $sheet->setCellValue('E'.$row, $item_training_internal->employees->divisions->penempatan);
-                $sheet->setCellValue('F'.$row, $item_training_internal->tanggal_training_internal);
-                $sheet->setCellValue('G'.$row, "'".$item_training_internal->lokasi_training_internal);
-                $sheet->setCellValue('H'.$row, $item_training_internal->materi_training_internal);
-                $sheet->setCellValue('I'.$row, $item_training_internal->trainer_training_internal);
+                $sheet->setCellValue('B'.$row, "'".$item_training_eksternal->nik_karyawan);
+                $sheet->setCellValue('C'.$row, $item_training_eksternal->employees->nama_karyawan);
+                $sheet->setCellValue('D'.$row, $item_training_eksternal->employees->positions->jabatan);
+                $sheet->setCellValue('E'.$row, $item_training_eksternal->employees->divisions->penempatan);
+                $sheet->setCellValue('F'.$row, "'".$item_training_eksternal->tanggal_awal_training_eksternal);
+                $sheet->setCellValue('G'.$row, "'".$item_training_eksternal->tanggal_akhir_training_eksternal);
+                $sheet->setCellValue('H'.$row, "'".$item_training_eksternal->jam_training_eksternal);
+                $sheet->setCellValue('I'.$row, $item_training_eksternal->lokasi_training_eksternal);
+                $sheet->setCellValue('J'.$row, $item_training_eksternal->institusi_penyelenggara_training_eksternal);
+                $sheet->setCellValue('K'.$row, $item_training_eksternal->perihal_training_eksternal);
+                $sheet->setCellValue('L'.$row, $item_training_eksternal->alamat_training_eksternal);
                 $row++;
                 $no++;
         }
 
          // Border seluruh data
         $lastRow = $row - 1;
-        $sheet->getStyle("A1:I{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+        $sheet->getStyle("A1:L{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
 
-                $sheet->getStyle("A1:I{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle("A1:L{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         
                 $sheet->getStyle("A2:A{$lastRow}")
                 ->getAlignment()
@@ -587,7 +612,13 @@ class TrainingInternalController extends Controller
                 $sheet->getStyle("G2:G{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("I2:I{$lastRow}")
+                $sheet->getStyle("H2:H{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("J2:J{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("K2:K{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
         
@@ -601,7 +632,7 @@ class TrainingInternalController extends Controller
         }
         $writer = new Xlsx($spreadsheet);
 
-        $filename = 'TrainingInternal'.$penempatan.'.xlsx';
+        $filename = 'TrainingEksternal'.$penempatan.'.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -617,42 +648,39 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                                 'employees',
                                 'employees.divisions',
                                 'employees.positions',
-                                ])->select('materi_training_internal')->groupBy('materi_training_internal')->get();
-
-        return view('admin.pages.training_internal.form_view_materi',[
-            'item_training_internals' => $item_training_internals
+                                ])->select('perihal_training_eksternal')->groupBy('perihal_training_eksternal')->get();
+        return view('admin.pages.training_eksternal.form_view_materi',[
+            'item_training_eksternals' => $item_training_eksternals
         ]);
     }
 
-    public function tampil_view_materi(MateriTrainingInternalRequest $request)
+    public function tampil_view_materi(MateriTrainingEksternalRequest $request)
     {
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
 
-        $materi_training_internal   = $request->input('materi_training_internal');
-        $training_internal          = TrainingInternals::where('materi_training_internal',$materi_training_internal)->first();
-        $item_training_internals    = TrainingInternals::with([
+        $perihal_training_eksternal   = $request->input('perihal_training_eksternal');
+        $training_eksternal          = TrainingEksternals::where('perihal_training_eksternal',$perihal_training_eksternal)->first();
+        $item_training_eksternals    = TrainingEksternals::with([
                                         'employees',
                                         'employees.divisions',
                                         'employees.positions',
-                                        ])->where('materi_training_internal', $materi_training_internal)->get();
-
-        // dd($item_training_internals);
+                                        ])->where('perihal_training_eksternal', $perihal_training_eksternal)->get();
                             
-        if (!$item_training_internals->isEmpty()) {
-            return view('admin.pages.training_internal.view_materi',[
-                'materi_training_internal'  => $materi_training_internal,
-                'item_training_internals'   => $item_training_internals
+        if (!$item_training_eksternals->isEmpty()) {
+            return view('admin.pages.training_eksternal.view_materi',[
+                'perihal_training_eksternal'    => $perihal_training_eksternal,
+                'item_training_eksternals'      => $item_training_eksternals
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');
-            return redirect()->route('training_internal.view_materi');
-        }   
+            return redirect()->route('training_eksternal.view_materi');
+        }  
     }
 
     public function excell_view_materi(Request $request)
@@ -669,14 +697,17 @@ class TrainingInternalController extends Controller
         $sheet->setCellValue('C1', 'Nama Karyawan');
         $sheet->setCellValue('D1', 'Jabatan');
         $sheet->setCellValue('E1', 'Penempatan');
-        $sheet->setCellValue('F1', 'Tanggal');
-        $sheet->setCellValue('G1', 'Lokasi');
-        $sheet->setCellValue('H1', 'Materi');
-        $sheet->setCellValue('I1', 'Trainer');
+        $sheet->setCellValue('F1', 'Penyelenggara');
+        $sheet->setCellValue('G1', 'Training');
+        $sheet->setCellValue('H1', 'Tanggal Awal');
+        $sheet->setCellValue('I1', 'Tanggal Akhir');
+        $sheet->setCellValue('J1', 'Jam');
+        $sheet->setCellValue('K1', 'Lokasi');
+        $sheet->setCellValue('L1', 'Alamat');
         // Header
 
         //Style
-        $sheet->getStyle('A1:I1')->applyFromArray([
+        $sheet->getStyle('A1:L1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => [
@@ -704,36 +735,39 @@ class TrainingInternalController extends Controller
         //Style
 
 
-        $materi_training_internal   = $request->materi_training_internal;
+        $perihal_training_eksternal   = $request->perihal_training_eksternal;
         
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
-                            ])->where('materi_training_internal', $materi_training_internal)->get();
+                            ])->where('perihal_training_eksternal', $perihal_training_eksternal)->get();
 
         $row = 2;
         $no = 1;
-        foreach ($item_training_internals as $item_training_internal) {
+        foreach ($item_training_eksternals as $item_training_eksternal) {
                 $sheet->getRowDimension($row)->setRowHeight(25);
                 $sheet->setCellValue('A'.$row, $no);
-                $sheet->setCellValue('B'.$row, "'".$item_training_internal->nik_karyawan);
-                $sheet->setCellValue('C'.$row, $item_training_internal->employees->nama_karyawan);
-                $sheet->setCellValue('D'.$row, $item_training_internal->employees->positions->jabatan);
-                $sheet->setCellValue('E'.$row, $item_training_internal->employees->divisions->penempatan);
-                $sheet->setCellValue('F'.$row, $item_training_internal->tanggal_training_internal);
-                $sheet->setCellValue('G'.$row, "'".$item_training_internal->lokasi_training_internal);
-                $sheet->setCellValue('H'.$row, $item_training_internal->materi_training_internal);
-                $sheet->setCellValue('I'.$row, $item_training_internal->trainer_training_internal);
+                $sheet->setCellValue('B'.$row, "'".$item_training_eksternal->nik_karyawan);
+                $sheet->setCellValue('C'.$row, $item_training_eksternal->employees->nama_karyawan);
+                $sheet->setCellValue('D'.$row, $item_training_eksternal->employees->positions->jabatan);
+                $sheet->setCellValue('E'.$row, $item_training_eksternal->employees->divisions->penempatan);
+                $sheet->setCellValue('F'.$row, $item_training_eksternal->institusi_penyelenggara_training_eksternal);
+                $sheet->setCellValue('G'.$row, $item_training_eksternal->perihal_training_eksternal);
+                $sheet->setCellValue('H'.$row, "'".$item_training_eksternal->tanggal_awal_training_eksternal);
+                $sheet->setCellValue('I'.$row, "'".$item_training_eksternal->tanggal_akhir_training_eksternal);
+                $sheet->setCellValue('J'.$row, "'".$item_training_eksternal->jam_training_eksternal);
+                $sheet->setCellValue('K'.$row, $item_training_eksternal->lokasi_training_eksternal);
+                $sheet->setCellValue('L'.$row, $item_training_eksternal->alamat_training_eksternal);
                 $row++;
                 $no++;
         }
 
          // Border seluruh data
         $lastRow = $row - 1;
-        $sheet->getStyle("A1:I{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+        $sheet->getStyle("A1:L{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
 
-                $sheet->getStyle("A1:I{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle("A1:L{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         
                 $sheet->getStyle("A2:A{$lastRow}")
                 ->getAlignment()
@@ -744,10 +778,13 @@ class TrainingInternalController extends Controller
                 $sheet->getStyle("F2:F{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("G2:G{$lastRow}")
+                $sheet->getStyle("H2:H{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle("I2:I{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("J2:J{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
         
@@ -761,7 +798,7 @@ class TrainingInternalController extends Controller
         }
         $writer = new Xlsx($spreadsheet);
 
-        $filename = 'TrainingInternal'.$materi_training_internal.'.xlsx';
+        $filename = 'TrainingEksternal'.$perihal_training_eksternal.'.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -777,36 +814,36 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.training_internal.form_edit_tanggal');
+        return view('admin.pages.training_eksternal.form_edit_tanggal');
     }
 
-    public function edit_tanggal(TanggalTrainingRequest $request)
+    public function edit_tanggal(TanggalTrainingEksternalRequest $request)
     {
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
 
-        $tanggal_training_internal  = $request->input('tanggal_training_internal');
+        $tanggal_awal_training_eksternal  = $request->input('tanggal_awal_training_eksternal');
 
         $employees = Employees::all();
-        $item_training_internals = TrainingInternals::with([
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
-                            ])->where('tanggal_training_internal', $tanggal_training_internal)->get();
+                            ])->where('tanggal_awal_training_eksternal', $tanggal_awal_training_eksternal)->get();
         
-        if (!$item_training_internals->isEmpty()) {
-            $selectedEmployees = $item_training_internals
+        if (!$item_training_eksternals->isEmpty()) {
+            $selectedEmployees = $item_training_eksternals
                             ->pluck('employees_id')
                             ->toArray();
-            return view('admin.pages.training_internal.view_edit_tanggal', [
+            return view('admin.pages.training_eksternal.view_edit_tanggal', [
                 'employees' => $employees,
-                'item_training_internals' => $item_training_internals,
+                'item_training_eksternals' => $item_training_eksternals,
                 'selectedEmployees' => $selectedEmployees
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');
-            return redirect()->route('training_internal.form_edit_tanggal');
+            return redirect()->route('training_eksternal.form_edit_tanggal');
         }  
     }
 
@@ -816,29 +853,50 @@ class TrainingInternalController extends Controller
             abort(403);
         }
         
-        $tanggal    = $request->input('tanggal_training_internal');
-        $tanggal_lama    = $request->input('tanggal_lama_training_internal');
-        $hari       = \Carbon\Carbon::parse($tanggal)->isoformat('dddd');
+        try {
+        DB::transaction(function () use ($request) {
+            
+        $tanggal_awal   = $request->input('tanggal_awal_training_eksternal');
+        $tanggal_akhir  = $request->input('tanggal_akhir_training_eksternal');
+        $tanggal_awal_lama_training_eksternal  = $request->input('tanggal_awal_lama_training_eksternal');
 
-        TrainingInternals::where('tanggal_training_internal', $tanggal_lama)->delete();
+        $hari_awal  = \Carbon\Carbon::parse($tanggal_awal)->isoformat('dddd');
+        $hari_akhir = \Carbon\Carbon::parse($tanggal_akhir)->isoformat('dddd');
+
+        TrainingEksternals::where('tanggal_awal_training_eksternal', $tanggal_awal_lama_training_eksternal)->delete();
 
         foreach ($request->employees_id as $employeeId) {
             $employee = Employees::find($employeeId);
 
-            TrainingInternals::create([
-            'employees_id'              => $employee->id,
-            'nik_karyawan'              => $employee->nik_karyawan,
-            'hari_training_internal'    => $hari,
-            'tanggal_training_internal' => $request->tanggal_training_internal,
-            'jam_training_internal'     => $request->jam_training_internal,
-            'lokasi_training_internal'  => $request->lokasi_training_internal,
-            'materi_training_internal'  => $request->materi_training_internal,
-            'trainer_training_internal' => $request->trainer_training_internal,
-            'edit_oleh'                 => auth()->user()->name
+            TrainingEksternals::create([
+            'employees_id'                                  => $employee->id,
+            'nik_karyawan'                                  => $employee->nik_karyawan,
+            'hari_awal_training_eksternal'                  => $hari_awal,
+            'hari_akhir_training_eksternal'                 => $hari_akhir,
+            'tanggal_awal_training_eksternal'               => $request->tanggal_awal_training_eksternal,
+            'tanggal_akhir_training_eksternal'              => $request->tanggal_akhir_training_eksternal,
+            'institusi_penyelenggara_training_eksternal'    => $request->institusi_penyelenggara_training_eksternal,
+            'perihal_training_eksternal'                    => $request->perihal_training_eksternal,
+            'jam_training_eksternal'                        => $request->jam_training_eksternal,
+            'lokasi_training_eksternal'                     => $request->lokasi_training_eksternal,
+            'alamat_training_eksternal'                     => $request->alamat_training_eksternal,
+            'edit_oleh'                                     => auth()->user()->name
         ]);
         }
-        Alert::success('Success Edit Data Training Internal','Oleh '.auth()->user()->name);
-        return redirect()->route('training_internal.index');
+        });
+        Alert::success('Success Edit Data Training Eksternal','Oleh '.auth()->user()->name);
+        return redirect()->route('training_eksternal.index');
+        } catch (\Exception $e) {
+            // Jika ada error (misal: ID karyawan tidak ketemu, atau masalah koneksi DB)
+        // Database akan otomatis Rollback (pembatalan delete/create)
+        Log::error("Gagal update training eksternal: " . $e->getMessage());
+        
+        return redirect()->back()
+            ->withErrors(['error' => 'Terjadi kesalahan sistem saat menyimpan data.'])
+            ->withInput();
+    }
+
+        
     }
 
     public function form_hapus_tanggal()
@@ -848,31 +906,34 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.training_internal.form_hapus_tanggal');
+        return view('admin.pages.training_eksternal.form_hapus_tanggal');
     }
 
-    public function tampil_hapus_tanggal(TanggalTrainingRequest $request)
+    public function tampil_hapus_tanggal(TanggalTrainingEksternalRequest $request)
     {
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
 
-        $tanggal_training_internal  = $request->input('tanggal_training_internal');
-        $item_training_internals = TrainingInternals::with([
+        $tanggal_awal_training_eksternal    = $request->input('tanggal_awal_training_eksternal');
+        $tanggal_akhir_training_eksternal   = $request->input('tanggal_akhir_training_eksternal');
+
+        $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.areas',
                             'employees.positions',
                             'employees.divisions',
-                            ])->where('tanggal_training_internal',$tanggal_training_internal)->get();
+                            ])->where('tanggal_awal_training_eksternal',$tanggal_awal_training_eksternal)->get();
 
-        if (!$item_training_internals->isEmpty()) {
-            return view('admin.pages.training_internal.view_hapus_tanggal',[
-                'tanggal_training_internal' => $tanggal_training_internal,
-                'item_training_internals'   => $item_training_internals
+        if (!$item_training_eksternals->isEmpty()) {
+            return view('admin.pages.training_eksternal.view_hapus_tanggal',[
+                'tanggal_awal_training_eksternal'   => $tanggal_awal_training_eksternal,
+                'tanggal_akhir_training_eksternal'  => $tanggal_akhir_training_eksternal,
+                'item_training_eksternals'          => $item_training_eksternals
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');
-            return redirect()->route('training_internal.form_hapus_tanggal');
+            return redirect()->route('training_eksternal.form_hapus_tanggal');
         }  
     }
 
@@ -882,16 +943,17 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        $tanggal_training_internal = $request->tanggal_training_internal;
-        DB::transaction(function () use ($tanggal_training_internal) {
-        $training = TrainingInternals::where('tanggal_training_internal',$tanggal_training_internal);
+        $tanggal_awal_training_eksternal = $request->tanggal_awal_training_eksternal;
+
+        DB::transaction(function () use ($tanggal_awal_training_eksternal) {
+        $training = TrainingEksternals::where('tanggal_awal_training_eksternal',$tanggal_awal_training_eksternal);
         $training->update([
                 'hapus_oleh' => auth()->user()->name
                 ]);
 
         $training->delete();
         });
-        Alert::error('Menghapus Data Training Internal','Oleh '.auth()->user()->name);
-        return redirect()->route('training_internal.index');
+        Alert::error('Menghapus Data Training Eksternal','Oleh '.auth()->user()->name);
+        return redirect()->route('training_eksternal.index');
     }
 }

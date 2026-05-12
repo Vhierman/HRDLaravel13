@@ -6,7 +6,7 @@
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Edit Data Training Internal');
+@section('title', 'Tambah Data Training Eksternal');
 @section('content')
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -14,7 +14,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Edit Data Training Internal</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Training Eksternal</li>
                 </ol>
             </nav>
         </div>
@@ -35,58 +35,69 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Tambah Training Internal</h5>
-            <form action="{{ route('training_internal.update_tanggal') }}" method="post" enctype="multipart/form-data">
+            <h5 class="mb-4">Form Tambah Training Eksternal</h5>
+            <form action="{{ route('training_eksternal.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="tanggal_lama_training_internal"
-                    value="{{ $item_training_internals->first()->tanggal_training_internal }}" class="form-control"
-                    placeholder="dd/mm/yyyy" readonly>
-
-                <div class="row g-3">
-                    <div class="col-12 col-lg-6">
+                <div class="row justify-content-center g-3 mb-2">
+                    <div class="col-md-12">
                         <label for="karyawan-select" class="form-label">Nama Karyawan</label>
-                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field" multiple>
+                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field"
+                            data-placeholder="Pilih Nama Karyawan" multiple>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
-                                    {{ in_array($employee->id, old('employees_id', $selectedEmployees)) ? 'selected' : '' }}>
+                                    {{ old('employees_id') == $employee->id ? 'selected' : '' }}>
                                     {{ $employee->nama_karyawan }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
+                </div>
+                <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Training</label>
-                        <input type="date" name="tanggal_training_internal"
-                            value="{{ old('tanggal_training_internal', $item_training_internals->first()->tanggal_training_internal) }}"
-                            class="form-control" placeholder="dd/mm/yyyy">
+                        <label class="form-label">Tanggal Awal Training</label>
+                        <input type="date" name="tanggal_awal_training_eksternal"
+                            value="{{ old('tanggal_awal_training_eksternal') }}" class="form-control"
+                            placeholder="dd/mm/yyyy">
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label">Tanggal Akhir Training</label>
+                        <input type="date" name="tanggal_akhir_training_eksternal"
+                            value="{{ old('tanggal_akhir_training_eksternal') }}" class="form-control"
+                            placeholder="dd/mm/yyyy">
+                    </div>
+                </div>
+                <div class="row g-3 mt-2">
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label">Institusi Penyelenggara Training</label>
+                        <input type="text" name="institusi_penyelenggara_training_eksternal"
+                            value="{{ old('institusi_penyelenggara_training_eksternal') }}" class="form-control"
+                            placeholder="Institusi Penyelenggara Training">
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label">Training</label>
+                        <input type="text" name="perihal_training_eksternal"
+                            value="{{ old('perihal_training_eksternal') }}" class="form-control" placeholder="Training">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
                         <label class="form-label">Jam Training</label>
-                        <input type="time" name="jam_training_internal"
-                            value="{{ old('jam_training_internal', $item_training_internals->first()->jam_training_internal) }}"
+                        <input type="time" name="jam_training_eksternal" value="{{ old('jam_training_eksternal') }}"
                             class="form-control" placeholder="00:00">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Lokasi Training</label>
-                        <input type="text" name="lokasi_training_internal"
-                            value="{{ old('lokasi_training_internal', $item_training_internals->first()->lokasi_training_internal) }}"
-                            class="form-control" placeholder="Masukan Lokasi Training">
+                        <label class="form-label">Lokasi</label>
+                        <input type="text" name="lokasi_training_eksternal"
+                            value="{{ old('lokasi_training_eksternal') }}" class="form-control"
+                            placeholder="Masukan Lokasi Training">
                     </div>
                 </div>
-                <div class="row g-3 mt-2">
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label">Materi Training</label>
-                        <input type="text" name="materi_training_internal"
-                            value="{{ old('materi_training_internal', $item_training_internals->first()->materi_training_internal) }}"
-                            class="form-control" placeholder="Masukan Materi Training">
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label">Trainer</label>
-                        <input type="text" name="trainer_training_internal"
-                            value="{{ old('trainer_training_internal', $item_training_internals->first()->trainer_training_internal) }}"
-                            class="form-control" placeholder="Masukan Trainer">
+                <div class="row justify-content-center g-3 mt-2">
+                    <div class="col-md-12">
+                        <label class="form-label">Alamat</label>
+                        <input type="text" name="alamat_training_eksternal"
+                            value="{{ old('alamat_training_eksternal') }}" class="form-control"
+                            placeholder="Masukan Alamat Lengkap Lokasi Training">
                     </div>
                 </div>
                 <br>
@@ -99,13 +110,14 @@
                                             class="material-icons-outlined">save</i>Simpan</button>
                                 </div>
                                 <div class="col">
-                                    <a href="{{ route('training_internal.index') }}"
+                                    <a href="{{ route('training_eksternal.index') }}"
                                         class="btn btn-danger px-4 raised d-flex gap-2">
                                         <i class="material-icons-outlined">cancel</i>Cancel
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </form>

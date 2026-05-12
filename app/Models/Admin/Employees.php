@@ -100,8 +100,8 @@ class Employees extends Model
     public function history_salaries() {
         return $this->hasMany(HistorySalaries::class,'employees_id','id');
     }
-    public function history_training_eksternals() {
-        return $this->hasMany(HistoryTrainingEksternals::class,'employees_id','id');
+    public function training_eksternals() {
+        return $this->hasMany(TrainingEksternals::class,'employees_id','id');
     }
     public function training_internals() {
         return $this->hasMany(TrainingInternals::class,'employees_id','id');

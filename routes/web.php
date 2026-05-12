@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\InventoryMotorcycleController;
 use App\Http\Controllers\Admin\InventoryCarController;
 use App\Http\Controllers\Admin\TrainingInternalController;
+use App\Http\Controllers\Admin\TrainingEksternalController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -72,6 +73,28 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('inventory_car/exportExcel', [InventoryCarController::class, 'exportExcel'])->name('inventory_car.exportExcel');
     Route::resource('inventory_car', InventoryCarController::class);
 
+    //Training Eksternal
+    Route::post('training_eksternal/hapus_tanggal', [TrainingEksternalController::class, 'hapus_tanggal'])->name('training_eksternal.hapus_tanggal');
+    Route::post('training_eksternal/tampil_hapus_tanggal', [TrainingEksternalController::class, 'tampil_hapus_tanggal'])->name('training_eksternal.tampil_hapus_tanggal');
+    Route::get('training_eksternal/form_hapus_tanggal', [TrainingEksternalController::class, 'form_hapus_tanggal'])->name('training_eksternal.form_hapus_tanggal');
+    Route::post('training_eksternal/update_tanggal', [TrainingEksternalController::class, 'update_tanggal'])->name('training_eksternal.update_tanggal');
+    Route::post('training_eksternal/edit_tanggal', [TrainingEksternalController::class, 'edit_tanggal'])->name('training_eksternal.edit_tanggal');
+    Route::get('training_eksternal/form_edit_tanggal', [TrainingEksternalController::class, 'form_edit_tanggal'])->name('training_eksternal.form_edit_tanggal');
+    Route::post('training_eksternal/excell_view_materi', [TrainingEksternalController::class, 'excell_view_materi'])->name('training_eksternal.excell_view_materi');
+    Route::post('training_eksternal/tampil_view_materi', [TrainingEksternalController::class, 'tampil_view_materi'])->name('training_eksternal.tampil_view_materi');
+    Route::get('training_eksternal/view_materi', [TrainingEksternalController::class, 'view_materi'])->name('training_eksternal.view_materi');
+    Route::post('training_eksternal/excell_view_nama', [TrainingEksternalController::class, 'excell_view_nama'])->name('training_eksternal.excell_view_nama');
+    Route::post('training_eksternal/tampil_view_nama', [TrainingEksternalController::class, 'tampil_view_nama'])->name('training_eksternal.tampil_view_nama');
+    Route::get('training_eksternal/view_nama', [TrainingEksternalController::class, 'view_nama'])->name('training_eksternal.view_nama');
+    Route::post('training_eksternal/excell_view_penempatan', [TrainingEksternalController::class, 'excell_view_penempatan'])->name('training_eksternal.excell_view_penempatan');
+    Route::post('training_eksternal/tampil_view_penempatan', [TrainingEksternalController::class, 'tampil_view_penempatan'])->name('training_eksternal.tampil_view_penempatan');
+    Route::get('training_eksternal/view_penempatan', [TrainingEksternalController::class, 'view_penempatan'])->name('training_eksternal.view_penempatan');
+    Route::post('training_eksternal/excell_training_eksternal', [TrainingEksternalController::class, 'excell_training_eksternal'])->name('training_eksternal.excell_training_eksternal');
+    Route::post('training_eksternal/tampil_view_tanggal', [TrainingEksternalController::class, 'tampil_view_tanggal'])->name('training_eksternal.tampil_view_tanggal');
+    Route::get('training_eksternal/view_tanggal', [TrainingEksternalController::class, 'view_tanggal'])->name('training_eksternal.view_tanggal');
+    Route::resource('training_eksternal', TrainingEksternalController::class);
+
+    //Training Internal
     Route::post('training_internal/hapus_tanggal', [TrainingInternalController::class, 'hapus_tanggal'])->name('training_internal.hapus_tanggal');
     Route::post('training_internal/tampil_hapus_tanggal', [TrainingInternalController::class, 'tampil_hapus_tanggal'])->name('training_internal.tampil_hapus_tanggal');
     Route::get('training_internal/form_hapus_tanggal', [TrainingInternalController::class, 'form_hapus_tanggal'])->name('training_internal.form_hapus_tanggal');

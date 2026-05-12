@@ -5,14 +5,14 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class HistoryTrainingEksternalRequest extends FormRequest
+class MateriTrainingEksternalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class HistoryTrainingEksternalRequest extends FormRequest
     {
         return [
             //
+            'perihal_training_eksternal'      => 'required'
         ];
     }
 }
