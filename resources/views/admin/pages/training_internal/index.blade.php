@@ -45,11 +45,14 @@
                 </div>
             </div>
             <div class="row justify-content-center g-3 text-center mt-2">
-                <div class="col-md-12">
+                <div class="col-md-6">
+                    <a href="{{ route('training_internal.form_belum_training') }}"
+                        class="btn btn-grd btn-primary px-5 btn-lg py-3 w-100">Lihat Data Karyawan Belum Pernah Training</a>
+                </div>
+                <div class="col-md-6">
                     <a href="{{ route('training_internal.form_hapus_tanggal') }}"
                         class="btn btn-grd btn-grd-danger px-5 btn-lg py-3 w-100">Hapus Data Training Internal</a>
                 </div>
-
             </div>
         </div>
     </div>

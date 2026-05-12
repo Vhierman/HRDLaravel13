@@ -894,4 +894,153 @@ class TrainingInternalController extends Controller
         Alert::error('Menghapus Data Training Internal','Oleh '.auth()->user()->name);
         return redirect()->route('training_internal.index');
     }
+
+    public function form_belum_training()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        return view('admin.pages.training_internal.form_view_belum_training');
+    }
+
+    public function tampil_view_belum_training(TanggalAwalAkhirRequest $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
+
+        $item_training_internals = Employees::with([
+                                'areas',
+                                'golongans',
+                                'positions',
+                                'divisions'
+                            ])->whereDoesntHave('training_internals', function ($query) use ($tanggal_awal, $tanggal_akhir) {
+                                $query->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir]);
+                            })->get();
+
+        if (!$item_training_internals->isEmpty()) {
+            return view('admin.pages.training_internal.view_belum_training',[
+                'tanggal_awal'  => $tanggal_awal,
+                'tanggal_akhir' => $tanggal_akhir,
+                'item_training_internals' => $item_training_internals
+            ]);
+        } else {
+            Alert::error('Data Tidak Ditemukan');
+            return redirect()->route('training_internal.form_belum_training');
+        }   
+    }
+
+    public function excell_belum_training_internal(Request $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        // Header
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'NIK Karyawan');
+        $sheet->setCellValue('C1', 'Nama Karyawan');
+        $sheet->setCellValue('D1', 'Jabatan');
+        $sheet->setCellValue('E1', 'Penempatan');
+        // Header
+
+        //Style
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => [
+                    'rgb' => 'FFFFFF'
+                ],
+                'size' => 12
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => '4CAF50'
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+            ]);
+            $sheet->getRowDimension(1)->setRowHeight(30);
+        //Style
+
+        $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
+        $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+
+        $item_training_internals = Employees::with([
+                                'areas',
+                                'golongans',
+                                'positions',
+                                'divisions'
+                            ])->whereDoesntHave('training_internals', function ($query) use ($tanggal_awal, $tanggal_akhir) {
+                                $query->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir]);
+                            })->get();
+
+        $row = 2;
+        $no = 1;
+        foreach ($item_training_internals as $item_training_internal) {
+                $sheet->getRowDimension($row)->setRowHeight(25);
+                $sheet->setCellValue('A'.$row, $no);
+                $sheet->setCellValue('B'.$row, "'".$item_training_internal->nik_karyawan);
+                $sheet->setCellValue('C'.$row, $item_training_internal->nama_karyawan);
+                $sheet->setCellValue('D'.$row, $item_training_internal->positions->jabatan);
+                $sheet->setCellValue('E'.$row, $item_training_internal->divisions->penempatan);
+                $row++;
+                $no++;
+        }
+
+         // Border seluruh data
+        $lastRow = $row - 1;
+        $sheet->getStyle("A1:E{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+
+                $sheet->getStyle("A1:E{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        
+                $sheet->getStyle("A2:A{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("B2:B{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("C2:C{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("D2:D{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("E2:E{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        
+        // Auto width
+        $highestColumn = $sheet->getHighestColumn(); 
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $columnLetter = Coordinate::stringFromColumnIndex($col);
+            $sheet->getColumnDimension($columnLetter)->setAutoSize(true);
+        }
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = 'TrainingInternal.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
 }

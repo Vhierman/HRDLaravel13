@@ -113,6 +113,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('training_internal/excell_training_internal', [TrainingInternalController::class, 'excell_training_internal'])->name('training_internal.excell_training_internal');
     Route::post('training_internal/tampil_view_tanggal', [TrainingInternalController::class, 'tampil_view_tanggal'])->name('training_internal.tampil_view_tanggal');
     Route::get('training_internal/view_tanggal', [TrainingInternalController::class, 'view_tanggal'])->name('training_internal.view_tanggal');
+    Route::post('training_internal/excell_belum_training_internal', [TrainingInternalController::class, 'excell_belum_training_internal'])->name('training_internal.excell_belum_training_internal');
+    Route::post('training_internal/tampil_view_belum_training', [TrainingInternalController::class, 'tampil_view_belum_training'])->name('training_internal.tampil_view_belum_training');
+    Route::get('training_internal/form_belum_training', [TrainingInternalController::class, 'form_belum_training'])->name('training_internal.form_belum_training');
     Route::resource('training_internal', TrainingInternalController::class);
 });
 // Route Admin Area
