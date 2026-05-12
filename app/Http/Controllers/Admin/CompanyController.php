@@ -50,7 +50,7 @@ class CompanyController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         Companies::create([
             'nama_perusahaan'   => $request->input('nama_perusahaan'),
             'input_oleh'        => Auth::user()->name
@@ -94,7 +94,7 @@ class CompanyController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-
+        $data   = $request->except('_token');
         $company = Companies::findOrFail($id);
         $company->update([
             'nama_perusahaan'   => $request->input('nama_perusahaan'),
