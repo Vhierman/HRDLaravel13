@@ -35,12 +35,12 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Tambah Absensi</h5>
+            <h5 class="mb-4 fs-4">Form Tambah Absensi</h5>
             <form action="{{ route('attendance.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Nama Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id" class="form-select" id="karyawan-select"
                             data-placeholder="Pilih Karyawan">
                             <option value="">Pilih Karyawan</option>
@@ -53,14 +53,14 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Absen</label>
+                        <label class="form-label fs-6">Tanggal Absen</label>
                         <input type="date" name="tanggal_absen" value="{{ old('tanggal_absen') }}" class="form-control"
                             placeholder="dd/mm/yyyy">
                     </div>
                 </div>
                 <div class="row g-3 mt-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Keterangan Absen</label>
+                        <label for="karyawan-select" class="form-label fs-6">Keterangan Absen</label>
                         <select class="form-select" name="keterangan_absen" id="keterangan_absen-select"
                             data-placeholder="Pilih Keterangan Absen">
                             <option value="">Pilih Keterangan Absen</option>
@@ -82,7 +82,7 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Keterangan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Keterangan</label>
                         <input type="text" name="keterangan_cuti_khusus" value="{{ old('keterangan_cuti_khusus') }}"
                             class="form-control" placeholder="Masukan Keterangan">
                     </div>

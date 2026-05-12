@@ -35,17 +35,17 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Data Absensi</h5>
+            <h5 class="mb-4 fs-4">Data Absensi</h5>
             <form action="{{ route('attendance.tampil_absen') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Dari Tanggal</label>
+                        <label class="form-label fs-6">Dari Tanggal</label>
                         <input type="date" name="tanggal_awal" value="{{ old('tanggal_awal') }}" class="form-control"
                             placeholder="dd/mm/yyyy">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Sampai Tanggal</label>
+                        <label class="form-label fs-6">Sampai Tanggal</label>
                         <input type="date" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" class="form-control"
                             placeholder="dd/mm/yyyy">
                     </div>

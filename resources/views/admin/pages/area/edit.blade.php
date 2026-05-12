@@ -29,12 +29,12 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Edit Area</h5>
+            <h5 class="mb-4 fs-4">Form Edit Area</h5>
             <form action="{{ route('area.update', $area->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label fs-5">Nama Area</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Nama Area</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="huruf(this);" name="area"
                             value="{{ $area->area }}" id="input35" placeholder="Nama Area" />

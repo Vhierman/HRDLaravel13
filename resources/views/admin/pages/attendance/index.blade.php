@@ -20,19 +20,19 @@
             <div class="row justify-content-center g-3 text-center">
                 <div class="col-md-3">
                     <a href="{{ route('attendance.form_tampil') }}"
-                        class="btn btn-grd btn-grd-deep-blue px-5 btn-lg py-3 w-100">Lihat Data</a>
+                        class="btn btn-grd btn-grd-deep-blue px-5 btn-lg py-3 w-100">Lihat Data Absensi</a>
                 </div>
                 <div class="col-md-3">
                     <a href="{{ route('attendance.create') }}"
-                        class="btn btn-grd btn-grd-success px-5 btn-lg py-3 w-100">Tambah Data</a>
+                        class="btn btn-grd btn-grd-success px-5 btn-lg py-3 w-100">Tambah Data Absensi</a>
                 </div>
                 <div class="col-md-3">
                     <a href="{{ route('attendance.form_edit') }}"
-                        class="btn btn-grd btn-grd-info px-5 btn-lg py-3 w-100">Edit Data</a>
+                        class="btn btn-grd btn-grd-info px-5 btn-lg py-3 w-100">Edit Data Absensi</a>
                 </div>
                 <div class="col-md-3">
                     <a href="{{ route('attendance.form_hapus') }}"
-                        class="btn btn-grd btn-grd-danger px-5 btn-lg py-3 w-100">Hapus Data</a>
+                        class="btn btn-grd btn-grd-danger px-5 btn-lg py-3 w-100">Hapus Data Absensi</a>
                 </div>
             </div>
         </div>
@@ -53,7 +53,6 @@
     </div>
     {{-- Chart --}}
 @endsection
-
 
 @section('js')
     <script src="{{ asset('template_admin/assets/plugins/apexchart/apexcharts.min.js') }}"></script>
@@ -216,7 +215,6 @@
                 }
             }
         };
-
         var chart = new ApexCharts(document.querySelector("#chartAbsensi"), options);
         chart.render();
     </script>

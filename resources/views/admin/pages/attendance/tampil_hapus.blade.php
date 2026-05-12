@@ -7,7 +7,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Hapus Data Absensi</li>
+                    <li class="breadcrumb-item active" aria-current="page">Hapus Absensi</li>
                 </ol>
             </nav>
         </div>
@@ -28,7 +28,7 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Hapus Absensi</h5>
+            <h5 class="mb-4 fs-4">Form Hapus Absensi</h5>
             <form action="{{ route('attendance.destroy', $item_attendance->id) }}" method="post"
                 enctype="multipart/form-data">
                 @csrf
@@ -36,31 +36,31 @@
 
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">NIK Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">NIK Karyawan</label>
                         <input type="text" name="nik_karyawan" value="{{ $item_attendance->employees->nik_karyawan }}"
                             class="form-control" placeholder="Masukan NIK Karyawan" readonly>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Nama Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <input type="text" name="nama_karyawan" value="{{ $item_attendance->employees->nama_karyawan }}"
                             class="form-control" placeholder="Masukan Nama Karyawan" readonly>
                     </div>
                 </div>
                 <div class="row g-3 mt-3">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Absen</label>
+                        <label class="form-label fs-6">Tanggal Absen</label>
                         <input type="date" name="tanggal_absen" value="{{ $item_attendance->tanggal_absen }}"
                             class="form-control" placeholder="dd/mm/yyyy" readonly>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Keterangan Absen</label>
+                        <label class="form-label fs-6">Keterangan Absen</label>
                         <input type="date" name="keterangan_absen" value="{{ $item_attendance->keterangan_absen }}"
                             class="form-control" placeholder="Keterangan Absen" readonly>
                     </div>
                 </div>
                 <div class="row g-3 mt-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Keterangan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Keterangan</label>
                         <input type="text" name="keterangan_cuti_khusus"
                             value="{{ $item_attendance->keterangan_cuti_khusus }}" class="form-control"
                             placeholder="Masukan Keterangan" readonly>

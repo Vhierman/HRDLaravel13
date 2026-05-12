@@ -18,7 +18,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Absensi karyawan</li>
+                    <li class="breadcrumb-item active" aria-current="page">Absensi Karyawan</li>
                 </ol>
             </nav>
         </div>

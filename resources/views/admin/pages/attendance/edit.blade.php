@@ -34,11 +34,11 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Edit Area</h5>
+            <h5 class="mb-4">Form Edit Absensi</h5>
             <form action="{{ route('attendance.tampil_form_edit') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Nama Karyawan</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Nama Karyawan</label>
                     <div class="col-sm-9">
                         <select name="employees_id" class="form-select" id="karyawan-select"
                             data-placeholder="Pilih Karyawan">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Tanggal Absen</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Tanggal Absen</label>
                     <div class="col-sm-9">
                         <input type="date" class="form-control" name="tanggal_absen" value="{{ old('tanggal_absen') }}"
                             id="input35" placeholder="dd/mm/yyyy" />
