@@ -12,7 +12,7 @@ class CertificationMinistryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,13 @@ class CertificationMinistryRequest extends FormRequest
     {
         return [
             //
+            'employees_id'                        => 'required',
+            'nomor_sertifikat_kementrian'         => 'required',
+            'jenis_sertifikat_kementrian'         => 'required',
+            'masa_berlaku_sertifikat_kementrian'  => 'required',
+            'tanggal_terbit_kementrian'           => 'required|date',
+            'sampai_tanggal_kementrian'           => 'required|date',
+            'lsp_kementrian'                      => 'required'
         ];
     }
 }

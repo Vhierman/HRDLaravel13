@@ -15,7 +15,7 @@ class CertificationMinistries extends Model
     protected $table = 'certification_ministries';
 
     protected $fillable = [
-        'employees_id ',
+        'employees_id',
         'nik_karyawan',
         'jumlah_sertifikat_kementrian',
         'nomor_sertifikat_kementrian',

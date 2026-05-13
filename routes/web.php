@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\InventoryCarController;
 use App\Http\Controllers\Admin\TrainingInternalController;
 use App\Http\Controllers\Admin\TrainingEksternalController;
 use App\Http\Controllers\Admin\CertificationBnspController;
+use App\Http\Controllers\Admin\CertificationMinistryController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -118,6 +119,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('training_internal', TrainingInternalController::class);
     Route::get('certification_bnsp/exportExcel', [CertificationBnspController::class, 'exportExcel'])->name('certification_bnsp.exportExcel');
     Route::resource('certification_bnsp', CertificationBnspController::class);
+    Route::get('certification_ministry/exportExcel', [CertificationMinistryController::class, 'exportExcel'])->name('certification_ministry.exportExcel');
+    Route::resource('certification_ministry', CertificationMinistryController::class);
     });
     // Route Admin Area
     
