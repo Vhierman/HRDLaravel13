@@ -35,7 +35,7 @@
                 @method('PUT')
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Maksimal Upah BPJS Ketenagakerjaan</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Maksimal Upah BPJS Ketenagakerjaan</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="angka(this);"
                             name="maksimal_upah_bpjsketenagakerjaan"
