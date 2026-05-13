@@ -35,14 +35,14 @@
                 @method('PUT')
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Jam Masuk</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Jam Masuk</label>
                     <div class="col-sm-9">
                         <input type="time" class="form-control" name="jam_masuk" value="{{ $working_hour->jam_masuk }}"
                             id="input35" placeholder="Jam Masuk" />
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Jam Pulang</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Jam Pulang</label>
                     <div class="col-sm-9">
                         <input type="time" class="form-control" name="jam_pulang" value="{{ $working_hour->jam_pulang }}"
                             id="input35" placeholder="Jam Pulang" />
