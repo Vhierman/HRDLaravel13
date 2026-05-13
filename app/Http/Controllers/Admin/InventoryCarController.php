@@ -9,6 +9,8 @@ use App\Models\Admin\InventoryCars;
 use App\Models\Admin\Employees;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
+use App\Models\Admin\Areas;
+use App\Models\Admin\Golongans;
 use Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +71,7 @@ class InventoryCarController extends Controller
             abort(403);
         }
 
-        $data       = $request->all();
+        $data       = $request->except('_token');
         $employee   = Employees::where('id',$request->input('employees_id'))->first();
         InventoryCars::create([
             'employees_id'              => $request->input('employees_id'),
@@ -128,9 +130,9 @@ class InventoryCarController extends Controller
             abort(403);
         }
 
+        $data                   = $request->except('_token');
         $inventory_car          = InventoryCars::findOrFail($id);
         $employee               = Employees::where('id',$request->input('employees_id'))->first();
-
         $inventory_car->update([
             'employees_id'              => $request->input('employees_id'),
             'nik_karyawan'              => $employee->nik_karyawan,
