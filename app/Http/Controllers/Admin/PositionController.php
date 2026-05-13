@@ -51,7 +51,7 @@ class PositionController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         Positions::create([
             'jabatan'           => $request->input('jabatan'),
             'input_oleh'        => Auth::user()->name
@@ -97,6 +97,7 @@ class PositionController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $position = Positions::findOrFail($id);
         $position->update([
             'jabatan'           => $request->input('jabatan'),
