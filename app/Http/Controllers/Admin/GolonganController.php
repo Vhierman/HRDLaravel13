@@ -51,7 +51,7 @@ class GolonganController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         Golongans::create([
             'golongan'          => $request->input('golongan'),
             'input_oleh'        => Auth::user()->name
@@ -97,6 +97,7 @@ class GolonganController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $golongan = Golongans::findOrFail($id);
         $golongan->update([
             'golongan'          => $request->input('golongan'),
