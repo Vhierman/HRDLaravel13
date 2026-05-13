@@ -12,7 +12,7 @@ class CertificationBnspRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,13 @@ class CertificationBnspRequest extends FormRequest
     {
         return [
             //
+            'employees_id'                  => 'required',
+            'nomor_sertifikat_bnsp'         => 'required',
+            'jenis_sertifikat_bnsp'         => 'required',
+            'masa_berlaku_sertifikat_bnsp'  => 'required',
+            'tanggal_terbit_bnsp'           => 'required|date',
+            'sampai_tanggal_bnsp'           => 'required|date',
+            'lsp_bnsp'                      => 'required'
         ];
     }
 }

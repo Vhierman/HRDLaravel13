@@ -106,6 +106,15 @@ class Employees extends Model
     public function training_internals() {
         return $this->hasMany(TrainingInternals::class,'employees_id','id');
     }
+    public function certification_bnsps() {
+        return $this->hasMany(CertificationBnsps::class,'employees_id','id');
+    }
+    public function certification_ministries() {
+        return $this->hasMany(CertificationMinistries::class,'employees_id','id');
+    }
+    public function certification_others() {
+        return $this->hasMany(CertificationOthers::class,'employees_id','id');
+    }
     public function inventory_cars() {
         return $this->hasMany(InventoryCars::class,'employees_id','id');
     }

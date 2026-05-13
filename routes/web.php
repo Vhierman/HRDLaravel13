@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\InventoryMotorcycleController;
 use App\Http\Controllers\Admin\InventoryCarController;
 use App\Http\Controllers\Admin\TrainingInternalController;
 use App\Http\Controllers\Admin\TrainingEksternalController;
+use App\Http\Controllers\Admin\CertificationBnspController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -72,7 +73,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('inventory_motorcycle', InventoryMotorcycleController::class);
     Route::get('inventory_car/exportExcel', [InventoryCarController::class, 'exportExcel'])->name('inventory_car.exportExcel');
     Route::resource('inventory_car', InventoryCarController::class);
-
     //Training Eksternal
     Route::post('training_eksternal/hapus_tanggal', [TrainingEksternalController::class, 'hapus_tanggal'])->name('training_eksternal.hapus_tanggal');
     Route::post('training_eksternal/tampil_hapus_tanggal', [TrainingEksternalController::class, 'tampil_hapus_tanggal'])->name('training_eksternal.tampil_hapus_tanggal');
@@ -93,7 +93,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('training_eksternal/tampil_view_tanggal', [TrainingEksternalController::class, 'tampil_view_tanggal'])->name('training_eksternal.tampil_view_tanggal');
     Route::get('training_eksternal/view_tanggal', [TrainingEksternalController::class, 'view_tanggal'])->name('training_eksternal.view_tanggal');
     Route::resource('training_eksternal', TrainingEksternalController::class);
-
     //Training Internal
     Route::post('training_internal/hapus_tanggal', [TrainingInternalController::class, 'hapus_tanggal'])->name('training_internal.hapus_tanggal');
     Route::post('training_internal/tampil_hapus_tanggal', [TrainingInternalController::class, 'tampil_hapus_tanggal'])->name('training_internal.tampil_hapus_tanggal');
@@ -117,13 +116,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('training_internal/tampil_view_belum_training', [TrainingInternalController::class, 'tampil_view_belum_training'])->name('training_internal.tampil_view_belum_training');
     Route::get('training_internal/form_belum_training', [TrainingInternalController::class, 'form_belum_training'])->name('training_internal.form_belum_training');
     Route::resource('training_internal', TrainingInternalController::class);
-});
-// Route Admin Area
-
-
-
-// Route User Area
-// Login User Area
+    Route::get('certification_bnsp/exportExcel', [CertificationBnspController::class, 'exportExcel'])->name('certification_bnsp.exportExcel');
+    Route::resource('certification_bnsp', CertificationBnspController::class);
+    });
+    // Route Admin Area
+    
+    
+    
+    // Route User Area
+    // Login User Area
 Route::get('/login',[UserLoginController::class,'index'])->name('user.login');
 Route::post('/login',[UserLoginController::class,'authenticate'])->name('user.login.auth');
 

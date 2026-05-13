@@ -135,7 +135,8 @@
                     <div class="menu-title">Sertifikasi</div>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>BNSP</a></li>
+                    <li><a href="{{ route('certification_bnsp.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>BNSP</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Kementrian</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Lainnya</a></li>
                 </ul>

@@ -15,7 +15,7 @@ class CertificationBnsps extends Model
     protected $table = 'certification_bnsps';
 
     protected $fillable = [
-        'employees_id ',
+        'employees_id',
         'nik_karyawan',
         'jumlah_sertifikat_bnsp',
         'nomor_sertifikat_bnsp',

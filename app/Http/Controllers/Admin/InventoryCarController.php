@@ -112,7 +112,7 @@ class InventoryCarController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::with(['divisions'])->get();
+        $employees              = Employees::with(['divisions'])->get();
         $inventory_car          = InventoryCars::with(['employees'])->where('id', $id)->first();
         return view('admin.pages.inventory_car.edit',[
         'inventory_car'         => $inventory_car,
