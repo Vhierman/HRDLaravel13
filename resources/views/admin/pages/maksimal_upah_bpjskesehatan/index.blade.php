@@ -28,7 +28,7 @@
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <a href="{{ route('maksimal_upah_bpjskesehatan.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Maksimal Upah BPJS Kesehatan
+                        Tambah Maksimal Upah BPJS Kesehatan
                     </a>
                 </div>
             </div>

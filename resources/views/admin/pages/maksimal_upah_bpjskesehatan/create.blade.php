@@ -9,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Maksimal Upah BPJS Kesehatan</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Maksimal Upah BPJS Kesehatan</li>
                 </ol>
             </nav>
         </div>
@@ -34,7 +34,7 @@
             <form action="{{ route('maksimal_upah_bpjskesehatan.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row mb-3">
-                    <label for="input35" class="col-sm-3 col-form-label">Maksimal Upah BPJS Kesehatan</label>
+                    <label for="input35" class="col-sm-3 col-form-label fs-6">Maksimal Upah BPJS Kesehatan</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" onkeyup="angka(this);" name="maksimal_upah_bpjskesehatan"
                             value="{{ old('maksimal_upah_bpjskesehatan') }}" id="input35"
