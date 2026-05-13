@@ -1,21 +1,29 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\EmployeeOutRequest;
 use App\Http\Requests\Admin\EmployeeOutUpdateRequest;
 use App\Models\Admin\EmployeesOuts;
 use App\Models\Admin\Employees;
+use App\Models\Admin\Divisions;
+use App\Models\Admin\Positions;
+use App\Models\Admin\Areas;
+use App\Models\Admin\Golongans;
 use App\Models\Admin\HistoryContracts;
 use App\Models\Admin\HistoryPositions;
 use App\Models\Admin\HistoryFamilies;
 use App\Models\Admin\HistorySalaries;
 use App\Models\Admin\RekapSalaries;
 use App\Models\Admin\Overtimes;
+use App\Models\Admin\CertificationBnsps;
+use App\Models\Admin\CertificationMinistries;
+use App\Models\Admin\CertificationOthers;
+use App\Models\Admin\TrainingInternals;
+use App\Models\Admin\TrainingEksternals;
 use App\Models\Admin\InventoryCars;
-use App\Models\Admin\InventoryMotorcyc;
+use App\Models\Admin\InventoryMotorcycles;
 use Alert;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Carbon\Carbon;
@@ -81,12 +89,11 @@ class EmployeeOutController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         DB::beginTransaction();
         try {
-             $employee = Employees::findOrFail($request->input('employee_id'));
-
-        $item_employee           = Employees::where('id', $request->input('employee_id'))->first();
-
+             $employee              = Employees::findOrFail($request->input('employee_id'));
+        $item_employee              = Employees::where('id', $request->input('employee_id'))->first();
         EmployeesOuts::create([
             'employees_id'                              => $request->input('employee_id'),
             'companies_id'                              => $item_employee->companies_id,
@@ -128,14 +135,21 @@ class EmployeeOutController extends Controller
             'input_oleh'                                => auth()->user()->name
         ]);
 
-        $id                     = $item_employee->id;
-        $employee               = Employees::where('id', $id)->first();
-        $contracts              = HistoryContracts::where('employees_id', $id)->get();
-        $positions              = HistoryPositions::where('employees_id', $id)->get();
-        $families               = HistoryFamilies::where('employees_id', $id)->get();
-        $salaries               = HistorySalaries::where('employees_id', $id)->get();
-        $rekap_salaries         = RekapSalaries::where('employees_id', $id)->get();
-        $overtimes              = Overtimes::where('employees_id', $id)->get();
+        $id                         = $item_employee->id;
+        $employee                   = Employees::where('id', $id)->first();
+        $contracts                  = HistoryContracts::where('employees_id', $id)->get();
+        $positions                  = HistoryPositions::where('employees_id', $id)->get();
+        $families                   = HistoryFamilies::where('employees_id', $id)->get();
+        $salaries                   = HistorySalaries::where('employees_id', $id)->get();
+        $rekap_salaries             = RekapSalaries::where('employees_id', $id)->get();
+        $overtimes                  = Overtimes::where('employees_id', $id)->get();
+        $certification_bnsps        = CertificationBnsps::where('employees_id', $id)->get();
+        $certification_ministries   = CertificationMinistries::where('employees_id', $id)->get();
+        $certification_others       = CertificationOthers::where('employees_id', $id)->get();
+        $trainining_internals       = TrainingInternals::where('employees_id', $id)->get();
+        $trainining_eksternals      = TrainingEksternals::where('employees_id', $id)->get();
+        $inventory_cars             = InventoryCars::where('employees_id', $id)->get();
+        $inventory_motorcycles      = InventoryMotorcycles::where('employees_id', $id)->get();
 
         $employee->delete();
         
@@ -175,6 +189,47 @@ class EmployeeOutController extends Controller
         }
         } else {}
 
+        if ($certification_bnsps <> null) {
+        foreach ($certification_bnsps as $certification_bnsp ) {
+            $certification_bnsp->delete();
+        }
+        } else {}
+
+        if ($certification_ministries <> null) {
+        foreach ($certification_ministries as $certification_ministry ) {
+            $certification_ministry->delete();
+        }
+        } else {}
+
+        if ($certification_others <> null) {
+        foreach ($certification_others as $certification_other ) {
+            $certification_other->delete();
+        }
+        } else {}
+
+        if ($trainining_internals <> null) {
+        foreach ($trainining_internals as $trainining_internal ) {
+            $trainining_internal->delete();
+        }
+        } else {}
+
+        if ($trainining_eksternals <> null) {
+        foreach ($trainining_eksternals as $trainining_eksternal ) {
+            $trainining_eksternal->delete();
+        }
+        } else {}
+
+        if ($inventory_cars <> null) {
+        foreach ($inventory_cars as $inventory_car ) {
+            $inventory_car->delete();
+        }
+        } else {}
+
+        if ($inventory_motorcycles <> null) {
+        foreach ($inventory_motorcycles as $inventory_motorcycle ) {
+            $inventory_motorcycle->delete();
+        }
+        } else {}
 
         //Menghapus Foto
         $fileFields = [
@@ -191,10 +246,7 @@ class EmployeeOutController extends Controller
 
         DB::commit();
 
-        Alert::success(
-            'Success Input Data Karyawan Keluar',
-            'Oleh ' . auth()->user()->name
-        );
+        Alert::success('Success Input Data Karyawan Keluar','Oleh ' . auth()->user()->name);
 
         return redirect()->route('employee_out.index');
 
@@ -204,9 +256,6 @@ class EmployeeOutController extends Controller
             Alert::error('Salah','Oleh '.auth()->user()->name);
             return redirect()->route('employee_out.index');
         }
-
-        // Alert::success('Success Input Data Karyawan Keluar','Oleh '.auth()->user()->name);
-        // return redirect()->route('employee_out.index');
     }
 
     /**
@@ -221,7 +270,6 @@ class EmployeeOutController extends Controller
 
         $item_employee_out      = EmployeesOuts::findOrFail($id);
         $nikkaryawan            = $item_employee_out->nik_karyawan_keluar;
-
         $item_employee_outs = EmployeesOuts::with([
                             'employees',
                             'companies',
@@ -280,97 +328,73 @@ class EmployeeOutController extends Controller
 
         $this->fpdf = new FPDF('P', 'mm', 'A4');
         $this->fpdf->AddPage();
-
         $indentNomor = 40; 
         $indentTeks = 20;  
         $lebarTeks = 175;
-
         $this->fpdf->Ln(15);
         $this->fpdf->SetFont('Arial', 'BU', '18');
         $this->fpdf->Cell(-5);
         $this->fpdf->Cell(200, 10, 'SURAT PENGALAMAN KERJA', 0, 0, 'C');
-
         $this->fpdf->Ln(6);
         $this->fpdf->SetFont('Arial', 'B', '14');
         $this->fpdf->Cell(-5);
         $this->fpdf->Cell(200, 10, 'No.' . $nomor . '/HRD/PK/' . $romawi . '/' . $tahun . '.', 0, 0, 'C');
         $this->fpdf->Ln(30);
-
         $this->fpdf->SetFont('Arial', '', '12');
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(100, 10, 'Kami Yang Bertanda Tangan Dibawah Ini :', 0, 0, 'L');
         $this->fpdf->Ln(9);
-
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(50, 10, 'Nama', 0, 0, 'L');
         $this->fpdf->Cell(100, 10, ' : Achmad Firmansyah', 0, 0, 'L');
         $this->fpdf->Ln(9);
-
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(50, 10, 'Jabatan', 0, 0, 'L');
         $this->fpdf->Cell(100, 10, ' : Manager ( HRD - GA )', 0, 0, 'L');
         $this->fpdf->Ln(9);
-
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(50, 10, 'Menerangkan Bahwa', 0, 0, 'L');
         $this->fpdf->Cell(100, 10, ' : ', 0, 0, 'L');
         $this->fpdf->Ln(9);
-
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(50, 10, 'Nama', 0, 0, 'L');
         $this->fpdf->Cell(100, 10, ' : ' . $item_employee_out->nama_karyawan_keluar . '', 0, 0, 'L');
         $this->fpdf->Ln(9);
-
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(50, 10, 'Jabatan ', 0, 0, 'L');
         $this->fpdf->Cell(100, 10, ' : ' . $item_employee_outs->positions->jabatan . ' / ' . $item_employee_outs->divisions->penempatan . '', 0, 0, 'L');
         $this->fpdf->Ln(9);
-
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(50, 10, 'Tanggal Mulai Kerja', 0, 0, 'L');
         $this->fpdf->Cell(100, 10, ' : ' . \Carbon\Carbon::parse($item_employee_out->tanggal_masuk_karyawan_keluar)->isoformat('D MMMM Y') . ' s/d ' . \Carbon\Carbon::parse($item_employee_out->tanggal_keluar_karyawan_keluar)->isoformat('D MMMM Y') . '', 0, 0, 'L');
         $this->fpdf->Ln(15);
-
-
-
         $this->fpdf->SetX($indentNomor);
         $text1 = "Adalah benar pernah menjadi karyawan di PT Prima Komponen Indonesia dengan jabatan dan masa kerja di atas,sehubungan dengan ". $item_employee_out->keterangan_keluar ." dari yang bersangkutan,maka hubungan perusahaan dengan yang bersangkutan dinyatakan terputus.";
         $this->fpdf->SetX($indentTeks); 
         $this->fpdf->MultiCell($lebarTeks, 5, $text1, 0, 'J');
-
         $this->fpdf->Ln(2);
-
         $this->fpdf->SetX($indentNomor);
         $text1 = "Selama  bekerja  yang  bersangkutan  telah menunjukan loyalitas dan dedikasi yang tinggi untuk itu atas nama pimpinan perusahaan mengucapkan terima kasih.";
         $this->fpdf->SetX($indentTeks); 
         $this->fpdf->MultiCell($lebarTeks, 5, $text1, 0, 'J');
-
         $this->fpdf->Ln(2);
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(180, 10, 'Demikianlah surat keterangan ini kami buat untuk digunakan dengan seperlunya.', 0, 0, 'L');
-
         $this->fpdf->Ln(15);
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(180, 10, 'Tangerang Selatan, ' . \Carbon\Carbon::parse($item_employee_out->tanggal_keluar_karyawan_keluar)->isoformat('D MMMM Y') . ' ', 0, 0, 'L');
-
         $this->fpdf->Ln(5);
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(180, 10, 'Hormat kami,', 0, 0, 'L');
-
         $this->fpdf->Ln(35);
-
         $this->fpdf->SetFont('Arial', 'BU', '12');
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(180, 10, 'Achmad Firmansyah', 0, 0, 'L');
-
         $this->fpdf->Ln(5);
-
         $this->fpdf->SetFont('Arial', 'B', '12');
         $this->fpdf->Cell(10);
         $this->fpdf->Cell(180, 10, 'Manager ( HRD - GA )', 0, 0, 'L');
-
         $this->fpdf->Output();
-
         exit;
     }
 
@@ -401,7 +425,7 @@ class EmployeeOutController extends Controller
             abort(403);
         }
 
-        $data_employee_out   = $request->all();
+        $data_employee_out   = $request->except('_token');
         $item_employee_out   = EmployeesOuts::findOrFail($id);
         $item_employee_out->update($data_employee_out);
         Alert::info('Success Edit Data Karyawan Keluar','Oleh '.auth()->user()->name);
@@ -623,11 +647,9 @@ class EmployeeOutController extends Controller
         $writer = new Xlsx($spreadsheet);
 
         $filename = 'DatabaseKaryawanKeluar.xlsx';
-
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
-
         $writer->save('php://output');
         exit;
     }
