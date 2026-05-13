@@ -30,7 +30,7 @@
                     <div class="btn-group position-static">
                         <a href="{{ route('inventory_motorcycle.create') }}" class="btn-group position-static">
                             <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Data Inventaris Motor
+                                <i class="bi bi-person-plus"></i> Tambah Inventaris Motor
                             </button>
                         </a>
                         <a href="{{ route('inventory_motorcycle.exportExcel') }}" target="_blank"

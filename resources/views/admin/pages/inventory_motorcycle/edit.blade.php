@@ -14,7 +14,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Edit Data Inventaris Motor</li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Inventaris Motor</li>
                 </ol>
             </nav>
         </div>
@@ -42,7 +42,7 @@
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Nama Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id" class="form-select" id="karyawan-select"
                             data-placeholder="Pilih Karyawan">
                             <option value="{{ $inventory_motorcycle->employees_id }}">Pilih Area</option>
@@ -56,31 +56,31 @@
 
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Nomor Polisi</label>
+                        <label class="form-label fs-6">Nomor Polisi</label>
                         <input type="text" name="nomor_polisi" value="{{ $inventory_motorcycle->nomor_polisi }}"
                             class="form-control" placeholder="Masukan Nomor Polisi">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Merk Motor</label>
+                        <label class="form-label fs-6">Merk Motor</label>
                         <input type="text" name="merk_motor" value="{{ $inventory_motorcycle->merk_motor }}"
                             class="form-control" placeholder="Masukan Merk Motor">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Type Motor</label>
+                        <label class="form-label fs-6">Type Motor</label>
                         <input type="text" name="type_motor" value="{{ $inventory_motorcycle->type_motor }}"
                             class="form-control" placeholder="Masukan Type Motor">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Warna Motor</label>
+                        <label class="form-label fs-6">Warna Motor</label>
                         <input type="text" name="warna_motor" value="{{ $inventory_motorcycle->warna_motor }}"
                             class="form-control" placeholder="Masukan Warna Motor">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Nomor Rangka</label>
+                        <label class="form-label fs-6">Nomor Rangka</label>
                         <input type="text" name="nomor_rangka_motor"
                             value="{{ $inventory_motorcycle->nomor_rangka_motor }}" class="form-control"
                             placeholder="Masukan Nomor Rangka">
@@ -88,13 +88,13 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Nomor Mesin</label>
+                        <label class="form-label fs-6">Nomor Mesin</label>
                         <input type="text" name="nomor_mesin_motor"
                             value="{{ $inventory_motorcycle->nomor_mesin_motor }}" class="form-control"
                             placeholder="Masukan Nomor Mesin">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Akhir Pajak</label>
+                        <label class="form-label fs-6">Tanggal Akhir Pajak</label>
                         <input type="date" name="tanggal_akhir_pajak_motor"
                             value="{{ $inventory_motorcycle->tanggal_akhir_pajak_motor }}" class="form-control"
                             placeholder="dd/mm/yyyy">
@@ -102,7 +102,7 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Akhir Plat</label>
+                        <label class="form-label fs-6">Tanggal Akhir Plat</label>
                         <input type="date" name="tanggal_akhir_plat_motor"
                             value="{{ $inventory_motorcycle->tanggal_akhir_plat_motor }}" class="form-control"
                             placeholder="dd/mm/yyyy">
