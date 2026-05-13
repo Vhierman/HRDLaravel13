@@ -191,7 +191,7 @@ class AttendanceController extends Controller
             abort(403);
         }
         
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.attendance.create',[
             'employees' => $employees
         ]);
@@ -297,7 +297,7 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.attendance.edit',[
             'employees' => $employees
         ]);
@@ -333,7 +333,8 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-        $employees      = Employees::all();
+        
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.attendance.hapus',[
             'employees' => $employees
         ]);
