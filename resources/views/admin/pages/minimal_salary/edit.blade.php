@@ -36,7 +36,7 @@
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Area</label>
+                        <label class="form-label fs-6">Area</label>
                         <select name="areas_id" class="form-select">
                             <option value="{{ $minimal_salary->areas_id }}">Pilih Area</option>
                             @foreach ($areas as $area)
@@ -48,7 +48,7 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Minimal Upah</label>
+                        <label class="form-label fs-6">Minimal Upah</label>
                         <input type="text" name="minimal_upah" onkeyup="angka(this);"
                             value="{{ $minimal_salary->minimal_upah }}" class="form-control"
                             placeholder="Masukan Minimal Upah">

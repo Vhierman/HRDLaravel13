@@ -9,7 +9,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Minimal Upah</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Minimal Upah</li>
                 </ol>
             </nav>
         </div>
@@ -35,7 +35,7 @@
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Area</label>
+                        <label class="form-label fs-6">Area</label>
                         <select name="areas_id" class="form-select">
                             <option value="">Pilih Area</option>
                             @foreach ($areas as $area)
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Minimal Upah</label>
+                        <label class="form-label fs-6">Minimal Upah</label>
                         <input type="text" name="minimal_upah" onkeyup="angka(this);" value="{{ old('minimal_upah') }}"
                             class="form-control" placeholder="Masukan Minimal Upah">
                     </div>

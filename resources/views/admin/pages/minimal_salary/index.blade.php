@@ -28,7 +28,7 @@
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <a href="{{ route('minimal_salary.create') }}" class="btn btn-primary px-5 raised">
-                        Tambah Data Minimal Upah
+                        Tambah Minimal Upah
                     </a>
                 </div>
             </div>
