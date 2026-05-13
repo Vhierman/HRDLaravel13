@@ -67,11 +67,11 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data           = $request->except('_token');
         $tanggal_awal   = $request->input('tanggal_awal_training_eksternal');
         $tanggal_akhir  = $request->input('tanggal_akhir_training_eksternal');
         $hari_awal      = \Carbon\Carbon::parse($tanggal_awal)->isoformat('dddd');
         $hari_akhir     = \Carbon\Carbon::parse($tanggal_akhir)->isoformat('dddd');
-
         foreach ($request->employees_id as $employeeId) {
             $employee = Employees::find($employeeId);
             $insert = [
@@ -153,6 +153,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $item_training_eksternals = TrainingEksternals::with([
@@ -183,6 +184,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         // Header
@@ -330,6 +332,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data           = $request->except('_token');
         $employees_id   = $request->input('employees_id');
         $employee       = Employees::where('id',$employees_id)->first();
         $nama_karyawan  = $employee->nama_karyawan;
@@ -357,6 +360,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         // Header
@@ -487,10 +491,10 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $divisions_id   = $request->input('divisions_id');
         $divisions      = Divisions::where('id',$divisions_id)->first();
         $penempatan     = $divisions->penempatan;
-
         $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
@@ -517,6 +521,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         // Header
@@ -664,6 +669,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data                        = $request->except('_token');
         $perihal_training_eksternal   = $request->input('perihal_training_eksternal');
         $training_eksternal          = TrainingEksternals::where('perihal_training_eksternal',$perihal_training_eksternal)->first();
         $item_training_eksternals    = TrainingEksternals::with([
@@ -689,6 +695,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         // Header
@@ -823,15 +830,14 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $tanggal_awal_training_eksternal  = $request->input('tanggal_awal_training_eksternal');
-
         $employees = Employees::all();
         $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
                             ])->where('tanggal_awal_training_eksternal', $tanggal_awal_training_eksternal)->get();
-        
         if (!$item_training_eksternals->isEmpty()) {
             $selectedEmployees = $item_training_eksternals
                             ->pluck('employees_id')
@@ -853,6 +859,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
         
+        $data   = $request->except('_token');
         try {
         DB::transaction(function () use ($request) {
             
@@ -894,9 +901,7 @@ class TrainingEksternalController extends Controller
         return redirect()->back()
             ->withErrors(['error' => 'Terjadi kesalahan sistem saat menyimpan data.'])
             ->withInput();
-    }
-
-        
+        }    
     }
 
     public function form_hapus_tanggal()
@@ -915,6 +920,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $tanggal_awal_training_eksternal    = $request->input('tanggal_awal_training_eksternal');
         $tanggal_akhir_training_eksternal   = $request->input('tanggal_akhir_training_eksternal');
 
@@ -943,6 +949,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $tanggal_awal_training_eksternal = $request->tanggal_awal_training_eksternal;
 
         DB::transaction(function () use ($tanggal_awal_training_eksternal) {
