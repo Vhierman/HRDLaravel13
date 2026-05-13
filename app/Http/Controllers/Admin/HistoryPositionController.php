@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\HistoryPositionRequest;
-use App\Models\Admin\Employees;
 use App\Models\Admin\HistoryPositions;
+use App\Models\Admin\Employees;
 use App\Models\Admin\Companies;
-use App\Models\Admin\WorkingHours;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
 use App\Models\Admin\Areas;
+use App\Models\Admin\Golongans;
+use App\Models\Admin\WorkingHours;
 use DB;
 use Alert;
 use Carbon\Carbon;
@@ -52,7 +53,8 @@ class HistoryPositionController extends Controller
             abort(403);
         }
 
-        $employees = null;
+        $data           = $request->except('_token');
+        $employees      = null;
         DB::transaction(function () use ($request, &$employees) {
             HistoryPositions::create([
                 'employees_id'          => $request->input('employees_id'),
@@ -128,14 +130,12 @@ class HistoryPositionController extends Controller
         if (!$employeeId) {
             return redirect()->back()->with('error', 'Gagal menemukan ID Karyawan.');
         }
-
         DB::transaction(function () use ($history_positions) {
             $history_positions->update([
                 'hapus_oleh' => auth()->user()->name
             ]);
             $history_positions->delete();
         });
-
         Alert::error('Menghapus Data History Jabatan', 'Oleh ' . auth()->user()->name);
         return redirect()->route('employee.show', ['employee' => $employeeId]);
     }
