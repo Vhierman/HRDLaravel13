@@ -123,7 +123,7 @@
             var table = $('#example2').DataTable({
                 lengthChange: false,
                 orderCellsTop: true, // Penting: Agar sorting tetap di baris header pertama
-                fixedHeader: true,
+                fixedHeader: false,
                 buttons: ['copy', 'excel', 'pdf', 'print']
             });
 

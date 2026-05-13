@@ -1,4 +1,9 @@
 @section('css')
+    {{-- Select2 --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
+    {{-- FormWizard --}}
     <link href="{{ asset('template_admin/assets/plugins/bs-stepper/css/bs-stepper.css') }}" rel="stylesheet">
 @endsection
 
@@ -101,7 +106,8 @@
 
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Perusahaan</label>
-                                    <select name="companies_id" class="form-select">
+                                    <select name="companies_id" class="form-select" id="perusahaan-select"
+                                        data-placeholder="Pilih Perusahaan">
                                         <option value="{{ $employee->companies_id }}">Pilih Perusahaan</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}"
@@ -114,7 +120,8 @@
 
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Area</label>
-                                    <select name="areas_id" class="form-select">
+                                    <select name="areas_id" class="form-select" id="area-select"
+                                        data-placeholder="Pilih Area">
                                         <option value="{{ $employee->areas_id }}">Pilih Area</option>
                                         @foreach ($areas as $area)
                                             <option value="{{ $area->id }}"
@@ -126,7 +133,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Golongan</label>
-                                    <select name="golongans_id" class="form-select">
+                                    <select name="golongans_id" class="form-select" id="golongan-select"
+                                        data-placeholder="Pilih Golongan">
                                         <option value="{{ $employee->golongans_id }}">Pilih Golongan</option>
                                         @foreach ($golongans as $golongan)
                                             <option value="{{ $golongan->id }}"
@@ -138,7 +146,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Penempatan</label>
-                                    <select name="divisions_id" class="form-select">
+                                    <select name="divisions_id" class="form-select" id="penempatan-select"
+                                        data-placeholder="Pilih Penempatan">
                                         <option value="{{ $employee->divisions_id }}">Pilih Penempatan</option>
                                         @foreach ($divisions as $division)
                                             <option value="{{ $division->id }}"
@@ -150,7 +159,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Jabatan</label>
-                                    <select name="positions_id" class="form-select">
+                                    <select name="positions_id" class="form-select" id="jabatan-select"
+                                        data-placeholder="Pilih Jabatan">
                                         <option value="{{ $employee->positions_id }}">Pilih Jabatan</option>
                                         @foreach ($positions as $position)
                                             <option value="{{ $position->id }}"
@@ -162,7 +172,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Jam kerja</label>
-                                    <select name="working_hours_id" class="form-select">
+                                    <select name="working_hours_id" class="form-select" id="jam_kerja-select"
+                                        data-placeholder="Pilih Jam Kerja">
                                         <option value="{{ $employee->working_hours_id }}">Pilih Jam Kerja</option>
                                         @foreach ($working_hours as $working_hour)
                                             <option value="{{ $working_hour->id }}"
@@ -174,7 +185,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Status Kerja</label>
-                                    <select id="input39" class="form-select" name="status_kerja">
+                                    <select id="input39" class="form-select" name="status_kerja"
+                                        id="status_kerja-select" data-placeholder="Pilih Status Kerja">
                                         <option value="">Pilih Status Kerja</option>
                                         <option value="PKWTT"
                                             @if ($employee->status_kerja == 'PKWTT') {{ 'selected="selected"' }} @endif>
@@ -212,7 +224,8 @@
                                 </div>
                                 <div class="col-12 col-lg-6">
                                     <label class="form-label fs-6">Nama Bank</label>
-                                    <select id="input39" class="form-select" name="nama_bank">
+                                    <select id="input39" class="form-select" name="nama_bank" id="nama_bank-select"
+                                        data-placeholder="Pilih Nama Bank">
                                         <option value="">Pilih Bank</option>
                                         <option value="BCA"
                                             @if ($employee->nama_bank == 'BCA') {{ 'selected="selected"' }} @endif>
@@ -557,7 +570,38 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- On Key Up --}}
     <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
-
     <script src="{{ asset('template_admin/assets/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
     <script src="{{ asset('template_admin/assets/plugins/bs-stepper/js/main.js') }}"></script>
+    {{-- Form Wizard --}}
+    <script src="{{ asset('template_admin/assets/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
+    <script src="{{ asset('template_admin/assets/plugins/bs-stepper/js/main.js') }}"></script>
+    {{-- Select2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('template_admin/assets/plugins/select2/js/select2-custom.js') }}"></script>
+    <script>
+        $('#penempatan-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#jabatan-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#area-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#perusahaan-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#golongan-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#jam_kerja-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#status_kerja-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#nama_bank-select').select2({
+            theme: 'bootstrap-5'
+        });
+    </script>
 @endsection

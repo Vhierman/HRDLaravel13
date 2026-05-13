@@ -1,10 +1,3 @@
-@section('css')
-    {{-- Select2 --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
-@endsection
-
 @extends('admin.layouts.base')
 @section('title', 'Data Absensi');
 @section('content')
@@ -81,17 +74,4 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- On Key Up --}}
     <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
-    {{-- Select2 --}}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('template_admin/assets/plugins/select2/js/select2-custom.js') }}"></script>
-    <script>
-        $('#karyawan-select').select2({
-            theme: 'bootstrap-5',
-            width: '100%'
-        });
-        $('#keterangan_absen-select').select2({
-            theme: 'bootstrap-5',
-            width: '100%'
-        });
-    </script>
 @endsection

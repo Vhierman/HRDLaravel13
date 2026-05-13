@@ -220,7 +220,8 @@
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <label class="form-label fs-6">Nama Bank</label>
-                                        <select id="input39" class="form-select" name="nama_bank">
+                                        <select id="input39" class="form-select" name="nama_bank"
+                                            id="nama_bank-select" data-placeholder="Pilih Nama Bank">
                                             <option value="">Pilih Nama Bank</option>
                                             <option value="BCA" {{ old('nama_bank') == 'BCA' ? 'selected' : '' }}>
                                                 BCA</option>
@@ -577,6 +578,9 @@
                 theme: 'bootstrap-5'
             });
             $('#status_kerja-select').select2({
+                theme: 'bootstrap-5'
+            });
+            $('#nama_bank-select').select2({
                 theme: 'bootstrap-5'
             });
         </script>

@@ -95,5 +95,4 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- On Key Up --}}
     <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
-
 @endsection

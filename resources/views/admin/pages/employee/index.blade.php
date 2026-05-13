@@ -178,7 +178,7 @@
             var table = $('#example2').DataTable({
                 lengthChange: false,
                 orderCellsTop: true, // Penting: Agar sorting tetap di baris header pertama
-                fixedHeader: true,
+                fixedHeader: false,
                 buttons: ['copy', 'excel', 'pdf', 'print']
             });
 
@@ -201,6 +201,7 @@
             });
         });
     </script>
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 {{-- Datatables --}}
