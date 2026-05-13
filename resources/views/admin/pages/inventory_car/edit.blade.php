@@ -45,11 +45,12 @@
                         <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id" class="form-select" id="karyawan-select"
                             data-placeholder="Pilih Karyawan">
-                            <option value="{{ $inventory_car->employees_id }}">Pilih Area</option>
+                            <option value="{{ $inventory_car->employees_id }}">Pilih Karyawan</option>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
                                     @if ($inventory_car->employees_id == $employee->id) {{ 'selected="selected"' }} @endif>
-                                    {{ $employee->nama_karyawan }}
+                                    {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
+                                    {{ $employee->divisions->penempatan }}
                                 </option>
                             @endforeach
                         </select>
