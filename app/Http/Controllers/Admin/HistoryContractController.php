@@ -53,10 +53,11 @@ class HistoryContractController extends Controller
             abort(403);
         }
         
+        $data           = $request->except('_token');
         $awal_kontrak   = date_create($request->input('awal_kontrak'));
         $akhir_kontrak  = date_create($request->input('akhir_kontrak'));
-        $interval = date_diff($awal_kontrak, $akhir_kontrak);
-        $totalBulan = ($interval->y * 12) + $interval->m;
+        $interval       = date_diff($awal_kontrak, $akhir_kontrak);
+        $totalBulan     = ($interval->y * 12) + $interval->m;
         $totalBulan += 1;
 
         if ($totalBulan == 12) {
