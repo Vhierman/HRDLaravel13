@@ -51,7 +51,7 @@ class DivisionController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         Divisions::create([
             'penempatan'        => $request->input('penempatan'),
             'input_oleh'        => Auth::user()->name
@@ -97,6 +97,7 @@ class DivisionController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $division = Divisions::findOrFail($id);
         $division->update([
             'penempatan'        => $request->input('penempatan'),
