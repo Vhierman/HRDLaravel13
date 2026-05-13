@@ -94,8 +94,8 @@ class CompanyController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-        $data   = $request->except('_token');
-        $company = Companies::findOrFail($id);
+        $data       = $request->except('_token');
+        $company    = Companies::findOrFail($id);
         $company->update([
             'nama_perusahaan'   => $request->input('nama_perusahaan'),
             'edit_oleh'         => Auth::user()->name
