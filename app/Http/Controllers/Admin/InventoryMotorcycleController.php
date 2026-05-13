@@ -57,7 +57,7 @@ class InventoryMotorcycleController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.inventory_motorcycle.create',['employees'=> $employees]);
     }
 
@@ -111,7 +111,7 @@ class InventoryMotorcycleController extends Controller
             abort(403);
         }
 
-        $employees              = Employees::all();
+        $employees              = Employees::with(['divisions'])->get();
         $inventory_motorcycle   = InventoryMotorcycles::with(['employees'])->where('id', $id)->first();
         return view('admin.pages.inventory_motorcycle.edit',[
         'inventory_motorcycle'  => $inventory_motorcycle,
