@@ -9,6 +9,8 @@ use App\Models\Admin\InventoryMotorcycles;
 use App\Models\Admin\Employees;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
+use App\Models\Admin\Areas;
+use App\Models\Admin\Golongans;
 use Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +71,7 @@ class InventoryMotorcycleController extends Controller
             abort(403);
         }
 
-        $data       = $request->all();
+        $data       = $request->except('_token');
         $employee   = Employees::where('id',$request->input('employees_id'))->first();
         InventoryMotorcycles::create([
             'employees_id'              => $request->input('employees_id'),
@@ -84,7 +86,6 @@ class InventoryMotorcycleController extends Controller
             'tanggal_akhir_plat_motor'  => $request->input('tanggal_akhir_plat_motor'),
             'input_oleh'                => Auth::user()->name
             ]);
-
         Alert::success('Success Input Data Inventaris Motor','Oleh '.auth()->user()->name);
         return redirect()->route('inventory_motorcycle.index');
     }
@@ -128,9 +129,9 @@ class InventoryMotorcycleController extends Controller
             abort(403);
         }
 
+        $data                   = $request->except('_token');
         $inventory_motorcycle   = InventoryMotorcycles::findOrFail($id);
         $employee               = Employees::where('id',$request->input('employees_id'))->first();
-
         $inventory_motorcycle->update([
             'employees_id'              => $request->input('employees_id'),
             'nik_karyawan'              => $employee->nik_karyawan,
