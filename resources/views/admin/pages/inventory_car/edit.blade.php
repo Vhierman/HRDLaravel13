@@ -14,7 +14,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Edit Data Inventaris Mobil</li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Inventaris Mobil</li>
                 </ol>
             </nav>
         </div>
@@ -42,7 +42,7 @@
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Nama Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id" class="form-select" id="karyawan-select"
                             data-placeholder="Pilih Karyawan">
                             <option value="{{ $inventory_car->employees_id }}">Pilih Area</option>
@@ -56,43 +56,43 @@
 
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Nomor Polisi</label>
+                        <label class="form-label fs-6">Nomor Polisi</label>
                         <input type="text" name="nomor_polisi" value="{{ $inventory_car->nomor_polisi }}"
                             class="form-control" placeholder="Masukan Nomor Polisi">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Merk Mobil</label>
+                        <label class="form-label fs-6">Merk Mobil</label>
                         <input type="text" name="merk_mobil" value="{{ $inventory_car->merk_mobil }}"
                             class="form-control" placeholder="Masukan Merk Mobil">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Type Mobil</label>
+                        <label class="form-label fs-6">Type Mobil</label>
                         <input type="text" name="type_mobil" value="{{ $inventory_car->type_mobil }}"
                             class="form-control" placeholder="Masukan Type Mobil">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Warna Mobil</label>
+                        <label class="form-label fs-6">Warna Mobil</label>
                         <input type="text" name="warna_mobil" value="{{ $inventory_car->warna_mobil }}"
                             class="form-control" placeholder="Masukan Warna Mobil">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Nomor Rangka</label>
+                        <label class="form-label fs-6">Nomor Rangka</label>
                         <input type="text" name="nomor_rangka_mobil" value="{{ $inventory_car->nomor_rangka_mobil }}"
                             class="form-control" placeholder="Masukan Nomor Rangka">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Nomor Mesin</label>
+                        <label class="form-label fs-6">Nomor Mesin</label>
                         <input type="text" name="nomor_mesin_mobil" value="{{ $inventory_car->nomor_mesin_mobil }}"
                             class="form-control" placeholder="Masukan Nomor Mesin">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Akhir Pajak</label>
+                        <label class="form-label fs-6">Tanggal Akhir Pajak</label>
                         <input type="date" name="tanggal_akhir_pajak_mobil"
                             value="{{ $inventory_car->tanggal_akhir_pajak_mobil }}" class="form-control"
                             placeholder="dd/mm/yyyy">
@@ -100,7 +100,7 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Akhir Plat</label>
+                        <label class="form-label fs-6">Tanggal Akhir Plat</label>
                         <input type="date" name="tanggal_akhir_plat_mobil"
                             value="{{ $inventory_car->tanggal_akhir_plat_mobil }}" class="form-control"
                             placeholder="dd/mm/yyyy">
