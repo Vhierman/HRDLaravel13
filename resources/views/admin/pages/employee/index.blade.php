@@ -30,7 +30,7 @@
                     <div class="btn-group position-static">
                         <a href="{{ route('employee.create') }}" class="btn-group position-static">
                             <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Data Karyawan
+                                <i class="bi bi-person-plus"></i> Tambah Karyawan
                             </button>
                         </a>
                         <a href="{{ route('exportExcel') }}" target="_blank" class="btn-group position-static">
@@ -201,7 +201,6 @@
             });
         });
     </script>
-
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 {{-- Datatables --}}

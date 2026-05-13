@@ -7,11 +7,8 @@
         <link href="{{ asset('template_admin/assets/plugins/bs-stepper/css/bs-stepper.css') }}" rel="stylesheet">
 
     @endsection
-
     @extends('admin.layouts.base')
     @section('title', 'Tambah Karyawan');
-
-
     @section('content')
 
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -19,7 +16,7 @@
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item active" aria-current="page">Tambah Data Karyawan</li>
+                        <li class="breadcrumb-item active" aria-current="page">Tambah Karyawan</li>
                     </ol>
                 </nav>
             </div>
@@ -40,7 +37,6 @@
 
         <div id="stepper1" class="bs-stepper">
             <div class="card">
-
                 <div class="card-header">
                     <div class="d-lg-flex flex-lg-row align-items-lg-center justify-content-lg-between" role="tablist">
                         <div class="step" data-target="#test-l-1">
@@ -108,7 +104,7 @@
                                 <div class="row g-3">
 
                                     <div class="col-12 col-lg-6">
-                                        <label for="perusahaan-select" class="form-label">Perusahaan</label>
+                                        <label for="perusahaan-select" class="form-label fs-6">Perusahaan</label>
                                         <select name="companies_id" class="form-select" id="perusahaan-select"
                                             data-placeholder="Pilih Perusahaan">
                                             <option value="">Pilih Perusahaan</option>
@@ -122,7 +118,7 @@
                                     </div>
 
                                     <div class="col-12 col-lg-6">
-                                        <label for="area-select" class="form-label">Area</label>
+                                        <label for="area-select" class="form-label fs-6">Area</label>
                                         <select name="areas_id" class="form-select" id="area-select"
                                             data-placeholder="Pilih Area">
                                             <option value="">Pilih Area</option>
@@ -135,7 +131,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label for="golongan-select" class="form-label">Golongan</label>
+                                        <label for="golongan-select" class="form-label fs-6">Golongan</label>
                                         <select name="golongans_id" class="form-select" id="golongan-select"
                                             data-placeholder="Pilih Golongan">
                                             <option value="">Pilih Golongan</option>
@@ -148,7 +144,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label for="penempatan-select" class="form-label">Penempatan</label>
+                                        <label for="penempatan-select" class="form-label fs-6">Penempatan</label>
                                         <select name="divisions_id" class="form-select" id="penempatan-select"
                                             data-placeholder="Pilih Penempatan">
                                             <option value="">Pilih Penempatan</option>
@@ -161,7 +157,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label for="jabatan-select" class="form-label">Jabatan</label>
+                                        <label for="jabatan-select" class="form-label fs-6">Jabatan</label>
                                         <select name="positions_id" class="form-select" id="jabatan-select"
                                             data-placeholder="Pilih Jabatan">
                                             <option value="">Pilih Jabatan</option>
@@ -174,7 +170,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label for="jam_kerja-select" class="form-label">Jam kerja</label>
+                                        <label for="jam_kerja-select" class="form-label fs-6">Jam kerja</label>
                                         <select name="working_hours_id" class="form-select" id="jam_kerja-select"
                                             data-placeholder="Pilih Jam Kerja">
                                             <option value="">Pilih Jam Kerja</option>
@@ -187,7 +183,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label for="status_kerja-select" class="form-label">Status Kerja</label>
+                                        <label for="status_kerja-select" class="form-label fs-6">Status Kerja</label>
                                         <select class="form-select" name="status_kerja" id="status_kerja-select"
                                             data-placeholder="Pilih Status Kerja">
                                             <option value="">Pilih Status Kerja</option>
@@ -205,25 +201,25 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Tanggal Mulai Kerja</label>
+                                        <label class="form-label fs-6">Tanggal Mulai Kerja</label>
                                         <input type="date" name="tanggal_mulai_kerja"
                                             value="{{ old('tanggal_mulai_kerja') }}" class="form-control"
                                             placeholder="dd/mm/yyyy">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Tanggal Akhir Kerja</label>
+                                        <label class="form-label fs-6">Tanggal Akhir Kerja</label>
                                         <input type="date" name="tanggal_akhir_kerja"
                                             value="{{ old('tanggal_akhir_kerja') }}" class="form-control"
                                             placeholder="dd/mm/yyyy">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor Rekening</label>
+                                        <label class="form-label fs-6">Nomor Rekening</label>
                                         <input type="text" name="nomor_rekening" onkeyup="angka(this);"
                                             value="{{ old('nomor_rekening') }}" class="form-control"
                                             placeholder="Masukan Nomor Rekening">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nama Bank</label>
+                                        <label class="form-label fs-6">Nama Bank</label>
                                         <select id="input39" class="form-select" name="nama_bank">
                                             <option value="">Pilih Nama Bank</option>
                                             <option value="BCA" {{ old('nama_bank') == 'BCA' ? 'selected' : '' }}>
@@ -258,42 +254,42 @@
                                 <div class="row g-3">
 
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">NIK KTP</label>
+                                        <label class="form-label fs-6">NIK KTP</label>
                                         <input type="text" onkeyup="angka(this);" maxlength="16" name="nik_karyawan"
                                             value="{{ old('nik_karyawan') }}" class="form-control"
                                             placeholder="Masukan NIK Karyawan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nama Lengkap</label>
+                                        <label class="form-label fs-6">Nama Lengkap</label>
                                         <input type="text" onkeyup="huruf(this);" name="nama_karyawan"
                                             value="{{ old('nama_karyawan') }}" class="form-control"
                                             placeholder="Masukan Nama Karyawan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Email</label>
+                                        <label class="form-label fs-6">Email</label>
                                         <input type="text" name="email_karyawan" value="{{ old('email_karyawan') }}"
                                             class="form-control" placeholder="Masukan Email Karyawan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor Absen</label>
+                                        <label class="form-label fs-6">Nomor Absen</label>
                                         <input type="text" onkeyup="angka(this);" name="nomor_absen"
                                             value="{{ old('nomor_absen') }}" maxlength="4" class="form-control"
                                             placeholder="Masukan Nomor Absen Karyawan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor NPWP</label>
+                                        <label class="form-label fs-6">Nomor NPWP</label>
                                         <input type="text" onkeyup="angka(this);" maxlength="16" name="nomor_npwp"
                                             value="{{ old('nomor_npwp') }}" class="form-control"
                                             placeholder="Masukan Nomor NPWP Karyawan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor Handphone</label>
+                                        <label class="form-label fs-6">Nomor Handphone</label>
                                         <input type="text" onkeyup="angka(this);" maxlength="16"
                                             name="nomor_handphone" value="{{ old('nomor_handphone') }}"
                                             class="form-control" placeholder="Masukan Nomor Handphone Karyawan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Tempat, Tanggal Lahir</label>
+                                        <label class="form-label fs-6">Tempat, Tanggal Lahir</label>
                                         <div class="input-group">
                                             <input type="text" value="{{ old('tempat_lahir') }}"
                                                 placeholder="Masukan Tempat Lahir" name="tempat_lahir"
@@ -304,7 +300,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Agama</label>
+                                        <label class="form-label fs-6">Agama</label>
                                         <select id="input39" class="form-select" name="agama">
                                             <option value="">Pilih Agama</option>
                                             <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>
@@ -324,7 +320,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Jenis Kelamin</label>
+                                        <label class="form-label fs-6">Jenis Kelamin</label>
                                         <select id="input39" class="form-select" name="jenis_kelamin">
                                             <option value="">Pilih Jenis Kelamin</option>
                                             <option value="Pria" {{ old('jenis_kelamin') == 'Pria' ? 'selected' : '' }}>
@@ -335,7 +331,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Pendidikan Terakhir</label>
+                                        <label class="form-label fs-6">Pendidikan Terakhir</label>
                                         <select id="input39" class="form-select" name="pendidikan_terakhir">
                                             <option value="">Pilih Pendidikan Terakhir</option>
                                             <option value="SD"
@@ -359,7 +355,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Golongan Darah</label>
+                                        <label class="form-label fs-6">Golongan Darah</label>
                                         <select id="input39" class="form-select" name="golongan_darah">
                                             <option value="">Pilih Golongan Darah</option>
                                             <option value="A" {{ old('golongan_darah') == 'A' ? 'selected' : '' }}>
@@ -373,7 +369,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Status Menikah</label>
+                                        <label class="form-label fs-6">Status Menikah</label>
                                         <select id="input39" class="form-select" name="status_nikah">
                                             <option value="">Pilih Status Menikah</option>
                                             <option value="Single"
@@ -389,19 +385,19 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nama Ayah Kandung</label>
+                                        <label class="form-label fs-6">Nama Ayah Kandung</label>
                                         <input type="text" onkeyup="huruf(this);" name="nama_ayah"
                                             value="{{ old('nama_ayah') }}" class="form-control"
                                             placeholder="Masukan Nama Ayah Kandung">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nama Ibu Kandung</label>
+                                        <label class="form-label fs-6">Nama Ibu Kandung</label>
                                         <input type="text" onkeyup="huruf(this);" name="nama_ibu"
                                             value="{{ old('nama_ibu') }}" class="form-control"
                                             placeholder="Masukan Nama Ibu Kandung">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor Kartu keluarga</label>
+                                        <label class="form-label fs-6">Nomor Kartu keluarga</label>
                                         <input type="text" onkeyup="angka(this);" maxlength="16"
                                             name="nomor_kartu_keluarga" value="{{ old('nomor_kartu_keluarga') }}"
                                             class="form-control" placeholder="Masukan Nomor Kartu Keluarga">
@@ -427,12 +423,12 @@
 
                                 <div class="row g-3">
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Alamat Lengkap</label>
+                                        <label class="form-label fs-6">Alamat Lengkap</label>
                                         <input type="text" name="alamat" value="{{ old('alamat') }}"
                                             class="form-control" placeholder="Masukan Alamat Lengkap">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">RT / RW</label>
+                                        <label class="form-label fs-6">RT / RW</label>
                                         <div class="input-group">
                                             <input type="text" value="{{ old('rt') }}" maxlength="3"
                                                 placeholder="RT" name="rt" class="form-control">
@@ -441,27 +437,27 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Kelurahan</label>
+                                        <label class="form-label fs-6">Kelurahan</label>
                                         <input type="text" name="kelurahan" value="{{ old('kelurahan') }}"
                                             class="form-control" placeholder="Masukan Nama Kelurahan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Kecamatan</label>
+                                        <label class="form-label fs-6">Kecamatan</label>
                                         <input type="text" name="kecamatan" value="{{ old('kecamatan') }}"
                                             class="form-control" placeholder="Masukan Nama Kecamatan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Kabupaten / Kota</label>
+                                        <label class="form-label fs-6">Kabupaten / Kota</label>
                                         <input type="text" name="kota" value="{{ old('kota') }}"
                                             class="form-control" placeholder="Masukan Nama Kabupaten / Kota">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Provinsi</label>
+                                        <label class="form-label fs-6">Provinsi</label>
                                         <input type="text" name="provinsi" value="{{ old('provinsi') }}"
                                             class="form-control" placeholder="Masukan Nama Provinsi">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Kode POS</label>
+                                        <label class="form-label fs-6">Kode POS</label>
                                         <input type="text" name="kode_pos" value="{{ old('kode_pos') }}"
                                             class="form-control" placeholder="Masukan Kode POS">
                                     </div>
@@ -487,13 +483,13 @@
 
                                 <div class="row g-3">
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor BPJS Kesehatan</label>
+                                        <label class="form-label fs-6">Nomor BPJS Kesehatan</label>
                                         <input type="text" onkeyup="angka(this);" maxlength="13"
                                             name="nomor_bpjskesehatan" value="{{ old('nomor_bpjskesehatan') }}"
                                             class="form-control" placeholder="Masukan Nomor BPJS Kesehatan">
                                     </div>
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Nomor BPJS Ketenagakerjaan</label>
+                                        <label class="form-label fs-6">Nomor BPJS Ketenagakerjaan</label>
                                         <input type="text" maxlength="11" name="nomor_bpjsketenagakerjaan"
                                             value="{{ old('nomor_bpjsketenagakerjaan') }}" class="form-control"
                                             placeholder="Masukan Nomor BPJS Ketenagakerjaan">
@@ -523,7 +519,7 @@
 
                                 <div class="row g-3">
                                     <div class="col-12 col-lg-6">
-                                        <label class="form-label">Foto Karyawan</label>
+                                        <label class="form-label fs-6">Foto Karyawan</label>
                                         <input type="file" name="foto_karyawan" class="form-control"
                                             placeholder="Foto Karyawan">
                                     </div>
@@ -584,6 +580,4 @@
                 theme: 'bootstrap-5'
             });
         </script>
-
-
     @endsection
