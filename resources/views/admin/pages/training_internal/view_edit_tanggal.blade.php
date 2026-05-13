@@ -43,7 +43,7 @@
                     placeholder="dd/mm/yyyy" readonly>
 
                 <div class="row g-3">
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-12">
                         <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id[]" class="form-select" id="multiple-select-custom-field" multiple>
                             @foreach ($employees as $employee)
@@ -54,7 +54,9 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-12 col-lg-6">
+                </div>
+                <div class="row g-3 mt-2">
+                    <div class="col-12 col-lg-12">
                         <label class="form-label fs-6">Tanggal Training</label>
                         <input type="date" name="tanggal_training_internal"
                             value="{{ old('tanggal_training_internal', $item_training_internals->first()->tanggal_training_internal) }}"

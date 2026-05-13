@@ -52,7 +52,7 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.training_internal.create',['employees'=> $employees]);
     }
 
@@ -303,7 +303,7 @@ class TrainingInternalController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.training_internal.form_view_nama',[
             'employees' => $employees
         ]);
