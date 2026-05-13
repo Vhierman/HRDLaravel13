@@ -15,7 +15,7 @@ class CertificationOthers extends Model
     protected $table = 'certification_others';
 
     protected $fillable = [
-        'employees_id ',
+        'employees_id',
         'nik_karyawan',
         'jumlah_sertifikat_lain',
         'nomor_sertifikat_lain',

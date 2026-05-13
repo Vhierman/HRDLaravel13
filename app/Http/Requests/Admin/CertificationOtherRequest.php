@@ -12,7 +12,7 @@ class CertificationOtherRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,10 @@ class CertificationOtherRequest extends FormRequest
     {
         return [
             //
+            'employees_id'              => 'required',
+            'nomor_sertifikat_lain'     => 'required',
+            'jenis_sertifikat_lain'     => 'required',
+            'tanggal_terbit_lain'       => 'required|date'
         ];
     }
 }

@@ -139,7 +139,8 @@
                                 class="material-icons-outlined">arrow_right</i>BNSP</a></li>
                     <li><a href="{{ route('certification_ministry.index') }}"><i
                                 class="material-icons-outlined">arrow_right</i>Kementrian</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Lainnya</a></li>
+                    <li><a href="{{ route('certification_other.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Lainnya</a></li>
                 </ul>
             </li>
             {{-- Sertifikasi --}}

@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\TrainingInternalController;
 use App\Http\Controllers\Admin\TrainingEksternalController;
 use App\Http\Controllers\Admin\CertificationBnspController;
 use App\Http\Controllers\Admin\CertificationMinistryController;
+use App\Http\Controllers\Admin\CertificationOtherController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -121,6 +122,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('certification_bnsp', CertificationBnspController::class);
     Route::get('certification_ministry/exportExcel', [CertificationMinistryController::class, 'exportExcel'])->name('certification_ministry.exportExcel');
     Route::resource('certification_ministry', CertificationMinistryController::class);
+    Route::get('certification_other/exportExcel', [CertificationOtherController::class, 'exportExcel'])->name('certification_other.exportExcel');
+    Route::resource('certification_other', CertificationOtherController::class);
     });
     // Route Admin Area
     
