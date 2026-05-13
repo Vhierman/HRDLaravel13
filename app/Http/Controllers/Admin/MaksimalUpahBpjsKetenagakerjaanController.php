@@ -51,7 +51,7 @@ class MaksimalUpahBpjsKetenagakerjaanController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         MaksimalUpahBpjsKetenagakerjaans::create([
             'maksimal_upah_bpjsketenagakerjaan'       => $request->input('maksimal_upah_bpjsketenagakerjaan'),
             'input_oleh'                        => Auth::user()->name
@@ -99,6 +99,7 @@ class MaksimalUpahBpjsKetenagakerjaanController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $maksimal_upah_bpjsketenagakerjaan = MaksimalUpahBpjsKetenagakerjaans::findOrFail($id);
         $maksimal_upah_bpjsketenagakerjaan->update([
             'maksimal_upah_bpjsketenagakerjaan'         => $request->input('maksimal_upah_bpjsketenagakerjaan'),
