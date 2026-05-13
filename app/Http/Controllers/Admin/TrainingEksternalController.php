@@ -14,6 +14,8 @@ use App\Models\Admin\TrainingEksternals;
 use App\Models\Admin\Employees;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
+use App\Models\Admin\Areas;
+use App\Models\Admin\Golongans;
 use Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
