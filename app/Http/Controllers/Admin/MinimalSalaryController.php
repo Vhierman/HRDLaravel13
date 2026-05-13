@@ -58,7 +58,7 @@ class MinimalSalaryController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         MinimalSalaries::create([
             'minimal_upah'      => $request->input('minimal_upah'),
             'areas_id'          => $request->input('areas_id'),
@@ -109,6 +109,7 @@ class MinimalSalaryController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $minimal_salary = MinimalSalaries::findOrFail($id);
         $minimal_salary->update([
             'minimal_upah'      => $request->input('minimal_upah'),
