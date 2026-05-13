@@ -51,7 +51,7 @@ class WorkingHourController extends Controller
             abort(403);
         }
 
-        $data = $request->all();
+        $data   = $request->except('_token');
         WorkingHours::create([
             'jam_masuk'     => $request->input('jam_masuk'),
             'jam_pulang'    => $request->input('jam_pulang'),
@@ -98,6 +98,7 @@ class WorkingHourController extends Controller
             abort(403);
         }
 
+        $data   = $request->except('_token');
         $working_hour = WorkingHours::findOrFail($id);
         $working_hour->update([
             'jam_masuk'     => $request->input('jam_masuk'),
