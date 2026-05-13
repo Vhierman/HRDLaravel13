@@ -43,7 +43,7 @@
 
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">Nama Karyawan</label>
+                                <label class="form-label fs-6">Nama Karyawan</label>
                                 <select name="employees_id" class="form-select" id="karyawan-select"
                                     data-placeholder="Pilih Karyawan">
                                     <option value="">Pilih Karyawan</option>

@@ -44,7 +44,7 @@
 
                 <div class="row justify-content-center g-3 mb-2">
                     <div class="col-md-12">
-                        <label for="karyawan-select" class="form-label">Nama Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id[]" class="form-select" id="multiple-select-custom-field"
                             data-placeholder="Pilih Nama Karyawan" multiple>
                             @foreach ($employees as $employee)
@@ -58,13 +58,13 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Awal Training</label>
+                        <label class="form-label fs-6">Tanggal Awal Training</label>
                         <input type="date" name="tanggal_awal_training_eksternal"
                             value="{{ old('tanggal_awal_training_eksternal', $item_training_eksternals->first()->tanggal_awal_training_eksternal) }}"
                             class="form-control" placeholder="dd/mm/yyyy">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Akhir Training</label>
+                        <label class="form-label fs-6">Tanggal Akhir Training</label>
                         <input type="date" name="tanggal_akhir_training_eksternal"
                             value="{{ old('tanggal_akhir_training_eksternal', $item_training_eksternals->first()->tanggal_akhir_training_eksternal) }}"
                             class="form-control" placeholder="dd/mm/yyyy">
@@ -72,13 +72,13 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Institusi Penyelenggara Training</label>
+                        <label class="form-label fs-6">Institusi Penyelenggara Training</label>
                         <input type="text" name="institusi_penyelenggara_training_eksternal"
                             value="{{ old('institusi_penyelenggara_training_eksternal', $item_training_eksternals->first()->institusi_penyelenggara_training_eksternal) }}"
                             class="form-control" placeholder="Institusi Penyelenggara Training">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Training</label>
+                        <label class="form-label fs-6">Training</label>
                         <input type="text" name="perihal_training_eksternal"
                             value="{{ old('perihal_training_eksternal', $item_training_eksternals->first()->perihal_training_eksternal) }}"
                             class="form-control" placeholder="Training">
@@ -86,13 +86,13 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Jam Training</label>
+                        <label class="form-label fs-6">Jam Training</label>
                         <input type="time" name="jam_training_eksternal"
                             value="{{ old('jam_training_eksternal', $item_training_eksternals->first()->jam_training_eksternal) }}"
                             class="form-control" placeholder="00:00">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Lokasi</label>
+                        <label class="form-label fs-6">Lokasi</label>
                         <input type="text" name="lokasi_training_eksternal"
                             value="{{ old('lokasi_training_eksternal', $item_training_eksternals->first()->lokasi_training_eksternal) }}"
                             class="form-control" placeholder="Masukan Lokasi Training">
@@ -100,7 +100,7 @@
                 </div>
                 <div class="row justify-content-center g-3 mt-2">
                     <div class="col-md-12">
-                        <label class="form-label">Alamat</label>
+                        <label class="form-label fs-6">Alamat</label>
                         <input type="text" name="alamat_training_eksternal"
                             value="{{ old('alamat_training_eksternal', $item_training_eksternals->first()->alamat_training_eksternal) }}"
                             class="form-control" placeholder="Masukan Alamat Lengkap Lokasi Training">

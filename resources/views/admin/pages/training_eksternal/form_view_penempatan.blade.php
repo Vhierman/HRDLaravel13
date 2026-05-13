@@ -43,7 +43,7 @@
 
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">Divisi</label>
+                                <label class="form-label fs-6">Divisi</label>
                                 <select name="divisions_id" class="form-select" id="karyawan-select"
                                     data-placeholder="Pilih Penempatan">
                                     <option value="">Pilih Penempatan</option>

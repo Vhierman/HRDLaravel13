@@ -42,7 +42,7 @@
                         @csrf
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">Tanggal Training</label>
+                                <label class="form-label fs-6">Tanggal Training</label>
                                 <input type="date" name="tanggal_awal_training_eksternal"
                                     value="{{ old('tanggal_awal_training_eksternal') }}" class="form-control"
                                     placeholder="dd/mm/yyyy">

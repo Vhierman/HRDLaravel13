@@ -43,7 +43,7 @@
 
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">Materi Training</label>
+                                <label class="form-label fs-6">Materi Training</label>
                                 <select name="perihal_training_eksternal" class="form-select" id="karyawan-select"
                                     data-placeholder="Pilih Materi Training">
 
