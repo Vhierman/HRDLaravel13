@@ -44,7 +44,7 @@
 
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label">Nama Karyawan</label>
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
                         <select name="employees_id[]" class="form-select" id="multiple-select-custom-field" multiple>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
@@ -55,7 +55,7 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Tanggal Training</label>
+                        <label class="form-label fs-6">Tanggal Training</label>
                         <input type="date" name="tanggal_training_internal"
                             value="{{ old('tanggal_training_internal', $item_training_internals->first()->tanggal_training_internal) }}"
                             class="form-control" placeholder="dd/mm/yyyy">
@@ -63,13 +63,13 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Jam Training</label>
+                        <label class="form-label fs-6">Jam Training</label>
                         <input type="time" name="jam_training_internal"
                             value="{{ old('jam_training_internal', $item_training_internals->first()->jam_training_internal) }}"
                             class="form-control" placeholder="00:00">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Lokasi Training</label>
+                        <label class="form-label fs-6">Lokasi Training</label>
                         <input type="text" name="lokasi_training_internal"
                             value="{{ old('lokasi_training_internal', $item_training_internals->first()->lokasi_training_internal) }}"
                             class="form-control" placeholder="Masukan Lokasi Training">
@@ -77,13 +77,13 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Materi Training</label>
+                        <label class="form-label fs-6">Materi Training</label>
                         <input type="text" name="materi_training_internal"
                             value="{{ old('materi_training_internal', $item_training_internals->first()->materi_training_internal) }}"
                             class="form-control" placeholder="Masukan Materi Training">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Trainer</label>
+                        <label class="form-label fs-6">Trainer</label>
                         <input type="text" name="trainer_training_internal"
                             value="{{ old('trainer_training_internal', $item_training_internals->first()->trainer_training_internal) }}"
                             class="form-control" placeholder="Masukan Trainer">

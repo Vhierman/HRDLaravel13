@@ -41,12 +41,12 @@
                 @csrf
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Dari Tanggal</label>
+                        <label class="form-label fs-6">Dari Tanggal</label>
                         <input type="date" name="tanggal_awal" value="{{ old('tanggal_awal') }}" class="form-control"
                             placeholder="dd/mm/yyyy">
                     </div>
                     <div class="col-12 col-lg-6">
-                        <label class="form-label">Sampai Tanggal</label>
+                        <label class="form-label fs-6">Sampai Tanggal</label>
                         <input type="date" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" class="form-control"
                             placeholder="dd/mm/yyyy">
                     </div>
