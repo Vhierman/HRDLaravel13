@@ -30,7 +30,7 @@
                     <div class="btn-group position-static">
                         <a href="{{ route('employee_out.create') }}" class="btn-group position-static">
                             <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Data Karyawan Keluar
+                                <i class="bi bi-person-plus"></i> Tambah Karyawan Keluar
                             </button>
                         </a>
                         <a href="{{ route('EmployeeOutExportExcel') }}" target="_blank" class="btn-group position-static">

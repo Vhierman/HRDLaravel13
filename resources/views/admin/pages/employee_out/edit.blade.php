@@ -4,8 +4,6 @@
 
 @extends('admin.layouts.base')
 @section('title', 'Edit Karyawan Keluar');
-
-
 @section('content')
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -18,7 +16,6 @@
             </nav>
         </div>
     </div>
-
 
     {{-- Pesan Error --}}
     @if ($errors->any())
@@ -42,7 +39,7 @@
                     @method('PUT')
                     @csrf
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">NIK Karyawan</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">NIK Karyawan</label>
                         <div class="col-sm-9">
                             <input type="text" name="nik_karyawan_keluar"
                                 value="{{ $item_employee_out->nik_karyawan_keluar }}" class="form-control"
@@ -51,7 +48,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">Nama Karyawan</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Nama Karyawan</label>
                         <div class="col-sm-9">
                             <input type="text" name="nama_karyawan_keluar"
                                 value="{{ $item_employee_out->nama_karyawan_keluar }}" class="form-control"
@@ -60,7 +57,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">Keterangan Keluar</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Keterangan Keluar</label>
                         <div class="col-sm-9">
                             <select id="input39" class="form-select" name="keterangan_keluar">
                                 <option value="">Pilih Keterangan Keluar</option>
@@ -82,7 +79,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">Tanggal Keluar</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Tanggal Keluar</label>
                         <div class="col-sm-9">
                             <input type="date" name="tanggal_keluar_karyawan_keluar"
                                 value="{{ $item_employee_out->tanggal_keluar_karyawan_keluar }}" class="form-control"

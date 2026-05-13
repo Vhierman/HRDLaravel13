@@ -4,11 +4,8 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
 @endsection
-
 @extends('admin.layouts.base')
 @section('title', 'Tambah Karyawan Keluar');
-
-
 @section('content')
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -16,12 +13,11 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Data Karyawan Keluar</li>
+                    <li class="breadcrumb-item active" aria-current="page">Tambah Karyawan Keluar</li>
                 </ol>
             </nav>
         </div>
     </div>
-
 
     {{-- Pesan Error --}}
     @if ($errors->any())
@@ -44,7 +40,7 @@
                     @csrf
 
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">Nama</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Nama</label>
                         <div class="col-sm-9">
                             <select name="employee_id" class="form-select" id="nama_karyawan_keluar-select"
                                 data-placeholder="Pilih Karyawan">
@@ -60,7 +56,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">Keterangan Keluar</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Keterangan Keluar</label>
                         <div class="col-sm-9">
                             <select id="input39" class="form-select" name="keterangan_keluar">
                                 <option value="">Pilih Keterangan Keluar</option>
@@ -82,7 +78,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label">Tanggal Keluar</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Tanggal Keluar</label>
                         <div class="col-sm-9">
                             <input type="date" name="tanggal_keluar_karyawan_keluar"
                                 value="{{ old('tanggal_keluar_karyawan_keluar') }}" class="form-control"
