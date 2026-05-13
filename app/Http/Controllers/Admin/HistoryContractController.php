@@ -10,6 +10,7 @@ use App\Models\Admin\Employees;
 use App\Models\Admin\Companies;
 use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
+use App\Models\Admin\Golongans;
 use App\Models\Admin\Areas;
 use App\Models\Admin\WorkingHours;
 use App\Models\Admin\HistoryContracts;

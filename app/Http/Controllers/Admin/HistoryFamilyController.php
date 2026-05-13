@@ -46,8 +46,8 @@ class HistoryFamilyController extends Controller
             abort(403);
         }
 
+        $data           = $request->except('_token');
         $employees      = Employees::where('nik_karyawan', $request->input('nik_karyawan'))->first();
-
         HistoryFamilies::create([
             'employees_id'                                          => $request->input('employees_id'),
             'nik_karyawan'                                          => $request->input('nik_karyawan'),
@@ -98,6 +98,7 @@ class HistoryFamilyController extends Controller
             abort(403);
         }
 
+        $data           = $request->except('_token');
         $history_family = HistoryFamilies::findOrFail($id);
         $nik_karyawan   = $history_family->nik_karyawan;
         $employee       = Employees::where('nik_karyawan', $nik_karyawan)->first();
