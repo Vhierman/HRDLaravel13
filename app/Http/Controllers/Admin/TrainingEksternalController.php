@@ -55,7 +55,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.training_eksternal.create',['employees'=> $employees]);
     }
 
@@ -322,7 +322,7 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.training_eksternal.form_view_nama',[
             'employees' => $employees
         ]);
@@ -834,7 +834,7 @@ class TrainingEksternalController extends Controller
 
         $data   = $request->except('_token');
         $tanggal_awal_training_eksternal  = $request->input('tanggal_awal_training_eksternal');
-        $employees = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         $item_training_eksternals = TrainingEksternals::with([
                             'employees',
                             'employees.divisions',

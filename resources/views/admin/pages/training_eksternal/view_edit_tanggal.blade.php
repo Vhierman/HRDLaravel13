@@ -50,7 +50,8 @@
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
                                     {{ in_array($employee->id, old('employees_id', $selectedEmployees)) ? 'selected' : '' }}>
-                                    {{ $employee->nama_karyawan }}
+                                    {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
+                                    {{ $employee->divisions->penempatan }}
                                 </option>
                             @endforeach
                         </select>
