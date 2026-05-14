@@ -35,6 +35,13 @@
                         class="btn btn-grd btn-grd-danger px-5 btn-lg py-3 w-100">Hapus Data Absensi</a>
                 </div>
             </div>
+            <div class="row justify-content-center g-3 text-center mt-2">
+                <div class="col-md-12">
+                    <a href="{{ route('attendance.form_non_absen') }}" class="btn btn-info px-5 btn-lg py-3 w-100">Lihat
+                        Data
+                        Karyawan Yang Tidak Pernah Absen</a>
+                </div>
+            </div>
         </div>
     </div>
 

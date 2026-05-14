@@ -113,7 +113,7 @@
             {{-- Training --}}
             <li>
                 <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">data_exploration</i>
+                    <div class="parent-icon"><i class="material-icons-outlined">work_history</i>
                     </div>
                     <div class="menu-title">Training</div>
                 </a>
@@ -130,7 +130,7 @@
             {{-- Sertifikasi --}}
             <li>
                 <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">book</i>
+                    <div class="parent-icon"><i class="material-icons-outlined">workspace_premium</i>
                     </div>
                     <div class="menu-title">Sertifikasi</div>
                 </a>
@@ -144,6 +144,20 @@
                 </ul>
             </li>
             {{-- Sertifikasi --}}
+
+            {{-- Overtimes --}}
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">alarm_add</i>
+                    </div>
+                    <div class="menu-title">Overtimes</div>
+                </a>
+                <ul>
+                    <li><a href="{{ route('certification_bnsp.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Lemburan Karyawan</a></li>
+                </ul>
+            </li>
+            {{-- Overtimes --}}
 
             {{-- Proses --}}
             <li>

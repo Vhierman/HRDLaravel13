@@ -44,6 +44,7 @@ Route::post('admin/login',[LoginController::class,'authenticate'])->name('login.
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
     Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
+    //Master
     Route::resource('user', UserController::class);
     Route::resource('company', CompanyController::class);
     Route::resource('area', AreaController::class);
@@ -54,16 +55,23 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('minimal_salary', MinimalSalaryController::class);
     Route::resource('maksimal_upah_bpjskesehatan', MaksimalUpahBpjsKesehatanController::class);
     Route::resource('maksimal_upah_bpjstk', MaksimalUpahBpjsKetenagakerjaanController::class);
+    //Employee
     Route::get('employee/aktif_kerja/{nik_karyawan}', [EmployeeController::class, 'aktif_kerja'])->name('cetak.aktif_kerja');
     Route::get('employee/exportExcel', [EmployeeController::class, 'exportExcel'])->name('exportExcel');
     Route::resource('employee', EmployeeController::class);
+    //History Employees
     Route::get('history_contract/pkwt/{nik_karyawan}', [HistoryContractController::class, 'pkwt'])->name('cetak.pkwt');
     Route::resource('history_contract', HistoryContractController::class);
     Route::resource('history_position', HistoryPositionController::class);
     Route::resource('history_family', HistoryFamilyController::class);
+    //Employees Out
     Route::get('employee_out/EmployeeOutExportExcel', [EmployeeOutController::class, 'EmployeeOutExportExcel'])->name('EmployeeOutExportExcel');
     Route::resource('employee_out', EmployeeOutController::class);
+    // Attendance
     Route::post('attendance/export_excell_absensi', [AttendanceController::class, 'export_excell_absensi'])->name('attendance.export_excell_absensi');
+    Route::post('attendance/export_excell_non_absensi', [AttendanceController::class, 'export_excell_non_absensi'])->name('attendance.export_excell_non_absensi');
+    Route::post('attendance/tampil_non_absen', [AttendanceController::class, 'tampil_non_absen'])->name('attendance.tampil_non_absen');
+    Route::get('attendance/form_non_absen', [AttendanceController::class, 'form_non_absen'])->name('attendance.form_non_absen');
     Route::get('attendance/form_tampil', [AttendanceController::class, 'form_tampil'])->name('attendance.form_tampil');
     Route::get('attendance/form_edit', [AttendanceController::class, 'form_edit'])->name('attendance.form_edit');
     Route::get('attendance/form_hapus', [AttendanceController::class, 'form_hapus'])->name('attendance.form_hapus');
@@ -71,6 +79,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('attendance/tampil_form_hapus', [AttendanceController::class, 'tampil_form_hapus'])->name('attendance.tampil_form_hapus');
     Route::post('attendance/tampil_absen', [AttendanceController::class, 'tampil_absen'])->name('attendance.tampil_absen');
     Route::resource('attendance', AttendanceController::class);
+    // Inventory
     Route::get('inventory_motorcycle/exportExcel', [InventoryMotorcycleController::class, 'exportExcel'])->name('inventory_motorcycle.exportExcel');
     Route::resource('inventory_motorcycle', InventoryMotorcycleController::class);
     Route::get('inventory_car/exportExcel', [InventoryCarController::class, 'exportExcel'])->name('inventory_car.exportExcel');
@@ -118,6 +127,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('training_internal/tampil_view_belum_training', [TrainingInternalController::class, 'tampil_view_belum_training'])->name('training_internal.tampil_view_belum_training');
     Route::get('training_internal/form_belum_training', [TrainingInternalController::class, 'form_belum_training'])->name('training_internal.form_belum_training');
     Route::resource('training_internal', TrainingInternalController::class);
+    // Certification
     Route::get('certification_bnsp/exportExcel', [CertificationBnspController::class, 'exportExcel'])->name('certification_bnsp.exportExcel');
     Route::resource('certification_bnsp', CertificationBnspController::class);
     Route::get('certification_ministry/exportExcel', [CertificationMinistryController::class, 'exportExcel'])->name('certification_ministry.exportExcel');

@@ -379,6 +379,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $data = $request->except('_token');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
@@ -405,6 +406,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         }
+
         $data = $request->except('_token');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -521,6 +523,165 @@ class AttendanceController extends Controller
         $writer = new Xlsx($spreadsheet);
 
         $filename = 'DatabaseAbsensiKaryawan.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function form_non_absen()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        return view('admin.pages.attendance.tampil_non_absen');
+    }
+
+    public function tampil_non_absen(TanggalAwalAkhirRequest $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        } 
+        $data = $request->except('_token');
+        $tanggal_awal  = $request->input('tanggal_awal');
+        $tanggal_akhir = $request->input('tanggal_akhir');
+
+        $item_employees = Employees::with([
+            'divisions',
+            'positions',
+            'golongans'
+        ])->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
+        {
+            $query->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir]);
+        })->get();
+
+        if ($item_employees->isNotEmpty()) {
+            return view('admin.pages.attendance.show_non_absen', [
+                'tanggal_awal'   => $tanggal_awal,
+                'tanggal_akhir'  => $tanggal_akhir,
+                'item_employees' => $item_employees
+            ]);
+        } else {
+            Alert::error('Data Tidak Ditemukan');
+            return redirect()->route('attendance.form_non_absen');
+        }
+    }
+
+    public function export_excell_non_absensi(Request $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $data = $request->except('_token');
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        // Header
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'NIK Karyawan');
+        $sheet->setCellValue('C1', 'Nama Karyawan');
+        $sheet->setCellValue('D1', 'Golongan');
+        $sheet->setCellValue('E1', 'Area');
+        $sheet->setCellValue('F1', 'Jabatan');
+        $sheet->setCellValue('G1', 'Penempatan');
+        // Header
+
+        //Style
+        $sheet->getStyle('A1:G1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => [
+                    'rgb' => 'FFFFFF'
+                ],
+                'size' => 12
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => '4CAF50'
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+            ]);
+            $sheet->getRowDimension(1)->setRowHeight(30);
+        //Style
+
+        $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
+        $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+
+        $item_employees = Employees::with([
+            'divisions',
+            'positions',
+            'golongans'
+        ])->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
+        {
+            $query->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir]);
+        })->get();
+
+        
+        $row = 2;
+        $no = 1;
+        foreach ($item_employees as $item_employee) {
+                $sheet->getRowDimension($row)->setRowHeight(25);
+                $sheet->setCellValue('A'.$row, $no);
+                $sheet->setCellValue('B'.$row, "'".$item_employee->nik_karyawan);
+                $sheet->setCellValue('C'.$row, $item_employee->nama_karyawan);
+                $sheet->setCellValue('D'.$row, $item_employee->golongans->golongan);
+                $sheet->setCellValue('E'.$row, $item_employee->areas->area);
+                $sheet->setCellValue('F'.$row, $item_employee->positions->jabatan);
+                $sheet->setCellValue('G'.$row, $item_employee->divisions->penempatan);
+                $row++;
+                $no++;
+        }
+
+         // Border seluruh data
+        $lastRow = $row - 1;
+        $sheet->getStyle("A1:G{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+
+                $sheet->getStyle("A1:G{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        
+                $sheet->getStyle("A2:A{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("B2:B{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("D2:D{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("E2:E{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("F2:F{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("G2:G{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        
+        // Auto width
+        $highestColumn = $sheet->getHighestColumn(); 
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $columnLetter = Coordinate::stringFromColumnIndex($col);
+            $sheet->getColumnDimension($columnLetter)->setAutoSize(true);
+        }
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = 'DatabaseKaryawanNonAbsen.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
