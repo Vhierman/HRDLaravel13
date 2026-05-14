@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\TrainingEksternalController;
 use App\Http\Controllers\Admin\CertificationBnspController;
 use App\Http\Controllers\Admin\CertificationMinistryController;
 use App\Http\Controllers\Admin\CertificationOtherController;
+use App\Http\Controllers\Admin\OvertimeController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -135,6 +136,21 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('certification_other/exportExcel', [CertificationOtherController::class, 'exportExcel'])->name('certification_other.exportExcel');
     Route::resource('certification_other', CertificationOtherController::class);
     });
+    //Overtimes
+    Route::post('overtime/proses_cancel_approve_overtime', [OvertimeController::class, 'proses_cancel_approve_overtime'])->name('overtime.proses_cancel_approve_overtime');
+    Route::post('overtime/tampil_cancel_approve_overtime', [OvertimeController::class, 'tampil_cancel_approve_overtime'])->name('overtime.tampil_cancel_approve_overtime');
+    Route::get('overtime/form_cancel_approve_overtime', [OvertimeController::class, 'form_cancel_approve_overtime'])->name('overtime.form_cancel_approve_overtime');
+    Route::post('overtime/proses_approve_overtime', [OvertimeController::class, 'proses_approve_overtime'])->name('overtime.proses_approve_overtime');
+    Route::post('overtime/tampil_approve_overtime', [OvertimeController::class, 'tampil_approve_overtime'])->name('overtime.tampil_approve_overtime');
+    Route::get('overtime/form_approve_overtime', [OvertimeController::class, 'form_approve_overtime'])->name('overtime.form_approve_overtime');
+    Route::post('overtime/tampil_hapus_overtime', [OvertimeController::class, 'tampil_hapus_overtime'])->name('overtime.tampil_hapus_overtime');
+    Route::get('overtime/form_hapus_overtime', [OvertimeController::class, 'form_hapus_overtime'])->name('overtime.form_hapus_overtime');
+    Route::post('overtime/tampil_edit_overtime', [OvertimeController::class, 'tampil_edit_overtime'])->name('overtime.tampil_edit_overtime');
+    Route::get('overtime/form_edit_overtime', [OvertimeController::class, 'form_edit_overtime'])->name('overtime.form_edit_overtime');
+    Route::post('overtime/export_excell_overtime', [OvertimeController::class, 'export_excell_overtime'])->name('overtime.export_excell_overtime');
+    Route::post('overtime/tampil_overtime', [OvertimeController::class, 'tampil_overtime'])->name('overtime.tampil_overtime');
+    Route::get('overtime/lihat_overtime', [OvertimeController::class, 'lihat_overtime'])->name('overtime.lihat_overtime');
+    Route::resource('overtime', OvertimeController::class);
     // Route Admin Area
     
     

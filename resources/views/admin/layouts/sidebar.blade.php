@@ -153,8 +153,8 @@
                     <div class="menu-title">Overtimes</div>
                 </a>
                 <ul>
-                    <li><a href="{{ route('certification_bnsp.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Lemburan Karyawan</a></li>
+                    <li><a href="{{ route('overtime.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Overtime Karyawan</a></li>
                 </ul>
             </li>
             {{-- Overtimes --}}

@@ -6,15 +6,15 @@
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Tambah Data Training Internal');
+@section('title', 'Hapus Overtime');
 @section('content')
 
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Training</div>
+        <div class="breadcrumb-title pe-3">Overtime</div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Training Internal</li>
+                    <li class="breadcrumb-item active" aria-current="page">Hapus Overtime</li>
                 </ol>
             </nav>
         </div>
@@ -35,75 +35,45 @@
         {{-- Pesan Error --}}
 
         <div class="card-body p-4">
-            <h5 class="mb-4">Form Tambah Training Internal</h5>
-            <form action="{{ route('training_internal.store') }}" method="post" enctype="multipart/form-data">
+            <h5 class="mb-4">Hapus Data Overtime</h5>
+            <form action="{{ route('overtime.tampil_hapus_overtime') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3">
-                    <div class="col-12 col-lg-12">
+                    <div class="col-12 col-lg-6">
                         <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
-                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field"
-                            data-placeholder="Pilih Nama Karyawan" multiple>
+                        <select name="employees_id" class="form-select" id="karyawan-select"
+                            data-placeholder="Pilih Karyawan">
+                            <option value="">Pilih Karyawan</option>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
-                                    {{ in_array($employee->id, old('employees_id', [])) ? 'selected' : '' }}>
+                                    {{ old('employees_id') == $employee->id ? 'selected' : '' }}>
                                     {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
                                     {{ $employee->divisions->penempatan }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
-
-                </div>
-                <div class="row g-3 mt-2">
-                    <div class="col-12 col-lg-12">
-                        <label class="form-label fs-6">Tanggal Training</label>
-                        <input type="date" name="tanggal_training_internal"
-                            value="{{ old('tanggal_training_internal') }}" class="form-control" placeholder="dd/mm/yyyy">
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label fs-6">Tanggal Lembur</label>
+                        <input type="date" name="tanggal" value="{{ old('tanggal') }}" class="form-control"
+                            placeholder="dd/mm/yyyy">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label fs-6">Jam Training</label>
-                        <input type="time" name="jam_training_internal" value="{{ old('jam_training_internal') }}"
-                            class="form-control" placeholder="00:00">
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label fs-6">Lokasi Training</label>
-                        <input type="text" name="lokasi_training_internal" value="{{ old('lokasi_training_internal') }}"
-                            class="form-control" placeholder="Masukan Lokasi Training">
-                    </div>
-                </div>
-                <div class="row g-3 mt-2">
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label fs-6">Materi Training</label>
-                        <input type="text" name="materi_training_internal" value="{{ old('materi_training_internal') }}"
-                            class="form-control" placeholder="Masukan Materi Training">
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <label class="form-label fs-6">Trainer</label>
-                        <input type="text" name="trainer_training_internal"
-                            value="{{ old('trainer_training_internal') }}" class="form-control"
-                            placeholder="Masukan Trainer">
-                    </div>
-                </div>
-                <br>
-                <div class="row g-3">
                     <div class="col-sm-12">
                         <div class="d-md-flex d-grid align-items-center gap-3">
                             <div class="row row-cols-auto g-3">
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary px-4 raised d-flex gap-2"><i
-                                            class="material-icons-outlined">save</i>Simpan</button>
+                                            class="material-icons-outlined">search</i>Cari</button>
                                 </div>
                                 <div class="col">
-                                    <a href="{{ route('training_internal.index') }}"
-                                        class="btn btn-danger px-4 raised d-flex gap-2">
+                                    <a href="{{ route('overtime.index') }}" class="btn btn-danger px-4 raised d-flex gap-2">
                                         <i class="material-icons-outlined">cancel</i>Cancel
                                     </a>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </form>

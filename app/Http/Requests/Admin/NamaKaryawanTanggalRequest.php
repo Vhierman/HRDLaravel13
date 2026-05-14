@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OvertimeRequest extends FormRequest
+class NamaKaryawanTanggalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +25,7 @@ class OvertimeRequest extends FormRequest
         return [
             //
             'employees_id'      => 'required',
-            'tanggal_lembur'    => 'required|date',
-            'keterangan_lembur' => 'required',
-            'jam_masuk'         => 'required',
-            'jam_istirahat'     => 'required',
-            'jam_pulang'        => 'required',
-            'jenis_lembur'      => 'required|string|in:Biasa,Libur'
+            'tanggal'           => 'required|date'
         ];
     }
 }

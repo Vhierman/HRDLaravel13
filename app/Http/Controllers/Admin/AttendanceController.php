@@ -546,6 +546,7 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
             abort(403);
         } 
+        
         $data = $request->except('_token');
         $tanggal_awal  = $request->input('tanggal_awal');
         $tanggal_akhir = $request->input('tanggal_akhir');

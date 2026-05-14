@@ -45,7 +45,7 @@
                             data-placeholder="Pilih Nama Karyawan" multiple>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
-                                    {{ old('employees_id') == $employee->id ? 'selected' : '' }}>
+                                    {{ in_array($employee->id, old('employees_id', [])) ? 'selected' : '' }}>
                                     {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
                                     {{ $employee->divisions->penempatan }}
                                 </option>
