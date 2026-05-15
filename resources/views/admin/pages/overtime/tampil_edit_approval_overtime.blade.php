@@ -35,10 +35,12 @@
 
         <div class="card-body p-4">
             <h5 class="mb-4">Form Edit Overtime {{ $item_overtime->employees->nama_karyawan }}</h5>
-            <form action="{{ route('overtime.update', $item_overtime->id) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('overtime.proses_edit_approve_overtime') }}" method="post"
+                enctype="multipart/form-data">
                 @csrf
-                @method('PUT')
                 <input type="hidden" name="employees_id" value="{{ $item_overtime->employees_id }}" class="form-control"
+                    placeholder="Employees ID" readonly>
+                <input type="hidden" name="id" value="{{ $item_overtime->id }}" class="form-control"
                     placeholder="Employees ID" readonly>
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
@@ -107,6 +109,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </form>

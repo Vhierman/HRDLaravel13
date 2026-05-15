@@ -135,7 +135,16 @@
                                 <td>{{ $item_overtime->jam_lembur }}</td>
                                 <td>{{ $item_overtime->uang_makan_lembur }}</td>
                                 <td>{{ $item_overtime->keterangan_lembur }}</td>
-                                <td>Edit Approval</td>
+                                <td>
+                                    <div class="row row-cols-auto g-3 justify-content-center">
+                                        <div class="col">
+                                            <a href="{{ route('overtime.edit', $item_overtime->id) }}"
+                                                class="btn btn-sm btn-success raised d-flex gap-2">
+                                                <i class="material-icons-outlined">edit</i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
 
                                 @if ($item_overtime->acc_hrd == null)
                                     <td><span class="badge bg-danger">Belum Direkap</span></td>

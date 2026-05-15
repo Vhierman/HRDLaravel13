@@ -4,73 +4,114 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Page</title>
-
-    <!--=============== GSAP ===============-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="{{ asset('template_login/assets/css/styles.css') }}">
-
+    <title>HRD | Login Page</title>
+    <!--favicon-->
+    <link rel="icon" href="{{ asset('template_admin/assets/images/favicon-32x32.png') }}" type="image/png">
+    <!-- loader-->
+    <link href="{{ asset('template_admin/assets/css/pace.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('template_admin/assets/js/pace.min.js') }}"></script>
+    <!--plugins-->
+    <link href="{{ asset('template_admin/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('template_admin/assets/plugins/metismenu/metisMenu.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('template_admin/assets/plugins/metismenu/mm-vertical.css') }}">
+    <!--bootstrap css-->
+    <link href="{{ asset('template_admin/assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+    <!--main css-->
+    <link href="{{ asset('template_admin/assets/css/bootstrap-extended.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_admin/sass/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_admin/sass/dark-theme.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_admin/sass/blue-theme.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_admin/sass/responsive.css') }}" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <video class="back-vid" autoplay loop muted plays-inline
-            src="{{ asset('template_login/assets/video/galaxy.mp4') }}"></video>
-        <section class="login">
-            <div class="login__content">
-                <div>
-                    <h2 class="login__title">Welcome back 👋</h2>
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+    <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center mx-3 mx-lg-0">
+        <div class="card my-5 col-xl-9 col-xxl-8 mx-auto rounded-4 overflow-hidden p-4">
+            <div class="row g-4">
+                <div class="col-lg-6 d-flex">
+                    <div class="card-body">
+                        <img src="{{ asset('template_admin/assets/images/logo/LogoPanjang.png') }}"
+                            class="mb-6 d-block mx-auto" width="350" alt="">
+                        <h5 class="fw-bold mt-4">Get Started Now</h5>
+
+                        <div class="separator">
+                            <div class="line"></div>
+                            <p class="mb-0 fw-bold">HRD-GA SYSTEM</p>
+                            <div class="line"></div>
                         </div>
-                    @endif
-                    <form action="{{ route('login.auth') }}" method="post" class="login__form">
-                        @csrf
-                        <div class="login__group">
-                            <div class="login__box">
-                                <i class="ri-mail-fill login__icon"></i>
-                                <input type="email" name="email" autocomplete="email" required placeholder=" "
-                                    class="login__input" id="email" value="{{ old('email') }}">
-                                <label for="email" class="login__label">Email</label>
-                            </div>
-
-                            <div class="login__box">
-                                <i class="ri-lock-2-fill login__icon"></i>
-                                <input type="password" name="password" autocomplete="current-password" required
-                                    placeholder=" " class="login__input" id="password" value="{{ old('password') }}">
-                                <label for="password" class="login__label">Password</label>
-                            </div>
+                        <div class="form-body mt-4">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form action="{{ route('login.auth') }}" method="post" class="row g-3">
+                                @csrf
+                                <div class="col-12">
+                                    <label for="inputEmailAddress" class="form-label fs-6">Email</label>
+                                    <input type="email" name="email" class="form-control"
+                                        value="{{ old('email') }}" id="inputEmailAddress" placeholder="Masukan Email">
+                                </div>
+                                <div class="col-12">
+                                    <label for="inputChoosePassword" class="form-label fs-6">Password</label>
+                                    <div class="input-group" id="show_hide_password">
+                                        <input type="password" name="password" class="form-control border-end-0"
+                                            id="inputChoosePassword" placeholder="Masukan Password">
+                                        <a href="javascript:;" class="input-group-text bg-transparent"><i
+                                                class="bi bi-eye-slash-fill"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-grd-info">Login</button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-grid">
+                                        <button type="reset" class="btn btn-grd-danger">Reset</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-
-                        <a href="#" class="login__forgot">Forgot Password?</a>
-
-                        <button type="submit" class="login__button">
-                            Log In <i class="ri-send-plane-2-fill"></i>
-                        </button>
-
-                        <p class="login__sign">
-                            Don't have an account? <a href="#">Sign Up</a>
-                        </p>
-                    </form>
+                    </div>
                 </div>
-                <div class="login__image">
-                    <img src="{{ asset('template_login/assets/img/prima.jpg') }}" alt="" class="login__img">
+                <div class="col-lg-6 d-lg-flex d-none">
+                    <div class="rounded-4 w-100 d-flex bg-grd-info overflow-hidden" style="height: 100%;">
+                        <img src="{{ asset('template_admin/assets/images/bg-login/NextPrima.png') }}"
+                            class="w-100 h-100" style="object-fit: cover;" alt="">
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 
-    <!--=============== GSAP ===============-->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
-    <!--=============== MAIN JS ===============-->
-    <script src="{{ asset('template_login/assets/js/main.js') }}"></script>
+    <!--plugins-->
+    <script src="{{ asset('template_admin/assets/js/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $("#show_hide_password a").on('click', function(event) {
+                event.preventDefault();
+                if ($('#show_hide_password input').attr("type") == "text") {
+                    $('#show_hide_password input').attr('type', 'password');
+                    $('#show_hide_password i').addClass("bi-eye-slash-fill");
+                    $('#show_hide_password i').removeClass("bi-eye-fill");
+                } else if ($('#show_hide_password input').attr("type") == "password") {
+                    $('#show_hide_password input').attr('type', 'text');
+                    $('#show_hide_password i').removeClass("bi-eye-slash-fill");
+                    $('#show_hide_password i').addClass("bi-eye-fill");
+                }
+            });
+        });
+    </script>
 
 </body>
 

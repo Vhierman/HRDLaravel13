@@ -137,6 +137,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('certification_other', CertificationOtherController::class);
     });
     //Overtimes
+    Route::post('overtime/proses_edit_approve_overtime', [OvertimeController::class, 'proses_edit_approve_overtime'])->name('overtime.proses_edit_approve_overtime');
     Route::post('overtime/proses_cancel_approve_overtime', [OvertimeController::class, 'proses_cancel_approve_overtime'])->name('overtime.proses_cancel_approve_overtime');
     Route::post('overtime/tampil_cancel_approve_overtime', [OvertimeController::class, 'tampil_cancel_approve_overtime'])->name('overtime.tampil_cancel_approve_overtime');
     Route::get('overtime/form_cancel_approve_overtime', [OvertimeController::class, 'form_cancel_approve_overtime'])->name('overtime.form_cancel_approve_overtime');
@@ -152,7 +153,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('overtime/lihat_overtime', [OvertimeController::class, 'lihat_overtime'])->name('overtime.lihat_overtime');
     Route::resource('overtime', OvertimeController::class);
     // Route Admin Area
-    
     
     
     // Route User Area

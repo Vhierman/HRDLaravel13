@@ -12,7 +12,7 @@ class OvertimeUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,12 @@ class OvertimeUpdateRequest extends FormRequest
     {
         return [
             //
+            'tanggal_lembur'    => 'required|date',
+            'keterangan_lembur' => 'required',
+            'jam_masuk'         => 'required',
+            'jam_istirahat'     => 'required',
+            'jam_pulang'        => 'required',
+            'jenis_lembur'      => 'required|string|in:Biasa,Libur'
         ];
     }
 }
