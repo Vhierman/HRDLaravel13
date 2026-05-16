@@ -137,6 +137,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('certification_other', CertificationOtherController::class);
     });
     //Overtimes
+    Route::post('overtime/exportExcell_rekap_overtime', [OvertimeController::class, 'exportExcell_rekap_overtime'])->name('overtime.exportExcell_rekap_overtime');
+    Route::post('overtime/exportPDF_rekap_overtime', [OvertimeController::class, 'exportPDF_rekap_overtime'])->name('overtime.exportPDF_rekap_overtime');
+    Route::post('overtime/cetak_rekap_overtime', [OvertimeController::class, 'cetak_rekap_overtime'])->name('overtime.cetak_rekap_overtime');
+    Route::get('overtime/form_cetak_rekap_overtime', [OvertimeController::class, 'form_cetak_rekap_overtime'])->name('overtime.form_cetak_rekap_overtime');
+    Route::post('overtime/cetak_slip_overtime', [OvertimeController::class, 'cetak_slip_overtime'])->name('overtime.cetak_slip_overtime');
+    Route::get('overtime/form_cetak_slip_overtime', [OvertimeController::class, 'form_cetak_slip_overtime'])->name('overtime.form_cetak_slip_overtime');
     Route::post('overtime/proses_edit_approve_overtime', [OvertimeController::class, 'proses_edit_approve_overtime'])->name('overtime.proses_edit_approve_overtime');
     Route::post('overtime/proses_cancel_approve_overtime', [OvertimeController::class, 'proses_cancel_approve_overtime'])->name('overtime.proses_cancel_approve_overtime');
     Route::post('overtime/tampil_cancel_approve_overtime', [OvertimeController::class, 'tampil_cancel_approve_overtime'])->name('overtime.tampil_cancel_approve_overtime');

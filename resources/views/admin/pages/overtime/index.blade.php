@@ -37,11 +37,11 @@
                         class="btn btn-primary px-5 btn-lg py-3 w-100">Rekap Data</a>
                 </div>
                 <div class="col-md-3">
-                    <a href="{{ route('training_internal.view_nama') }}"
+                    <a href="{{ route('overtime.form_cetak_slip_overtime') }}"
                         class="btn btn-success px-5 btn-lg py-3 w-100">Cetak Slip</a>
                 </div>
                 <div class="col-md-3">
-                    <a href="{{ route('training_internal.view_penempatan') }}"
+                    <a href="{{ route('overtime.form_cetak_rekap_overtime') }}"
                         class="btn btn-warning px-5 btn-lg py-3 w-100">Cetak Rekap</a>
                 </div>
                 <div class="col-md-3">
