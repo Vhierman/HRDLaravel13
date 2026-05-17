@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\CertificationMinistryController;
 use App\Http\Controllers\Admin\CertificationOtherController;
 use App\Http\Controllers\Admin\OvertimeController;
 use App\Http\Controllers\Admin\KontrakKerjaController;
+use App\Http\Controllers\Admin\LegalController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -175,13 +176,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('kontrak_kerja/form_kontrak_harian', [KontrakKerjaController::class, 'form_kontrak_harian'])->name('kontrak_kerja.form_kontrak_harian');
     Route::get('kontrak_kerja/form_kontrak_pkwt', [KontrakKerjaController::class, 'form_kontrak_pkwt'])->name('kontrak_kerja.form_kontrak_pkwt');
     Route::resource('kontrak_kerja', KontrakKerjaController::class);
+    
+    // Perijinan
+    Route::get('legal/exportExcel', [LegalController::class, 'exportExcel'])->name('legal.exportExcel');
+    Route::resource('legal', LegalController::class);
     // Route Admin Area
     
     
     // Route User Area
     // Login User Area
-Route::get('/login',[UserLoginController::class,'index'])->name('user.login');
-Route::post('/login',[UserLoginController::class,'authenticate'])->name('user.login.auth');
+    Route::get('/login',[UserLoginController::class,'index'])->name('user.login');
+    Route::post('/login',[UserLoginController::class,'authenticate'])->name('user.login.auth');
 
 // Halaman User Area
 Route::prefix('user')->middleware('auth')->group(function () {

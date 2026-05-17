@@ -12,7 +12,7 @@ class LegalRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,11 @@ class LegalRequest extends FormRequest
     {
         return [
             //
+            'nama_perijinan'    => 'required',
+            'nomor_perijinan'   => 'required',
+            'instansi_penerbit' => 'required',
+            'tanggal_berlaku'   => 'required|date',
+            'tanggal_habis'     => 'required|date'
         ];
     }
 }

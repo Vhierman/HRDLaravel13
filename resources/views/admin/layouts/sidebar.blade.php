@@ -178,14 +178,13 @@
             {{-- Surat --}}
             <li>
                 <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">contact_mail</i>
+                    <div class="parent-icon"><i class="material-icons-outlined">assured_workload</i>
                     </div>
-                    <div class="menu-title">Surat</div>
+                    <div class="menu-title">Perijinan</div>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>PKWT Kontrak</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>PKWT Harian</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Penilaian Karyawan</a>
+                    <li><a href="{{ route('legal.index') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Perijinan Perusahaan</a>
                     </li>
                 </ul>
             </li>

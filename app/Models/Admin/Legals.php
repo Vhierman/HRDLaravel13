@@ -20,7 +20,6 @@ class Legals extends Model
         'instansi_penerbit',
         'tanggal_berlaku',
         'tanggal_habis',
-        'masa_berlaku',
         'input_oleh',
         'edit_oleh',
         'hapus_oleh'
