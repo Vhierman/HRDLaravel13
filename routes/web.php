@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\CertificationBnspController;
 use App\Http\Controllers\Admin\CertificationMinistryController;
 use App\Http\Controllers\Admin\CertificationOtherController;
 use App\Http\Controllers\Admin\OvertimeController;
+use App\Http\Controllers\Admin\KontrakKerjaController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -158,6 +159,22 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('overtime/tampil_overtime', [OvertimeController::class, 'tampil_overtime'])->name('overtime.tampil_overtime');
     Route::get('overtime/lihat_overtime', [OvertimeController::class, 'lihat_overtime'])->name('overtime.lihat_overtime');
     Route::resource('overtime', OvertimeController::class);
+    //Kontrak Kerja
+    Route::post('kontrak_kerja/proses_cetak_tanggal_pkwt', [KontrakKerjaController::class, 'proses_cetak_tanggal_pkwt'])->name('kontrak_kerja.proses_cetak_tanggal_pkwt');
+    Route::post('kontrak_kerja/proses_nama_pkwt', [KontrakKerjaController::class, 'proses_nama_pkwt'])->name('kontrak_kerja.proses_nama_pkwt');
+    Route::get('kontrak_kerja/form_proses_nama_pkwt', [KontrakKerjaController::class, 'form_proses_nama_pkwt'])->name('kontrak_kerja.form_proses_nama_pkwt');
+    Route::post('kontrak_kerja/proses_tanggal_pkwt', [KontrakKerjaController::class, 'proses_tanggal_pkwt'])->name('kontrak_kerja.proses_tanggal_pkwt');
+    Route::get('kontrak_kerja/form_cetak_tanggal_pkwt', [KontrakKerjaController::class, 'form_cetak_tanggal_pkwt'])->name('kontrak_kerja.form_cetak_tanggal_pkwt');
+    Route::get('kontrak_kerja/form_proses_tanggal_pkwt', [KontrakKerjaController::class, 'form_proses_tanggal_pkwt'])->name('kontrak_kerja.form_proses_tanggal_pkwt');
+    Route::post('kontrak_kerja/proses_cetak_tanggal_harian', [KontrakKerjaController::class, 'proses_cetak_tanggal_harian'])->name('kontrak_kerja.proses_cetak_tanggal_harian');
+    Route::get('kontrak_kerja/form_cetak_tanggal_harian', [KontrakKerjaController::class, 'form_cetak_tanggal_harian'])->name('kontrak_kerja.form_cetak_tanggal_harian');
+    Route::post('kontrak_kerja/proses_nama_harian', [KontrakKerjaController::class, 'proses_nama_harian'])->name('kontrak_kerja.proses_nama_harian');
+    Route::get('kontrak_kerja/form_proses_nama_harian', [KontrakKerjaController::class, 'form_proses_nama_harian'])->name('kontrak_kerja.form_proses_nama_harian');
+    Route::post('kontrak_kerja/proses_tanggal_harian', [KontrakKerjaController::class, 'proses_tanggal_harian'])->name('kontrak_kerja.proses_tanggal_harian');
+    Route::get('kontrak_kerja/form_proses_tanggal_harian', [KontrakKerjaController::class, 'form_proses_tanggal_harian'])->name('kontrak_kerja.form_proses_tanggal_harian');
+    Route::get('kontrak_kerja/form_kontrak_harian', [KontrakKerjaController::class, 'form_kontrak_harian'])->name('kontrak_kerja.form_kontrak_harian');
+    Route::get('kontrak_kerja/form_kontrak_pkwt', [KontrakKerjaController::class, 'form_kontrak_pkwt'])->name('kontrak_kerja.form_kontrak_pkwt');
+    Route::resource('kontrak_kerja', KontrakKerjaController::class);
     // Route Admin Area
     
     

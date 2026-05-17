@@ -1112,6 +1112,11 @@ class HistoryContractController extends Controller
                 $upah = $salary->jumlah_upah;
                 $hari = "Bulan";
             }
+            elseif($karyawan->golongans_id == 1)
+            {
+                $upah = $salary->jumlah_upah;
+                $hari = "Bulan";
+            }
             else
             {
                 $upah = $salary->jumlah_upah/20;

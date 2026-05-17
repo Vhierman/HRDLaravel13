@@ -164,13 +164,13 @@
                 <a href="#" class="has-arrow">
                     <div class="parent-icon"><i class="material-icons-outlined">ads_click</i>
                     </div>
-                    <div class="menu-title">Proses</div>
+                    <div class="menu-title">Kontrak Kerja</div>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>PKWT Kontrak</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>PKWT Harian</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Salary</a></li>
+                    <li><a href="{{ route('kontrak_kerja.form_kontrak_pkwt') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Karyawan PKWT</a></li>
+                    <li><a href="{{ route('kontrak_kerja.form_kontrak_harian') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Karyawan Harian</a></li>
                 </ul>
             </li>
             {{-- Proses --}}

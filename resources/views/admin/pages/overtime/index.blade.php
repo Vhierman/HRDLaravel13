@@ -1,5 +1,5 @@
 @extends('admin.layouts.base')
-@section('title', 'Data Training');
+@section('title', 'Data Overtimes');
 
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">

@@ -146,8 +146,8 @@ class EmployeeController extends Controller
         $tanggal_mulai_kerja    = Carbon::parse($employee->tanggal_mulai_kerja);
         $UmurLengkap            = $tanggal_lahir->diff($today)->format('%y Tahun, %m Bulan');
         $MasaKerja              = $tanggal_mulai_kerja->diff($today)->format('%y Tahun, %m Bulan');
-        $history_contracts      = HistoryContracts::with(['employees'])->get();
-        $history_families       = HistoryFamilies::with(['employees'])->get();
+        $history_contracts      = HistoryContracts::where('employees_id', $employee->id)->get();
+        $history_families       = HistoryFamilies::where('employees_id', $employee->id)->get();
         $history_family         = HistoryFamilies::with(['employees'])->where('employees_id', $employee->id)->first();
         $history_positions      = HistoryPositions::with([
                                     'employees',

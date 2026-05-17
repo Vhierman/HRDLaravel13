@@ -1,6 +1,5 @@
 @section('css')
     <link href="{{ asset('template_admin/assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 @endsection
 @extends('admin.layouts.base')
 @section('title', 'Detail Karyawan')
@@ -22,7 +21,7 @@
 
         <!-- PROFILE SECTION -->
 
-        <div data-aos="zoom-in" class="col-lg-4 col-12">
+        <div class="col-lg-4 col-12">
             <div class="card employee-card shadow-lg">
 
                 <div class="position-relative">
@@ -37,11 +36,11 @@
                 <!-- Profile Text -->
                 <div class="text-center p-4 mt-5" style="margin-top:-70px;">
 
-                    <h3 class="mt-3 fw-bold text-white">
+                    <h3 class="mt-3 fw-bold text-black">
                         {{ $employee->nama_karyawan }}
                     </h3>
 
-                    <h4 class="mt-3 fw-bold text-white">
+                    <h4 class="mt-3 fw-bold text-black">
                         {{ $employee->positions->jabatan }} /
                         {{ $employee->divisions->penempatan }}
                     </h4>
@@ -88,7 +87,7 @@
         <!-- END PROFILE SECTION -->
 
         <!-- DETAIL SECTION -->
-        <div class="col" data-aos="fade-left">
+        <div class="col">
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-pills mb-3" role="tablist">
@@ -505,249 +504,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- Modal Table History Kontrak --}}
-                                <div class="modal fade" id="ScrollableModalHistoryKontrak">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-bottom-0 bg-grd-primary py-2">
-                                                <h5 class="modal-title">Form History Kontrak
-                                                </h5>
-                                                <a href="#" class="primaery-menu-close" data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="order-summary">
-                                                    <div class="card mb-0">
-                                                        <div class="card-body">
-
-                                                            @if ($employee->status_kerja != 'PKWTT')
-                                                                {{-- Head --}}
-                                                                <div class="card border bg-transparent shadow-none mb-3">
-                                                                    <div class="card-body">
-                                                                        <p class="fs-5">
-                                                                            {{ $employee->nama_karyawan }}
-                                                                        </p>
-                                                                        <button type="button"
-                                                                            class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#ScrollableModalTambahHistoryKontrak">
-                                                                            <i
-                                                                                class="material-icons-outlined">add</i>Tambah
-                                                                            Data History Kontrak
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                                {{-- End Head --}}
-                                                            @endif
-
-                                                            {{-- Body --}}
-                                                            <div class="card border bg-transparent shadow-none">
-                                                                <div class="card-body ">
-                                                                    <div class="table-responsive">
-                                                                        <table id="example2"
-                                                                            class="table table-striped table-bordered w-100"
-                                                                            style="width:100%">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>No</th>
-                                                                                    <th>Awal Kontrak</th>
-                                                                                    <th>Akhir Kontrak</th>
-                                                                                    <th>Status Kerja</th>
-                                                                                    <th>Masa Kontrak</th>
-                                                                                    <th>Action</th>
-                                                                                </tr>
-                                                                                <tr class="search-row">
-                                                                                    <th></th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Awal Kontrak..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Akhir Kontrak..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Status Kerja..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Masa Kontrak..." />
-                                                                                    </th>
-
-                                                                                    <th></th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @php
-                                                                                    $no = 1;
-                                                                                @endphp
-                                                                                @foreach ($history_contracts as $history_contract)
-                                                                                    <tr>
-                                                                                        <td>{{ $no++ }}</td>
-                                                                                        <td>{{ \Carbon\Carbon::parse($history_contract->tanggal_awal_kontrak)->isoformat('DD-MM-Y') }}
-                                                                                        </td>
-                                                                                        <td>{{ \Carbon\Carbon::parse($history_contract->tanggal_akhir_kontrak)->isoformat('DD-MM-Y') }}
-                                                                                        </td>
-                                                                                        <td>{{ $history_contract->status_kontrak_kerja }}
-                                                                                        </td>
-                                                                                        <td>{{ $history_contract->masa_kontrak }}
-                                                                                        </td>
-
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="row row-cols-auto g-3 justify-content-center">
-                                                                                                <div class="col">
-                                                                                                    <a href="{{ route('cetak.pkwt', $history_contract->id) }}"
-                                                                                                        class="btn btn-primary raised d-flex gap-2"
-                                                                                                        target="_blank">
-                                                                                                        <i
-                                                                                                            class="material-icons-outlined">print</i>
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                                <div class="col">
-                                                                                                    <form
-                                                                                                        action="{{ route('history_contract.destroy', $history_contract->id) }}"
-                                                                                                        method="POST">
-                                                                                                        @csrf
-                                                                                                        @method('delete')
-                                                                                                        <button
-                                                                                                            class="btn btn-danger raised d-flex gap-2">
-                                                                                                            <i
-                                                                                                                class="material-icons-outlined">delete</i>
-                                                                                                        </button>
-                                                                                                    </form>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {{-- End Body --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- Modal Body --}}
-                                        </div>
-                                        {{-- Modal Content --}}
-                                    </div>
-                                    {{-- Modal Dialog --}}
-                                </div>
-                                {{-- End Modal Table History Kontrak --}}
-                                {{-- Modal Add History Kontrak --}}
-                                <div class="modal fade" id="ScrollableModalTambahHistoryKontrak">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-bottom-0 py-2 bg-grd-info">
-                                                <h5 class="modal-title">Form Tambah History Kontrak</h5>
-                                                <a href="javascript:;" class="primaery-menu-close"
-                                                    data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
-                                            </div>
-                                            <div class="modal-body">
-                                                @if ($errors->any())
-                                                    <div class="alert alert-danger alert-dismissible fade show"
-                                                        role="alert">
-                                                        <ul class="mb-0">
-                                                            @foreach ($errors->all() as $error)
-                                                                <li>{{ $error }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                @endif
-
-                                                <!-- Area Pesan Error Manual (Session) -->
-                                                @if (session('error'))
-                                                    <div class="alert alert-danger alert-dismissible fade show"
-                                                        role="alert">
-                                                        {{ session('error') }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                @endif
-                                                <div class="form-body">
-                                                    <form action="{{ route('history_contract.store') }}"
-                                                        id="inputHistoryContract" method="post"
-                                                        enctype="multipart/form-data" class="row g-3">
-                                                        @csrf
-                                                        <input type="hidden" name="employees_id" class="form-control"
-                                                            value="{{ $employee->id }}" id="inputHistoryContract"
-                                                            readonly placeholder="Employees ID">
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryContract" class="form-label">NIK
-                                                                Karyawan</label>
-                                                            <input type="text" name="nik_karyawan"
-                                                                class="form-control"
-                                                                value="{{ $employee->nik_karyawan }}"
-                                                                id="inputHistoryContract" readonly placeholder="NIK">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryContract" class="form-label">Nama
-                                                                Karyawan</label>
-                                                            <input type="text" name="nama_karyawan"
-                                                                value="{{ $employee->nama_karyawan }}"
-                                                                class="form-control" id="inputHistoryContract" readonly
-                                                                placeholder="Nama Karyawan">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryContract" class="form-label">Awal
-                                                                Kontrak</label>
-                                                            <input type="date" name="awal_kontrak"
-                                                                class="form-control" id="inputHistoryContract"
-                                                                placeholder="dd/mm/yyyy">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryContract" class="form-label">Akhir
-                                                                Kontrak</label>
-                                                            <input type="date" name="akhir_kontrak"
-                                                                class="form-control" id="inputHistoryContract"
-                                                                placeholder="dd/mm/yyyy">
-                                                        </div>
-
-                                                        <div class="col-md-12">
-                                                            <label class="form-label">Status Kerja</label>
-                                                            <select id="inputHistoryContract" class="form-select"
-                                                                name="status_kerja">
-                                                                <option value="">Pilih Status Kerja</option>
-                                                                <option value="PKWTT"
-                                                                    {{ old('status_kerja') == 'PKWTT' ? 'selected' : '' }}>
-                                                                    PKWTT</option>
-                                                                <option value="PKWT"
-                                                                    {{ old('status_kerja') == 'PKWT' ? 'selected' : '' }}>
-                                                                    PKWT</option>
-                                                                <option value="Harian"
-                                                                    {{ old('status_kerja') == 'Harian' ? 'selected' : '' }}>
-                                                                    Harian</option>
-                                                                <option value="Outsourcing"
-                                                                    {{ old('status_kerja') == 'Outsourcing' ? 'selected' : '' }}>
-                                                                    Outsourcing
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="d-md-flex d-grid align-items-center gap-3">
-                                                                <button type="submit"
-                                                                    class="btn btn-grd-danger px-4">Submit</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- End Modal Add History Kontrak --}}
-                                {{-- History Kontrak --}}
-
                                 {{-- History Jabatan --}}
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
@@ -760,23 +516,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- Modal Table History Jabatan --}}
-                                <div class="modal fade" id="ScrollableModalHistoryJabatan">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-bottom-0 bg-grd-primary py-2">
-                                                <h5 class="modal-title">Form History Jabatan
-                                                </h5>
-                                                <a href="#" class="primaery-menu-close" data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="order-summary">
-                                                    <div class="card mb-0">
-                                                        <div class="card-body">
 
+                            </div>
+                            {{-- Modal Table History Kontrak --}}
+                            <div class="modal fade" id="ScrollableModalHistoryKontrak">
+                                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom-0 bg-grd-primary py-2">
+                                            <h5 class="modal-title">Form History Kontrak
+                                            </h5>
+                                            <a href="#" class="primary-menu-close" data-bs-dismiss="modal">
+                                                <i class="material-icons-outlined">close</i>
+                                            </a>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="order-summary">
+                                                <div class="card mb-0">
+                                                    <div class="card-body">
 
+                                                        @if ($employee->status_kerja != 'PKWTT')
                                                             {{-- Head --}}
                                                             <div class="card border bg-transparent shadow-none mb-3">
                                                                 <div class="card-body">
@@ -786,252 +544,487 @@
                                                                     <button type="button"
                                                                         class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#ScrollableModalTambahHistoryJabatan">
+                                                                        data-bs-target="#ScrollableModalTambahHistoryKontrak">
                                                                         <i class="material-icons-outlined">add</i>Tambah
-                                                                        Data History Jabatan
+                                                                        Data History Kontrak
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                             {{-- End Head --}}
+                                                        @endif
 
+                                                        {{-- Body --}}
+                                                        <div class="card border bg-transparent shadow-none">
+                                                            <div class="card-body ">
+                                                                <div class="table-responsive">
+                                                                    <table id="example2"
+                                                                        class="table table-striped table-bordered w-100"
+                                                                        style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No</th>
+                                                                                <th>Awal Kontrak</th>
+                                                                                <th>Akhir Kontrak</th>
+                                                                                <th>Status Kerja</th>
+                                                                                <th>Masa Kontrak</th>
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                            <tr class="search-row">
+                                                                                <th></th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Awal Kontrak..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Akhir Kontrak..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Status Kerja..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Masa Kontrak..." />
+                                                                                </th>
 
-                                                            {{-- Body --}}
-                                                            <div class="card border bg-transparent shadow-none">
-                                                                <div class="card-body ">
-                                                                    <div class="table-responsive">
-                                                                        <table id="example2"
-                                                                            class="table table-striped table-bordered w-100"
-                                                                            style="width:100%">
-                                                                            <thead>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @php
+                                                                                $no = 1;
+                                                                            @endphp
+                                                                            @foreach ($history_contracts as $history_contract)
                                                                                 <tr>
-                                                                                    <th>No</th>
-                                                                                    <th>Perusahaan</th>
-                                                                                    <th>Area</th>
-                                                                                    <th>Penempatan</th>
-                                                                                    <th>Jabatan</th>
-                                                                                    <th>Tanggal Mutasi</th>
-                                                                                    <th>Action</th>
-                                                                                </tr>
-                                                                                <tr class="search-row">
-                                                                                    <th></th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Perusahaan..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Area..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Penempatan..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Jabatan..." />
-                                                                                    </th>
-                                                                                    <th><input type="text"
-                                                                                            class="form-control form-control-sm"
-                                                                                            placeholder="Cari Tanggal Mutasi..." />
-                                                                                    </th>
-                                                                                    <th></th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @php
-                                                                                    $no = 1;
-                                                                                @endphp
-                                                                                @foreach ($history_positions as $history_position)
-                                                                                    <tr>
-                                                                                        <td>{{ $no++ }}</td>
-                                                                                        <td>{{ $history_position->companies->nama_perusahaan }}
-                                                                                        </td>
-                                                                                        <td>{{ $history_position->areas->area }}
-                                                                                        </td>
-                                                                                        <td>{{ $history_position->divisions->penempatan }}
-                                                                                        </td>
-                                                                                        <td>{{ $history_position->positions->jabatan }}
-                                                                                        </td>
-                                                                                        <td>{{ \Carbon\Carbon::parse($history_position->tanggal_mutasi)->isoformat('DD-MM-Y') }}
-                                                                                        </td>
+                                                                                    <td>{{ $no++ }}</td>
+                                                                                    <td>{{ \Carbon\Carbon::parse($history_contract->tanggal_awal_kontrak)->isoformat('DD-MM-Y') }}
+                                                                                    </td>
+                                                                                    <td>{{ \Carbon\Carbon::parse($history_contract->tanggal_akhir_kontrak)->isoformat('DD-MM-Y') }}
+                                                                                    </td>
+                                                                                    <td>{{ $history_contract->status_kontrak_kerja }}
+                                                                                    </td>
+                                                                                    <td>{{ $history_contract->masa_kontrak }}
+                                                                                    </td>
 
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="row row-cols-auto g-3 justify-content-center">
-                                                                                                <div class="col">
-                                                                                                    <form
-                                                                                                        action="{{ route('history_position.destroy', $history_position->id) }}"
-                                                                                                        method="POST">
-                                                                                                        @csrf
-                                                                                                        @method('delete')
-                                                                                                        <button
-                                                                                                            class="btn btn-danger raised d-flex gap-2">
-                                                                                                            <i
-                                                                                                                class="material-icons-outlined">delete</i>
-                                                                                                        </button>
-                                                                                                    </form>
-                                                                                                </div>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="row row-cols-auto g-3 justify-content-center">
+                                                                                            <div class="col">
+                                                                                                <a href="{{ route('cetak.pkwt', $history_contract->id) }}"
+                                                                                                    class="btn btn-primary raised d-flex gap-2"
+                                                                                                    target="_blank">
+                                                                                                    <i
+                                                                                                        class="material-icons-outlined">print</i>
+                                                                                                </a>
                                                                                             </div>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                                            <div class="col">
+                                                                                                <form
+                                                                                                    action="{{ route('history_contract.destroy', $history_contract->id) }}"
+                                                                                                    method="POST">
+                                                                                                    @csrf
+                                                                                                    @method('delete')
+                                                                                                    <button
+                                                                                                        class="btn btn-danger raised d-flex gap-2">
+                                                                                                        <i
+                                                                                                            class="material-icons-outlined">delete</i>
+                                                                                                    </button>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
-                                                            {{-- End Body --}}
                                                         </div>
+                                                        {{-- End Body --}}
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- Modal Body --}}
                                         </div>
-                                        {{-- Modal Content --}}
+                                        {{-- Modal Body --}}
                                     </div>
-                                    {{-- Modal Dialog --}}
+                                    {{-- Modal Content --}}
                                 </div>
-                                {{-- End Modal Table History Jabatan --}}
-                                {{-- Modal Add History Jabatan --}}
-                                <div class="modal fade" id="ScrollableModalTambahHistoryJabatan">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-bottom-0 py-2 bg-grd-info">
-                                                <h5 class="modal-title">Form Tambah History Jabatan</h5>
-                                                <a href="javascript:;" class="primaery-menu-close"
-                                                    data-bs-dismiss="modal">
-                                                    <i class="material-icons-outlined">close</i>
-                                                </a>
+                                {{-- Modal Dialog --}}
+                            </div>
+                            {{-- End Modal Table History Kontrak --}}
+                            {{-- Modal Add History Kontrak --}}
+                            <div class="modal fade" id="ScrollableModalTambahHistoryKontrak">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+                                            <h5 class="modal-title">Form Tambah History Kontrak</h5>
+                                            <a href="javascript:;" class="primary-menu-close" data-bs-dismiss="modal">
+                                                <i class="material-icons-outlined">close</i>
+                                            </a>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                    role="alert">
+                                                    <ul class="mb-0">
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                            @endif
+
+                                            <!-- Area Pesan Error Manual (Session) -->
+                                            @if (session('error'))
+                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ session('error') }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                            @endif
+                                            <div class="form-body">
+                                                <form action="{{ route('history_contract.store') }}"
+                                                    id="inputHistoryContract" method="post"
+                                                    enctype="multipart/form-data" class="row g-3">
+                                                    @csrf
+                                                    <input type="hidden" name="employees_id" class="form-control"
+                                                        value="{{ $employee->id }}" id="inputHistoryContract" readonly
+                                                        placeholder="Employees ID">
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryContract" class="form-label">NIK
+                                                            Karyawan</label>
+                                                        <input type="text" name="nik_karyawan" class="form-control"
+                                                            value="{{ $employee->nik_karyawan }}"
+                                                            id="inputHistoryContract" readonly placeholder="NIK">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryContract" class="form-label">Nama
+                                                            Karyawan</label>
+                                                        <input type="text" name="nama_karyawan"
+                                                            value="{{ $employee->nama_karyawan }}" class="form-control"
+                                                            id="inputHistoryContract" readonly
+                                                            placeholder="Nama Karyawan">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryContract" class="form-label">Awal
+                                                            Kontrak</label>
+                                                        <input type="date" name="awal_kontrak" class="form-control"
+                                                            id="inputHistoryContract" placeholder="dd/mm/yyyy">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryContract" class="form-label">Akhir
+                                                            Kontrak</label>
+                                                        <input type="date" name="akhir_kontrak" class="form-control"
+                                                            id="inputHistoryContract" placeholder="dd/mm/yyyy">
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Status Kerja</label>
+                                                        <select id="inputHistoryContract" class="form-select"
+                                                            name="status_kerja">
+                                                            <option value="">Pilih Status Kerja</option>
+                                                            <option value="PKWTT"
+                                                                {{ old('status_kerja') == 'PKWTT' ? 'selected' : '' }}>
+                                                                PKWTT</option>
+                                                            <option value="PKWT"
+                                                                {{ old('status_kerja') == 'PKWT' ? 'selected' : '' }}>
+                                                                PKWT</option>
+                                                            <option value="Harian"
+                                                                {{ old('status_kerja') == 'Harian' ? 'selected' : '' }}>
+                                                                Harian</option>
+                                                            <option value="Outsourcing"
+                                                                {{ old('status_kerja') == 'Outsourcing' ? 'selected' : '' }}>
+                                                                Outsourcing
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="d-md-flex d-grid align-items-center gap-3">
+                                                            <button type="submit"
+                                                                class="btn btn-grd-danger px-4">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
-                                            <div class="modal-body">
-                                                @if ($errors->any())
-                                                    <div class="alert alert-danger alert-dismissible fade show"
-                                                        role="alert">
-                                                        <ul class="mb-0">
-                                                            @foreach ($errors->all() as $error)
-                                                                <li>{{ $error }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- End Modal Add History Kontrak --}}
+                            {{-- History Kontrak --}}
 
-                                                <!-- Area Pesan Error Manual (Session) -->
-                                                @if (session('error'))
-                                                    <div class="alert alert-danger alert-dismissible fade show"
-                                                        role="alert">
-                                                        {{ session('error') }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                @endif
-                                                <div class="form-body">
-                                                    <form action="{{ route('history_position.store') }}"
-                                                        id="inputHistoryPosition" method="post"
-                                                        enctype="multipart/form-data" class="row g-3">
-                                                        @csrf
-                                                        <input type="hidden" name="employees_id" class="form-control"
-                                                            value="{{ $employee->id }}" id="inputHistoryPosition"
-                                                            readonly placeholder="Employees ID">
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryPosition" class="form-label">NIK
-                                                                Karyawan</label>
-                                                            <input type="text" name="nik_karyawan"
-                                                                class="form-control"
-                                                                value="{{ $employee->nik_karyawan }}"
-                                                                id="inputHistoryPosition" readonly placeholder="NIK">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryPosition" class="form-label">Nama
-                                                                Karyawan</label>
-                                                            <input type="text" name="nama_karyawan"
-                                                                value="{{ $employee->nama_karyawan }}"
-                                                                class="form-control" id="inputHistoryPosition" readonly
-                                                                placeholder="Nama Karyawan">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryPosition" class="form-label">Nama
-                                                                Perusahaan</label>
-                                                            <select name="companies_id" id="inputHistoryPosition"
-                                                                class="form-select">
-                                                                <option value="">Pilih Perusahaan</option>
-                                                                @foreach ($companies as $company)
-                                                                    <option value="{{ $company->id }}"
-                                                                        {{ old('companies_id') == $company->id ? 'selected' : '' }}>
-                                                                        {{ $company->nama_perusahaan }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryPosition" id="inputHistoryPosition"
-                                                                class="form-label">Nama
-                                                                Area</label>
-                                                            <select name="areas_id" id="inputHistoryPosition"
-                                                                class="form-select">
-                                                                <option value="">Pilih Area</option>
-                                                                @foreach ($areas as $area)
-                                                                    <option value="{{ $area->id }}"
-                                                                        {{ old('areas_id') == $area->id ? 'selected' : '' }}>
-                                                                        {{ $area->area }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryPosition" id="inputHistoryPosition"
-                                                                class="form-label">Nama
-                                                                Penempatan</label>
-                                                            <select name="divisions_id" id="inputHistoryPosition"
-                                                                class="form-select">
-                                                                <option value="">Pilih Penempatan</option>
-                                                                @foreach ($divisions as $division)
-                                                                    <option value="{{ $division->id }}"
-                                                                        {{ old('divisions_id') == $division->id ? 'selected' : '' }}>
-                                                                        {{ $division->penempatan }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="inputHistoryPosition" class="form-label">Nama
-                                                                Jabatan</label>
-                                                            <select name="positions_id" id="inputHistoryPosition"
-                                                                class="form-select">
-                                                                <option value="">Pilih Jabatan</option>
-                                                                @foreach ($positions as $position)
-                                                                    <option value="{{ $position->id }}"
-                                                                        {{ old('positions_id') == $position->id ? 'selected' : '' }}>
-                                                                        {{ $position->jabatan }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
 
-                                                        <div class="col-md-12">
-                                                            <label for="inputHistoryPosition" class="form-label">Tanggal
-                                                                Mutasi</label>
-                                                            <input type="date" name="tanggal_mutasi"
-                                                                value="{{ old('tanggal_mutasi') }}" class="form-control"
-                                                                id="inputHistoryPosition" placeholder="dd/mm/yyyy">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="d-md-flex d-grid align-items-center gap-3">
-                                                                <button type="submit"
-                                                                    class="btn btn-grd-danger px-4">Submit</button>
+                            {{-- Modal Table History Jabatan --}}
+                            <div class="modal fade" id="ScrollableModalHistoryJabatan">
+                                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom-0 bg-grd-primary py-2">
+                                            <h5 class="modal-title">Form History Jabatan
+                                            </h5>
+                                            <a href="#" class="primary-menu-close" data-bs-dismiss="modal">
+                                                <i class="material-icons-outlined">close</i>
+                                            </a>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="order-summary">
+                                                <div class="card mb-0">
+                                                    <div class="card-body">
+
+
+                                                        {{-- Head --}}
+                                                        <div class="card border bg-transparent shadow-none mb-3">
+                                                            <div class="card-body">
+                                                                <p class="fs-5">
+                                                                    {{ $employee->nama_karyawan }}
+                                                                </p>
+                                                                <button type="button"
+                                                                    class="btn btn-primary px-4 raised d-flex gap-2 w-100 justify-content-center"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#ScrollableModalTambahHistoryJabatan">
+                                                                    <i class="material-icons-outlined">add</i>Tambah
+                                                                    Data History Jabatan
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                        {{-- End Head --}}
+
+
+                                                        {{-- Body --}}
+                                                        <div class="card border bg-transparent shadow-none">
+                                                            <div class="card-body ">
+                                                                <div class="table-responsive">
+                                                                    <table id="example2"
+                                                                        class="table table-striped table-bordered w-100"
+                                                                        style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No</th>
+                                                                                <th>Perusahaan</th>
+                                                                                <th>Area</th>
+                                                                                <th>Penempatan</th>
+                                                                                <th>Jabatan</th>
+                                                                                <th>Tanggal Mutasi</th>
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                            <tr class="search-row">
+                                                                                <th></th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Perusahaan..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Area..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Penempatan..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Jabatan..." />
+                                                                                </th>
+                                                                                <th><input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Cari Tanggal Mutasi..." />
+                                                                                </th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @php
+                                                                                $no = 1;
+                                                                            @endphp
+                                                                            @foreach ($history_positions as $history_position)
+                                                                                <tr>
+                                                                                    <td>{{ $no++ }}</td>
+                                                                                    <td>{{ $history_position->companies->nama_perusahaan }}
+                                                                                    </td>
+                                                                                    <td>{{ $history_position->areas->area }}
+                                                                                    </td>
+                                                                                    <td>{{ $history_position->divisions->penempatan }}
+                                                                                    </td>
+                                                                                    <td>{{ $history_position->positions->jabatan }}
+                                                                                    </td>
+                                                                                    <td>{{ \Carbon\Carbon::parse($history_position->tanggal_mutasi)->isoformat('DD-MM-Y') }}
+                                                                                    </td>
+
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="row row-cols-auto g-3 justify-content-center">
+                                                                                            <div class="col">
+                                                                                                <form
+                                                                                                    action="{{ route('history_position.destroy', $history_position->id) }}"
+                                                                                                    method="POST">
+                                                                                                    @csrf
+                                                                                                    @method('delete')
+                                                                                                    <button
+                                                                                                        class="btn btn-danger raised d-flex gap-2">
+                                                                                                        <i
+                                                                                                            class="material-icons-outlined">delete</i>
+                                                                                                    </button>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {{-- End Body --}}
+                                                    </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        {{-- Modal Body --}}
+                                    </div>
+                                    {{-- Modal Content --}}
+                                </div>
+                                {{-- Modal Dialog --}}
+                            </div>
+                            {{-- End Modal Table History Jabatan --}}
+                            {{-- Modal Add History Jabatan --}}
+                            <div class="modal fade" id="ScrollableModalTambahHistoryJabatan">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+                                            <h5 class="modal-title">Form Tambah History Jabatan</h5>
+                                            <a href="javascript:;" class="primary-menu-close" data-bs-dismiss="modal">
+                                                <i class="material-icons-outlined">close</i>
+                                            </a>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                    role="alert">
+                                                    <ul class="mb-0">
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                            @endif
+
+                                            <!-- Area Pesan Error Manual (Session) -->
+                                            @if (session('error'))
+                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ session('error') }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                            @endif
+                                            <div class="form-body">
+                                                <form action="{{ route('history_position.store') }}"
+                                                    id="inputHistoryPosition" method="post"
+                                                    enctype="multipart/form-data" class="row g-3">
+                                                    @csrf
+                                                    <input type="hidden" name="employees_id" class="form-control"
+                                                        value="{{ $employee->id }}" id="inputHistoryPosition" readonly
+                                                        placeholder="Employees ID">
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryPosition" class="form-label">NIK
+                                                            Karyawan</label>
+                                                        <input type="text" name="nik_karyawan" class="form-control"
+                                                            value="{{ $employee->nik_karyawan }}"
+                                                            id="inputHistoryPosition" readonly placeholder="NIK">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryPosition" class="form-label">Nama
+                                                            Karyawan</label>
+                                                        <input type="text" name="nama_karyawan"
+                                                            value="{{ $employee->nama_karyawan }}" class="form-control"
+                                                            id="inputHistoryPosition" readonly
+                                                            placeholder="Nama Karyawan">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryPosition" class="form-label">Nama
+                                                            Perusahaan</label>
+                                                        <select name="companies_id" id="inputHistoryPosition"
+                                                            class="form-select">
+                                                            <option value="">Pilih Perusahaan</option>
+                                                            @foreach ($companies as $company)
+                                                                <option value="{{ $company->id }}"
+                                                                    {{ old('companies_id') == $company->id ? 'selected' : '' }}>
+                                                                    {{ $company->nama_perusahaan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryPosition" id="inputHistoryPosition"
+                                                            class="form-label">Nama
+                                                            Area</label>
+                                                        <select name="areas_id" id="inputHistoryPosition"
+                                                            class="form-select">
+                                                            <option value="">Pilih Area</option>
+                                                            @foreach ($areas as $area)
+                                                                <option value="{{ $area->id }}"
+                                                                    {{ old('areas_id') == $area->id ? 'selected' : '' }}>
+                                                                    {{ $area->area }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryPosition" id="inputHistoryPosition"
+                                                            class="form-label">Nama
+                                                            Penempatan</label>
+                                                        <select name="divisions_id" id="inputHistoryPosition"
+                                                            class="form-select">
+                                                            <option value="">Pilih Penempatan</option>
+                                                            @foreach ($divisions as $division)
+                                                                <option value="{{ $division->id }}"
+                                                                    {{ old('divisions_id') == $division->id ? 'selected' : '' }}>
+                                                                    {{ $division->penempatan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputHistoryPosition" class="form-label">Nama
+                                                            Jabatan</label>
+                                                        <select name="positions_id" id="inputHistoryPosition"
+                                                            class="form-select">
+                                                            <option value="">Pilih Jabatan</option>
+                                                            @foreach ($positions as $position)
+                                                                <option value="{{ $position->id }}"
+                                                                    {{ old('positions_id') == $position->id ? 'selected' : '' }}>
+                                                                    {{ $position->jabatan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <label for="inputHistoryPosition" class="form-label">Tanggal
+                                                            Mutasi</label>
+                                                        <input type="date" name="tanggal_mutasi"
+                                                            value="{{ old('tanggal_mutasi') }}" class="form-control"
+                                                            id="inputHistoryPosition" placeholder="dd/mm/yyyy">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="d-md-flex d-grid align-items-center gap-3">
+                                                            <button type="submit"
+                                                                class="btn btn-grd-danger px-4">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {{-- End Modal Add History Jabatan --}}
-                                {{-- History Jabatan --}}
                             </div>
-
+                            {{-- End Modal Add History Jabatan --}}
+                            {{-- History Jabatan --}}
                             <div class="row g-2 row-cols-1 row-cols-lg-2 my-0 mx-2">
                                 <div class="col">
                                     <div class="d-flex align-items-start gap-3 border p-3 rounded w-100">
@@ -1051,7 +1044,7 @@
                                             <div class="modal-header border-bottom-0 bg-grd-primary py-2">
                                                 <h5 class="modal-title">Form History Keluarga
                                                 </h5>
-                                                <a href="#" class="primaery-menu-close" data-bs-dismiss="modal">
+                                                <a href="#" class="primary-menu-close" data-bs-dismiss="modal">
                                                     <i class="material-icons-outlined">close</i>
                                                 </a>
                                             </div>
@@ -1588,9 +1581,6 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- On Key Up --}}
     <script src="{{ asset('template_admin/assets/plugins/onkeyup-angka-huruf/onkeyup_angka_huruf.js') }}"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-    </script>
+
 @endsection
 {{-- Datatables --}}
