@@ -162,7 +162,7 @@
             </li>
             {{-- Overtimes --}}
 
-            {{-- Proses --}}
+            {{-- Kontrak Kerja --}}
             <li>
                 <a href="#" class="has-arrow">
                     <div class="parent-icon"><i class="material-icons-outlined">ads_click</i>
@@ -178,9 +178,9 @@
                                 class="material-icons-outlined">arrow_right</i>Penilaian Karyawan</a></li>
                 </ul>
             </li>
-            {{-- Proses --}}
+            {{-- Kontrak Kerja --}}
 
-            {{-- Surat --}}
+            {{-- Perijinan --}}
             <li>
                 <a href="#" class="has-arrow">
                     <div class="parent-icon"><i class="material-icons-outlined">assured_workload</i>
@@ -190,6 +190,21 @@
                 <ul>
                     <li><a href="{{ route('legal.index') }}"><i
                                 class="material-icons-outlined">arrow_right</i>Perijinan Perusahaan</a>
+                    </li>
+                </ul>
+            </li>
+            {{-- Perijinan --}}
+
+            {{-- Salary --}}
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">currency_exchange</i>
+                    </div>
+                    <div class="menu-title">Gaji</div>
+                </a>
+                <ul>
+                    <li><a href="{{ route('salary.index') }}"><i class="material-icons-outlined">arrow_right</i>Gaji
+                            Karyawan</a>
                     </li>
                 </ul>
             </li>
@@ -228,20 +243,12 @@
                                         class="material-icons-outlined">arrow_right</i>Engineering</a></li>
                         </ul>
                     </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Rekap Absensi</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Perijinan</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Kontrak</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Tetap</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Harian</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Outsourcing</a>
-                    </li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Inventaris Motor</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Inventaris Mobil</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Internal</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
-                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a></li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
                 </ul>
             </li>
             {{-- Laporan --}}
@@ -255,6 +262,15 @@
                 </a>
             </li>
             {{-- Privacy Policy, Terms of Service, Documentation, and Support --}}
+            {{-- Logout --}}
+            <li>
+                <a href="{{ route('admin.logout') }}">
+                    <div class="parent-icon"><i class="material-icons-outlined">logout</i>
+                    </div>
+                    <div class="menu-title">Logout</div>
+                </a>
+            </li>
+            {{-- Logout --}}
 
 
         </ul>

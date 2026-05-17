@@ -163,6 +163,27 @@ class OvertimeController extends Controller
         $jumlah_jam_ketiga      = $jam_ketiga * 3;
         $jumlah_jam_keempat     = $jam_keempat * 4;
         //Rumus Lembur
+        
+        DB::transaction(function () use (
+            $request,
+            $tanggal_lembur,
+            $jenis_lembur,
+            $keterangan_lembur,
+            $jam_masuk,
+            $jam_istirahat,
+            $jam_pulang,
+            $jam_lembur,
+            $jam_pertama,
+            $jam_kedua,
+            $jam_ketiga,
+            $jam_keempat,
+            $jumlah_jam_pertama,
+            $jumlah_jam_kedua,
+            $jumlah_jam_ketiga,
+            $jumlah_jam_keempat,
+            $uang_makan_lembur,
+        ) {
+
 
         foreach ($request->employees_id as $employeeId) {
 
@@ -190,6 +211,7 @@ class OvertimeController extends Controller
             ];
             Overtimes::create($insert);
         }
+        });
         Alert::success('Success Input Data Overtime','Oleh '.auth()->user()->name);
         return redirect()->route('overtime.index');
     }
@@ -726,9 +748,9 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        $data_token         = $request->except('_token');
-        $awal   = $request->input('tanggal_awal');
-        $akhir  = $request->input('tanggal_akhir');
+        $data_token     = $request->except('_token');
+        $awal           = $request->input('tanggal_awal');
+        $akhir          = $request->input('tanggal_akhir');
 
         // TimeStamp
         $waktu_acc_hrd      = Carbon::now()->toDateTimeString();

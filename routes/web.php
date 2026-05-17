@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\OvertimeController;
 use App\Http\Controllers\Admin\KontrakKerjaController;
 use App\Http\Controllers\Admin\LegalController;
 use App\Http\Controllers\Admin\BonusController;
+use App\Http\Controllers\Admin\SalaryController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -185,6 +186,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Bonus
     Route::post('bonus/tampil_penilaian_bonus', [BonusController::class, 'tampil_penilaian_bonus'])->name('bonus.tampil_penilaian_bonus');
     Route::resource('bonus', BonusController::class);
+    // Salary
+    Route::post('salary/cetak_slip', [SalaryController::class, 'cetak_slip'])->name('salary.cetak_slip');
+    Route::post('salary/export_excell_rekap', [SalaryController::class, 'export_excell_rekap'])->name('salary.export_excell_rekap');
+    Route::post('salary/cancel_rekap_gaji', [SalaryController::class, 'cancel_rekap_gaji'])->name('salary.cancel_rekap_gaji');
+    Route::post('salary/proses_rekap_salary', [SalaryController::class, 'proses_rekap_salary'])->name('salary.proses_rekap_salary');
+    Route::get('salary/rekap_salary', [SalaryController::class, 'rekap_salary'])->name('salary.rekap_salary');
+    Route::post('salary/hasil_rekon_salary', [SalaryController::class, 'hasil_rekon_salary'])->name('salary.hasil_rekon_salary');
+    Route::get('salary/export_excell_rekon', [SalaryController::class, 'export_excell_rekon'])->name('salary.export_excell_rekon');
+    Route::post('salary/proses_rekon_salary', [SalaryController::class, 'proses_rekon_salary'])->name('salary.proses_rekon_salary');
+    Route::get('salary/rekon_salary', [SalaryController::class, 'rekon_salary'])->name('salary.rekon_salary');
+    Route::resource('salary', SalaryController::class);
     // Route Admin Area
     
     

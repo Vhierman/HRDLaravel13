@@ -484,11 +484,11 @@
             </li>
             <li class="nav-item d-md-flex d-none">
                 <a class="nav-link position-relative" data-bs-toggle="offcanvas" href="#offcanvasCart"><i
-                        class="material-icons-outlined">shopping_cart</i>
+                        class="material-icons-outlined">notifications</i>
                     <span class="badge-notify">8</span>
                 </a>
             </li>
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
                 <a href="javascrpt:;" class="dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
                     <img src="{{ asset('template_admin/assets/images/avatars/01.png') }}"
                         class="rounded-circle p-1 border" width="45" height="45" alt="">
@@ -517,7 +517,7 @@
                         href="{{ route('admin.logout') }}"><i
                             class="material-icons-outlined">power_settings_new</i>Logout</a>
                 </div>
-            </li>
+            </li> --}}
         </ul>
 
     </nav>
