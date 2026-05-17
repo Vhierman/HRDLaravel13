@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\ProsesTanggalKontrakKerjaRequest;
 use App\Http\Requests\Admin\NamaTanggalAwalAkhirRequest;
 use App\Http\Requests\Admin\TanggalAwalAkhirRequest;
+use App\Http\Requests\Admin\StatusPenempatanTanggalAwalAkhirRequest;
 use App\Models\Admin\Employees;
 use App\Models\Admin\HistoryContracts;
 use App\Models\Admin\RekapSalaries;
@@ -18,6 +19,7 @@ use App\Models\Admin\Positions;
 use DB;
 use Alert;
 use Carbon\Carbon;
+use Storage;
 
 class KontrakKerjaController extends Controller
 {
@@ -597,10 +599,10 @@ class KontrakKerjaController extends Controller
                     $this->fpdf->Cell(30, 6, ' '.\Carbon\Carbon::parse($pkwtharian->tanggal_akhir_kontrak)->isoformat('D MMMM Y').'.', 0, 0, 'L');
 
                     // //TTD
-                    // $this->fpdf->Ln();
-                    // $this->fpdf->Cell(10);
-                    // $this->fpdf->Image('../public/storage/assets/ttdAchmadFirmansyah.png' , 20,270,30);
-                    // $this->fpdf->Ln(5);
+                    $this->fpdf->Ln();
+                    $this->fpdf->Cell(10);
+                    $this->fpdf->Image('../public/storage/assets/logo/ttdVhierman.png' , 20,270,30);
+                    $this->fpdf->Ln(5);
                     // //TTD
             
                     $this->fpdf->Ln(100);
@@ -869,10 +871,10 @@ class KontrakKerjaController extends Controller
                     $this->fpdf->Cell(35, 5, 'PIHAK PERTAMA.', 0, 0, 'L');
                     
                     //TTD
-                    // $this->fpdf->Ln();
-                    // $this->fpdf->Cell(20);
-                    // $this->fpdf->Image('../public/storage/assets/ttdAchmadFirmansyah.png' , 20,270,30);
-                    // $this->fpdf->Ln(5);
+                    $this->fpdf->Ln();
+                    $this->fpdf->Cell(20);
+                    $this->fpdf->Image('../public/storage/assets/logo/ttdVhierman.png' , 20,270,30);
+                    $this->fpdf->Ln(5);
                     //TTD
                     $this->fpdf->Ln(100);
             
@@ -1066,9 +1068,9 @@ class KontrakKerjaController extends Controller
             
                     $this->fpdf->Ln(30);
                     //TTD
-                    // $this->fpdf->Cell(20);
-                    // $this->fpdf->Image('../public/storage/assets/ttdAchmadFirmansyah.png' , 25,240,50);
-                    // $this->fpdf->Ln(5);
+                    $this->fpdf->Cell(20);
+                    $this->fpdf->Image('../public/storage/assets/logo/ttdVhierman.png' , 25,240,50);
+                    $this->fpdf->Ln(5);
                     //TTD
 
                     $this->fpdf->SetFont('Arial', 'B', '11');
@@ -1680,5 +1682,369 @@ class KontrakKerjaController extends Controller
         
         $this->fpdf->Output();
         exit;
+    }
+
+    public function form_penilaian()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        
+        return view('admin.pages.kontrak_kerja.penilaian.index');
+    }
+
+    public function cetak_penilaian_karyawan(StatusPenempatanTanggalAwalAkhirRequest $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $data           = $request->except('_token');
+        $status_kerja   = $request->input('status_kerja');
+        $penempatan     = $request->input('penempatan');
+        $awal           = $request->input('tanggal_awal');
+        $akhir          = $request->input('tanggal_akhir');
+
+        
+        $divisi = match ($penempatan) {
+            'Produksi'      => [11],
+            'Office'        => [1, 2, 3, 4, 7, 8, 9],
+            'PPC'           => [5, 6, 12, 13, 14, 15, 16],
+            'Quality'       => [10],
+            'PDC Daihatsu'  => [19, 20, 21],
+            default         => abort(403),
+            };
+            
+        $penilaiankaryawans = Employees::with([
+                            'divisions',
+                            'positions'
+                            ])->whereBetween('tanggal_akhir_kerja', [$awal, $akhir])->whereIn('divisions_id', $divisi)->get();
+        
+
+        if ($penilaiankaryawans->isEmpty()) {
+            Alert::error('Data Penilaian Karyawan Tidak Ditemukan');
+            return redirect()->route('kontrak_kerja.form_penilaian');
+        }
+
+        else{
+            $this->fpdf = new FPDF('P', 'mm', 'A4');
+            $this->fpdf->setTopMargin(2);
+            $this->fpdf->setLeftMargin(2);
+            $this->fpdf->SetAutoPageBreak(true);
+            
+            foreach ($penilaiankaryawans as $penilaiankaryawan) {
+                $this->fpdf->AddPage();
+
+                $this->fpdf->Cell(205, 290, '', 1, 0, 'C');
+                $this->fpdf->SetFont('Arial', 'B', '8');
+                $this->fpdf->Cell(-200);
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(70, 20, '', 1, 0, 'C');
+                $this->fpdf->Image('../public/storage/assets/logo/LogoPanjang.png' , 9, 12, 65);
+                $this->fpdf->Cell(50, 20, '', 1, 0, 'C');
+
+                $this->fpdf->Cell(30, 5, "No.Form", 1, 0, 'L');
+                $this->fpdf->Cell(43, 5, "FR/HRD-GA/HR/006/Rev.01", 1, 0, 'L');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(125);
+                $this->fpdf->Cell(30, 5, "Tgl.Dikeluarkan", 1, 0, 'L');
+                $this->fpdf->Cell(43, 5, "24 November 2012", 1, 0, 'L');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(125);
+                $this->fpdf->Cell(30, 5, "Tgl.Revisi", 1, 0, 'L');
+                $this->fpdf->Cell(43, 5, "01 April 2015", 1, 0, 'L');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(125);
+                $this->fpdf->Cell(30, 5, "Halaman", 1, 0, 'L');
+                $this->fpdf->Cell(43, 5, "1 Dari 1", 1, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', 'B', '10');
+                $this->fpdf->Ln(-13);
+                $this->fpdf->Cell(75);
+                $this->fpdf->Cell(50, 5, "FORM PENILAIAN I", 0, 0, 'C');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(75);
+                $this->fpdf->Cell(50, 5, "PRESTASI KERJA", 0, 0, 'C');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(75);
+                $this->fpdf->Cell(50, 5, "OPERATOR / PELAKSANA", 0, 0, 'C');
+
+                $this->fpdf->Ln(15);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(30, 5, "Nama ", 0, 0, 'L');
+                $this->fpdf->SetFont('Arial', '', '10');
+                $this->fpdf->Cell(5, 5, " : ", 0, 0, 'C');
+                $this->fpdf->Cell(50, 5, $penilaiankaryawan->nama_karyawan, 0, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', 'B', '10');
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(30, 5, "Tanggal Masuk ", 0, 0, 'L');
+                $this->fpdf->SetFont('Arial', '', '10');
+                $this->fpdf->Cell(5, 5, " : ", 0, 0, 'C');
+                $this->fpdf->Cell(50, 5, \Carbon\Carbon::parse($penilaiankaryawan->tanggal_mulai_kerja)->isoformat('dddd, D MMMM Y') . '', 0, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', 'B', '10');
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(30, 5, "Jabatan / Bagian ", 0, 0, 'L');
+                $this->fpdf->SetFont('Arial', '', '10');
+                $this->fpdf->Cell(5, 5, " : ", 0, 0, 'C');
+                $this->fpdf->Cell(50, 5, $penilaiankaryawan->positions->jabatan . ' / ' . $penilaiankaryawan->divisions->penempatan . '', 0, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', 'B', '10');
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(30, 5, "Tanggal Akhir", 0, 0, 'L');
+                $this->fpdf->SetFont('Arial', '', '10');
+                $this->fpdf->Cell(5, 5, " : ", 0, 0, 'C');
+                $this->fpdf->Cell(50, 5, \Carbon\Carbon::parse($penilaiankaryawan->tanggal_akhir_kerja)->isoformat('dddd, D MMMM Y') . '', 0, 0, 'L');
+                
+                $this->fpdf->SetFont('Arial', 'B', '9');
+                $this->fpdf->Ln(10);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 10, 'Unsur - unsur kerja yang dinilai', 1, 0, 'C');
+
+                $this->fpdf->Cell(17, 10, '', 1, 0, 'C');
+                $this->fpdf->Cell(-17);
+                $this->fpdf->Cell(17, 5, '*Hasil', 0, 0, 'C');
+                $this->fpdf->Cell(60, 10, '**Kalkulasi Over All Prestasi', 1, 0, 'C');
+                $this->fpdf->Cell(44, 10, '**Komulatif Prestasi', 1, 0, 'C');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(78);
+                $this->fpdf->Cell(17, 5, 'Penilaian', 0, 0, 'C');
+
+                $this->fpdf->SetFont('Arial', '', '9');
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kepahaman Pengetahuan Tentang Pekerjaaannya', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(12, 6, 'A', 1, 0, 'C');
+                $this->fpdf->Cell(12, 6, 'B', 1, 0, 'C');
+                $this->fpdf->Cell(12, 6, 'C', 1, 0, 'C');
+                $this->fpdf->Cell(12, 6, 'D', 1, 0, 'C');
+                $this->fpdf->Cell(12, 6, 'E', 1, 0, 'C');
+                $this->fpdf->Cell(22, 6, 'Tingkat', 1, 0, 'C');
+                $this->fpdf->Cell(22, 6, 'Angka', 1, 0, 'C');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kepahaman Mengenal Methode Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'F', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'K', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'F', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'K', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'F', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'K', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'F', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'K', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'F', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, 'K', 1, 0, 'C');
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Ketrampilan Menggunakan Sarana Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(6, 6, '', 1, 0, 'C');
+                $this->fpdf->Ln(-6);
+                $this->fpdf->Cell(155);
+                $this->fpdf->Cell(22, 12, '', 1, 0, 'C');
+                $this->fpdf->Cell(22, 12, '', 1, 0, 'C');
+                $this->fpdf->Ln(12);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kwantitas Hasil Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, ' Keterangan ', 1, 0, 'C');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kwalitas Hasil Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'Sebelum menilai hendaklah terlebih dahulu membaca " Pedoman', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Inisiatif', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'memberi nilai prestasi " yang telah disediakan. Berilah penilaian dengan', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kerjasama', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'Huruf ( A ) atau ( B ) atau ( C ) atau ( D ) atau ( E )', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(90, 12, 'Unsur - unsur kondite yang dinilai', 1, 0, 'C');
+
+                $this->fpdf->Cell(104, 6, 'dalam lajur kotak " Hasil Pencarian " ', 0, 0, 'L');
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(95);
+                $this->fpdf->Cell(104, 6, 'F = Frekwensi dan K = Komulatif', 0, 0, 'L');
+
+                $this->fpdf->Ln(7);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kerajinan Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'Nilai Konklusi :', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kepatuhan Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'A = 4, B = 3, C = 2, D = 1, E = 0.', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kejujuran Wewenang', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'Tingkat :', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kesadaran dan Tanggung Jawab', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, '[ A = 3.6 - 4 ] [ B = 2.8 - 3.5 ] [ C = 2 - 2.75 ] [ D = < 2 ]', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(73, 6, 'Kemauan Gairah Kerja', 1, 0, 'L');
+                $this->fpdf->Cell(17, 6, '', 1, 0, 'C');
+                $this->fpdf->Cell(104, 6, 'Tanda " * Diisi oleh Penilai  **Diisi Oleh HRD', 0, 0, 'L');
+
+                $this->fpdf->Ln(-54);
+                $this->fpdf->Cell(95);
+                $this->fpdf->Cell(104, 60, '', 1, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', 'B', '9');
+                $this->fpdf->Ln(65);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(104, 6, '*Usulan dari atasan', 0, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', '', '9');
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(194, 5, '1. Diangkat menjadi karyawan tetap', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' Dengan alasan .......................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' ................................................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' ................................................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(194, 5, '2. Diperpanjang kontrak kerja selama ...................... Tahun / Bulan', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' Dengan alasan .......................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' ................................................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' ................................................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(194, 5, '3. Tidak diperpanjang kontrak kerja', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' Dengan alasan ........................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' ................................................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(6);
+                $this->fpdf->Cell(8);
+                $this->fpdf->Cell(191, 6, ' .................................................................................................................................................................................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(-66);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(194, 80, '', 1, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', 'B', '9');
+                $this->fpdf->Ln(82);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(104, 6, 'Pengesahan', 0, 0, 'L');
+
+                $this->fpdf->SetFont('Arial', '', '9');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(48, 6, 'Penilai :', 0, 0, 'L');
+
+                $this->fpdf->Cell(48, 6, 'Diperiksa :', 0, 0, 'L');
+
+                $this->fpdf->Cell(48, 6, 'Diproses :', 0, 0, 'L');
+
+                $this->fpdf->Cell(48, 6, 'Disetujui :', 0, 0, 'L');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(48, 6, 'Tanggal ..................................', 0, 0, 'L');
+                $this->fpdf->Cell(48, 6, 'Tanggal ..................................', 0, 0, 'L');
+                $this->fpdf->Cell(48, 6, 'Tanggal ..................................', 0, 0, 'L');
+                $this->fpdf->Cell(48, 6, 'Tanggal ..................................', 0, 0, 'L');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(48, 6, 'Atasan Langsung :', 0, 0, 'C');
+
+                $this->fpdf->Cell(48, 6, 'Kepala Dept. / Manager', 0, 0, 'C');
+
+                $this->fpdf->Cell(48, 6, 'HRD - GA', 0, 0, 'C');
+
+                $this->fpdf->Cell(48, 6, 'Direktur', 0, 0, 'C');
+
+                $this->fpdf->Ln(-10);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(48, 15, '', 1, 0, 'C');
+
+                $this->fpdf->Cell(48, 15, '', 1, 0, 'C');
+
+                $this->fpdf->Cell(48, 15, '', 1, 0, 'C');
+
+                $this->fpdf->Cell(48, 15, '', 1, 0, 'C');
+
+                $this->fpdf->Ln(15);
+                $this->fpdf->Cell(5);
+                $this->fpdf->Cell(48, 24, '', 1, 0, 'C');
+                $this->fpdf->Cell(48, 24, '', 1, 0, 'C');
+                $this->fpdf->Cell(48, 24, '', 1, 0, 'C');
+                $this->fpdf->Cell(48, 24, '', 1, 0, 'C');
+            
+            }
+                $this->fpdf->Output();
+                exit;
+        }
     }
 }

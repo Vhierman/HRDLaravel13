@@ -1237,7 +1237,7 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        $data               = $request->except('_token');
+        $data           = $request->except('_token');
         $status_kerja   = $request->input('status_kerja');
         $penempatan     = $request->input('penempatan');
         $awal           = $request->input('tanggal_awal');

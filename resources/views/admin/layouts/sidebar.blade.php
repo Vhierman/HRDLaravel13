@@ -45,17 +45,20 @@
                         <li><a href="{{ route('position.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
                         <li><a href="{{ route('golongan.index') }}"><i
-                                    class="material-icons-outlined">arrow_right</i>Golongan</a>
+                                    class="material-icons-outlined">arrow_right</i>Golongan</a></li>
                         <li><a href="{{ route('working_hour.index') }}"><i
-                                    class="material-icons-outlined">arrow_right</i>Jam Kerja</a>
+                                    class="material-icons-outlined">arrow_right</i>Jam Kerja</a></li>
                         <li><a href="{{ route('minimal_salary.index') }}"><i
-                                    class="material-icons-outlined">arrow_right</i>Minimal Upah</a>
+                                    class="material-icons-outlined">arrow_right</i>Minimal Upah</a></li>
                         <li><a href="{{ route('maksimal_upah_bpjskesehatan.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
-                                Kesehatan</a>
+                                Kesehatan</a></li>
                         <li><a href="{{ route('maksimal_upah_bpjstk.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
                                 Ketenagakerjaan</a>
+                        </li>
+                        <li><a href="{{ route('bonus.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Bonus</a>
                         </li>
                     </ul>
                 </li>
@@ -171,6 +174,8 @@
                                 class="material-icons-outlined">arrow_right</i>Karyawan PKWT</a></li>
                     <li><a href="{{ route('kontrak_kerja.form_kontrak_harian') }}"><i
                                 class="material-icons-outlined">arrow_right</i>Karyawan Harian</a></li>
+                    <li><a href="{{ route('kontrak_kerja.form_penilaian') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Penilaian Karyawan</a></li>
                 </ul>
             </li>
             {{-- Proses --}}

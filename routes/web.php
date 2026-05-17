@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\CertificationOtherController;
 use App\Http\Controllers\Admin\OvertimeController;
 use App\Http\Controllers\Admin\KontrakKerjaController;
 use App\Http\Controllers\Admin\LegalController;
+use App\Http\Controllers\Admin\BonusController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -161,6 +162,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('overtime/lihat_overtime', [OvertimeController::class, 'lihat_overtime'])->name('overtime.lihat_overtime');
     Route::resource('overtime', OvertimeController::class);
     //Kontrak Kerja
+    Route::post('kontrak_kerja/cetak_penilaian_karyawan', [KontrakKerjaController::class, 'cetak_penilaian_karyawan'])->name('kontrak_kerja.cetak_penilaian_karyawan');
+    Route::get('kontrak_kerja/form_penilaian', [KontrakKerjaController::class, 'form_penilaian'])->name('kontrak_kerja.form_penilaian');
     Route::post('kontrak_kerja/proses_cetak_tanggal_pkwt', [KontrakKerjaController::class, 'proses_cetak_tanggal_pkwt'])->name('kontrak_kerja.proses_cetak_tanggal_pkwt');
     Route::post('kontrak_kerja/proses_nama_pkwt', [KontrakKerjaController::class, 'proses_nama_pkwt'])->name('kontrak_kerja.proses_nama_pkwt');
     Route::get('kontrak_kerja/form_proses_nama_pkwt', [KontrakKerjaController::class, 'form_proses_nama_pkwt'])->name('kontrak_kerja.form_proses_nama_pkwt');
@@ -176,10 +179,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('kontrak_kerja/form_kontrak_harian', [KontrakKerjaController::class, 'form_kontrak_harian'])->name('kontrak_kerja.form_kontrak_harian');
     Route::get('kontrak_kerja/form_kontrak_pkwt', [KontrakKerjaController::class, 'form_kontrak_pkwt'])->name('kontrak_kerja.form_kontrak_pkwt');
     Route::resource('kontrak_kerja', KontrakKerjaController::class);
-    
     // Perijinan
     Route::get('legal/exportExcel', [LegalController::class, 'exportExcel'])->name('legal.exportExcel');
     Route::resource('legal', LegalController::class);
+    // Bonus
+    Route::post('bonus/tampil_penilaian_bonus', [BonusController::class, 'tampil_penilaian_bonus'])->name('bonus.tampil_penilaian_bonus');
+    Route::resource('bonus', BonusController::class);
     // Route Admin Area
     
     
