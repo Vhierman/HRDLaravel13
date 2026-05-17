@@ -409,11 +409,33 @@ class OvertimeController extends Controller
                             'employees.golongans',
                             'employees.areas'
                             ])->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])->get();
+
+        $jumlah_belum_direkap     = Overtimes::with([
+                                    'employees',
+                                    'employees.divisions',
+                                    'employees.positions',
+                                    'employees.golongans',
+                                    'employees.areas'
+                                    ])->whereNull('acc_hrd')
+                                    ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])->count();
+        
+        $jumlah_sudah_direkap     = Overtimes::with([
+                                    'employees',
+                                    'employees.divisions',
+                                    'employees.positions',
+                                    'employees.golongans',
+                                    'employees.areas'
+                                    ])->whereNotNull('acc_hrd')
+                                    ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])->count();
+
+
         if (!$item_overtimes->isEmpty()) {
             return view('admin.pages.overtime.tampil_overtime',[
-                'tanggal_awal'      => $tanggal_awal,
-                'tanggal_akhir'     => $tanggal_akhir,
-                'item_overtimes'    => $item_overtimes
+                'tanggal_awal'          => $tanggal_awal,
+                'tanggal_akhir'         => $tanggal_akhir,
+                'item_overtimes'        => $item_overtimes,
+                'jumlah_belum_direkap'  => $jumlah_belum_direkap,
+                'jumlah_sudah_direkap'  => $jumlah_sudah_direkap
             ]);
         } else {
             Alert::error('Data Tidak Ditemukan');

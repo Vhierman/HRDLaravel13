@@ -38,6 +38,20 @@
                         </button>
                     </form>
                 </div>
+                <div class="col">
+                    <button type="button" class="btn btn-danger position-relative d-flex gap-2"><i
+                            class="material-icons-outlined">chat_bubble_outline</i>Overtime Belum Direkap<span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">{{ $jumlah_belum_direkap }}<span
+                                class="visually-hidden">unread messages</span></span>
+                    </button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary position-relative d-flex gap-2"><i
+                            class="material-icons-outlined">chat_bubble_outline</i>Overtime Sudah Direkap<span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">{{ $jumlah_sudah_direkap }}<span
+                                class="visually-hidden">unread messages</span></span>
+                    </button>
+                </div>
             </div>
             <br>
             <div class="table-responsive">
