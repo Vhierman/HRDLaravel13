@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\KontrakKerjaController;
 use App\Http\Controllers\Admin\LegalController;
 use App\Http\Controllers\Admin\BonusController;
 use App\Http\Controllers\Admin\SalaryController;
+use App\Http\Controllers\Admin\ReportController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -197,6 +198,16 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('salary/proses_rekon_salary', [SalaryController::class, 'proses_rekon_salary'])->name('salary.proses_rekon_salary');
     Route::get('salary/rekon_salary', [SalaryController::class, 'rekon_salary'])->name('salary.rekon_salary');
     Route::resource('salary', SalaryController::class);
+    // Laporan
+    Route::post('report/tampil_karyawan_keluar', [ReportController::class, 'tampil_karyawan_keluar'])->name('report.tampil_karyawan_keluar');
+    Route::get('report/karyawan_keluar', [ReportController::class, 'karyawan_keluar'])->name('report.karyawan_keluar');
+    Route::post('report/tampil_karyawan_masuk', [ReportController::class, 'tampil_karyawan_masuk'])->name('report.tampil_karyawan_masuk');
+    Route::get('report/karyawan_masuk', [ReportController::class, 'karyawan_masuk'])->name('report.karyawan_masuk');
+    Route::post('report/tampil_absensi_karyawan', [ReportController::class, 'tampil_absensi_karyawan'])->name('report.tampil_absensi_karyawan');
+    Route::get('report/absensi_karyawan', [ReportController::class, 'absensi_karyawan'])->name('report.absensi_karyawan');
+    Route::post('report/tampil_rekap_absensi', [ReportController::class, 'tampil_rekap_absensi'])->name('report.tampil_rekap_absensi');
+    Route::get('report/rekap_absensi', [ReportController::class, 'rekap_absensi'])->name('report.rekap_absensi');
+    Route::resource('report', ReportController::class);
     // Route Admin Area
     
     

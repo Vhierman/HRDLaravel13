@@ -109,6 +109,9 @@
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     {{-- Chart Penempatan Detail --}}
     <script>
         var pkwtt_bl = {{ json_encode($dataPenempatan[18]['PKWTT'] ?? 0) }};

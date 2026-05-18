@@ -218,35 +218,14 @@
                     <div class="menu-title">Laporan</div>
                 </a>
                 <ul>
-                    <li><a class="has-arrow" href="javascript:;"><i
-                                class="material-icons-outlined">arrow_right</i>Absensi Department</a>
-                        <ul>
-                            <li><a href="auth-basic-login.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>PDC Daihatsu</a></li>
-                            <li><a href="auth-basic-register.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>Produksi</a></li>
-                            <li><a href="auth-basic-forgot-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>PPC</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>IC</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>IT</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>Document Control</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>HRD-GA</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>Marketing</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>Purchasing</a></li>
-                            <li><a href="auth-basic-reset-password.html" target="_blank"><i
-                                        class="material-icons-outlined">arrow_right</i>Engineering</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Rekap Absensi</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a></li>
+                    <li><a href="{{ route('report.rekap_absensi') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Rekap Absensi</a></li>
+                    <li><a href="{{ route('report.absensi_karyawan') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
+                    <li><a href="{{ route('report.karyawan_masuk') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a></li>
+                    <li><a href="{{ route('report.karyawan_keluar') }}"><i
+                                class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a></li>
                     <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
                 </ul>

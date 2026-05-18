@@ -92,9 +92,9 @@ class EmployeeOutController extends Controller
         $data   = $request->except('_token');
         DB::beginTransaction();
         try {
-             $employee              = Employees::findOrFail($request->input('employee_id'));
-        $item_employee              = Employees::where('id', $request->input('employee_id'))->first();
-        EmployeesOuts::create([
+            $employee      = Employees::findOrFail($request->input('employee_id'));
+            $item_employee  = Employees::where('id', $request->input('employee_id'))->first();
+            EmployeesOuts::create([
             'employees_id'                              => $request->input('employee_id'),
             'companies_id'                              => $item_employee->companies_id,
             'golongans_id'                              => $item_employee->golongans_id,
@@ -153,41 +153,13 @@ class EmployeeOutController extends Controller
 
         $employee->delete();
         
-        if ($contracts <> null) {
-        foreach ($contracts as $contract ) {
-            $contract->delete();
-        }
-        } else {}
-
-        if ($positions <> null) {
-        foreach ($positions as $position ) {
-            $position->delete();
-        }
-        } else {}
-
-        if ($families <> null) {
-        foreach ($families as $family ) {
-            $family->delete();
-        }
-        } else {}
-
-        if ($salaries <> null) {
-        foreach ($salaries as $salary ) {
-            $salary->delete();
-        }
-        } else {}
-
-        if ($rekap_salaries <> null) {
-        foreach ($rekap_salaries as $rekap_salary ) {
-            $rekap_salary->delete();
-        }
-        } else {}
-
-        if ($overtimes <> null) {
-        foreach ($overtimes as $overtime ) {
-            $overtime->delete();
-        }
-        } else {}
+        HistoryContracts::where('employees_id', $employee->id)->delete();
+        HistoryPositions::where('employees_id', $employee->id)->delete();
+        HistoryFamilies::where('employees_id', $employee->id)->delete();
+        HistorySalaries::where('employees_id', $employee->id)->delete();
+        RekapSalaries::where('employees_id', $employee->id)->delete();
+        Overtimes::where('employees_id', $employee->id)->delete();
+        
 
         if ($certification_bnsps <> null) {
         foreach ($certification_bnsps as $certification_bnsp ) {
@@ -252,7 +224,7 @@ class EmployeeOutController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-
+            // dd($e->getMessage());
             Alert::error('Salah','Oleh '.auth()->user()->name);
             return redirect()->route('employee_out.index');
         }
