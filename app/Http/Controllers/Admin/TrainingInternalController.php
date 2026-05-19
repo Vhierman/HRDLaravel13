@@ -35,7 +35,7 @@ class TrainingInternalController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -93,7 +93,7 @@ class TrainingInternalController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
     }
@@ -134,7 +134,7 @@ class TrainingInternalController extends Controller
     public function view_tanggal()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -143,7 +143,7 @@ class TrainingInternalController extends Controller
 
     public function tampil_view_tanggal(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -171,7 +171,7 @@ class TrainingInternalController extends Controller
 
     public function excell_training_internal(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -300,9 +300,10 @@ class TrainingInternalController extends Controller
 
     public function view_nama()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
+
         $employees      = Employees::with(['divisions'])->get();
         return view('admin.pages.training_internal.form_view_nama',[
             'employees' => $employees
@@ -311,7 +312,7 @@ class TrainingInternalController extends Controller
 
     public function tampil_view_nama(NamaKaryawanRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -338,7 +339,7 @@ class TrainingInternalController extends Controller
 
     public function excell_view_nama(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -453,7 +454,7 @@ class TrainingInternalController extends Controller
 
     public function view_penempatan()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
         $divisions      = Divisions::all();
@@ -464,7 +465,7 @@ class TrainingInternalController extends Controller
 
     public function tampil_view_penempatan(PenempatanRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -494,7 +495,7 @@ class TrainingInternalController extends Controller
 
     public function excell_view_penempatan(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -613,7 +614,7 @@ class TrainingInternalController extends Controller
 
     public function view_materi()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -630,7 +631,7 @@ class TrainingInternalController extends Controller
 
     public function tampil_view_materi(MateriTrainingInternalRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -657,7 +658,7 @@ class TrainingInternalController extends Controller
 
     public function excell_view_materi(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -897,7 +898,7 @@ class TrainingInternalController extends Controller
 
     public function form_belum_training()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -906,7 +907,7 @@ class TrainingInternalController extends Controller
 
     public function tampil_view_belum_training(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 
@@ -936,7 +937,7 @@ class TrainingInternalController extends Controller
 
     public function excell_belum_training_internal(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' ) {
             abort(403);
         }
 

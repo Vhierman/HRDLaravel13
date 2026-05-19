@@ -32,7 +32,7 @@ class CertificationMinistryController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -48,7 +48,7 @@ class CertificationMinistryController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -62,7 +62,7 @@ class CertificationMinistryController extends Controller
     public function store(CertificationMinistryRequest $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -90,7 +90,7 @@ class CertificationMinistryController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
     }
@@ -101,7 +101,7 @@ class CertificationMinistryController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -119,7 +119,7 @@ class CertificationMinistryController extends Controller
     public function update(CertificationMinistryRequest $request, string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -148,7 +148,7 @@ class CertificationMinistryController extends Controller
     public function destroy(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -165,7 +165,7 @@ class CertificationMinistryController extends Controller
 
     public function exportExcel()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 

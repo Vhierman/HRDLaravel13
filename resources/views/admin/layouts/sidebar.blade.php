@@ -25,7 +25,7 @@
             {{-- Dashboard --}}
 
             {{-- Master --}}
-            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
+            @if (Auth::user()->roles == 'admin')
                 <li>
                     <a class="has-arrow" href="#">
                         <div class="parent-icon"><i class="material-icons-outlined">apps</i>
@@ -98,54 +98,61 @@
             {{-- Absensi --}}
 
             {{-- Inventaris --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
-                    </div>
-                    <div class="menu-title">Inventaris</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('inventory_motorcycle.index') }}"><i
-                                class="material-icons-outlined">two_wheeler</i>Inventaris Motor</a></li>
-                    <li><a href="{{ route('inventory_car.index') }}"><i
-                                class="material-icons-outlined">directions_car</i>Inventaris Mobil</a></li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'accounting')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
+                        </div>
+                        <div class="menu-title">Inventaris</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('inventory_motorcycle.index') }}"><i
+                                    class="material-icons-outlined">two_wheeler</i>Inventaris Motor</a></li>
+                        <li><a href="{{ route('inventory_car.index') }}"><i
+                                    class="material-icons-outlined">directions_car</i>Inventaris Mobil</a></li>
+                    </ul>
+                </li>
+            @endif
             {{-- Inventaris --}}
 
+
             {{-- Training --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">work_history</i>
-                    </div>
-                    <div class="menu-title">Training</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('training_internal.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Training Internal</a></li>
-                    <li><a href="{{ route('training_eksternal.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
-                    </li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'leader')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">work_history</i>
+                        </div>
+                        <div class="menu-title">Training</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('training_internal.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Training Internal</a></li>
+                        <li><a href="{{ route('training_eksternal.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             {{-- Training --}}
 
             {{-- Sertifikasi --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">workspace_premium</i>
-                    </div>
-                    <div class="menu-title">Sertifikasi</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('certification_bnsp.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>BNSP</a></li>
-                    <li><a href="{{ route('certification_ministry.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Kementrian</a></li>
-                    <li><a href="{{ route('certification_other.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Lainnya</a></li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'accounting')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">workspace_premium</i>
+                        </div>
+                        <div class="menu-title">Sertifikasi</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('certification_bnsp.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>BNSP</a></li>
+                        <li><a href="{{ route('certification_ministry.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Kementrian</a></li>
+                        <li><a href="{{ route('certification_other.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Lainnya</a></li>
+                    </ul>
+                </li>
+            @endif
             {{-- Sertifikasi --}}
 
             {{-- Overtimes --}}
@@ -163,73 +170,83 @@
             {{-- Overtimes --}}
 
             {{-- Kontrak Kerja --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">ads_click</i>
-                    </div>
-                    <div class="menu-title">Kontrak Kerja</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('kontrak_kerja.form_kontrak_pkwt') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Karyawan PKWT</a></li>
-                    <li><a href="{{ route('kontrak_kerja.form_kontrak_harian') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Karyawan Harian</a></li>
-                    <li><a href="{{ route('kontrak_kerja.form_penilaian') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Penilaian Karyawan</a></li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">ads_click</i>
+                        </div>
+                        <div class="menu-title">Kontrak Kerja</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('kontrak_kerja.form_kontrak_pkwt') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Karyawan PKWT</a></li>
+                        <li><a href="{{ route('kontrak_kerja.form_kontrak_harian') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Karyawan Harian</a></li>
+                        <li><a href="{{ route('kontrak_kerja.form_penilaian') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Penilaian Karyawan</a></li>
+                    </ul>
+                </li>
+            @endif
             {{-- Kontrak Kerja --}}
 
             {{-- Perijinan --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">assured_workload</i>
-                    </div>
-                    <div class="menu-title">Perijinan</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('legal.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Perijinan Perusahaan</a>
-                    </li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'accounting')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">assured_workload</i>
+                        </div>
+                        <div class="menu-title">Perijinan</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('legal.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Perijinan Perusahaan</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             {{-- Perijinan --}}
 
             {{-- Salary --}}
-            <li>
-                <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">currency_exchange</i>
-                    </div>
-                    <div class="menu-title">Gaji</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('salary.index') }}"><i class="material-icons-outlined">arrow_right</i>Gaji
-                            Karyawan</a>
-                    </li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">currency_exchange</i>
+                        </div>
+                        <div class="menu-title">Gaji</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('salary.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Gaji
+                                Karyawan</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             {{-- Surat --}}
 
             {{-- Laporan --}}
-            <li>
-                <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon"><i class="material-icons-outlined">assignment_turned_in</i>
-                    </div>
-                    <div class="menu-title">Laporan</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('report.rekap_absensi') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Rekap Absensi</a></li>
-                    <li><a href="{{ route('report.absensi_karyawan') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
-                    <li><a href="{{ route('report.karyawan_masuk') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a></li>
-                    <li><a href="{{ route('report.karyawan_keluar') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
-                </ul>
-            </li>
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'accounting')
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon"><i class="material-icons-outlined">assignment_turned_in</i>
+                        </div>
+                        <div class="menu-title">Laporan</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('report.rekap_absensi') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Rekap Absensi</a></li>
+                        <li><a href="{{ route('report.absensi_karyawan') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
+                        <li><a href="{{ route('report.karyawan_masuk') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a></li>
+                        <li><a href="{{ route('report.karyawan_keluar') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a></li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a>
+                        </li>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
+                    </ul>
+                </li>
+            @endif
             {{-- Laporan --}}
 
             {{-- Privacy Policy, Terms of Service, Documentation, and Support --}}

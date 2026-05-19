@@ -32,7 +32,7 @@ class InventoryMotorcycleController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -172,7 +172,7 @@ class InventoryMotorcycleController extends Controller
 
     public function exportExcel()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 

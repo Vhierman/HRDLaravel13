@@ -35,7 +35,7 @@ class ReportController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
     }
@@ -46,7 +46,7 @@ class ReportController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
     }
@@ -68,7 +68,7 @@ class ReportController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
     }
@@ -108,7 +108,7 @@ class ReportController extends Controller
 
     public function rekap_absensi()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -117,7 +117,7 @@ class ReportController extends Controller
 
     public function tampil_rekap_absensi(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -185,7 +185,7 @@ class ReportController extends Controller
 
     public function absensi_karyawan()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -197,7 +197,7 @@ class ReportController extends Controller
 
     public function tampil_absensi_karyawan(NamaTanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
         
@@ -296,7 +296,7 @@ class ReportController extends Controller
 
     public function karyawan_masuk()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -305,7 +305,7 @@ class ReportController extends Controller
 
     public function tampil_karyawan_masuk(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -369,7 +369,7 @@ class ReportController extends Controller
 
     public function karyawan_keluar()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -378,7 +378,7 @@ class ReportController extends Controller
 
     public function tampil_karyawan_keluar(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
 

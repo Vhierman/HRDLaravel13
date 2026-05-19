@@ -34,7 +34,7 @@ class AttendanceController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -187,7 +187,7 @@ class AttendanceController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
         
@@ -203,7 +203,7 @@ class AttendanceController extends Controller
     public function store(AttendanceRequest $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -228,7 +228,7 @@ class AttendanceController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader' && auth()->user()->roles != 'accounting') {
             abort(403);
         }
     }
@@ -239,7 +239,7 @@ class AttendanceController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
     }
@@ -250,7 +250,7 @@ class AttendanceController extends Controller
     public function update(Request $request, $id)
     {
         
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -275,7 +275,7 @@ class AttendanceController extends Controller
     public function destroy(Request $request, $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -293,7 +293,7 @@ class AttendanceController extends Controller
 
     public function form_edit()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -305,9 +305,10 @@ class AttendanceController extends Controller
 
     public function tampil_form_edit(AttendanceUpdateRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
+
         $data = $request->except('_token');
         $employees_id       = $request->input('employees_id');
         $tanggal_absen      = $request->input('tanggal_absen');
@@ -330,7 +331,7 @@ class AttendanceController extends Controller
 
     public function form_hapus()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
         
@@ -342,9 +343,10 @@ class AttendanceController extends Controller
 
     public function tampil_form_hapus(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
+
         $data = $request->except('_token');
         $employees_id       = $request->input('employees_id');
         $tanggal_absen      = $request->input('tanggal_absen');
@@ -367,7 +369,7 @@ class AttendanceController extends Controller
 
     public function form_tampil()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -376,7 +378,7 @@ class AttendanceController extends Controller
 
     public function tampil_absen(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -403,7 +405,7 @@ class AttendanceController extends Controller
 
     public function export_excell_absensi(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -534,7 +536,7 @@ class AttendanceController extends Controller
 
     public function form_non_absen()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -543,9 +545,9 @@ class AttendanceController extends Controller
 
     public function tampil_non_absen(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
-        } 
+        }
         
         $data = $request->except('_token');
         $tanggal_awal  = $request->input('tanggal_awal');
@@ -574,7 +576,7 @@ class AttendanceController extends Controller
 
     public function export_excell_non_absensi(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 

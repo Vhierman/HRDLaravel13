@@ -40,7 +40,7 @@ class OvertimeController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -53,7 +53,7 @@ class OvertimeController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -67,7 +67,7 @@ class OvertimeController extends Controller
     public function store(OvertimeRequest $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -222,7 +222,7 @@ class OvertimeController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
     }
@@ -233,7 +233,7 @@ class OvertimeController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -253,7 +253,7 @@ class OvertimeController extends Controller
     public function update(OvertimeUpdateRequest $request, string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -388,7 +388,7 @@ class OvertimeController extends Controller
     public function destroy(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -408,7 +408,7 @@ class OvertimeController extends Controller
 
     public function lihat_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -417,7 +417,7 @@ class OvertimeController extends Controller
 
     public function tampil_overtime(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -467,7 +467,7 @@ class OvertimeController extends Controller
 
     public function export_excell_overtime(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -625,7 +625,7 @@ class OvertimeController extends Controller
 
     public function form_edit_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -637,7 +637,7 @@ class OvertimeController extends Controller
 
     public function tampil_edit_overtime(NamaKaryawanTanggalRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -666,7 +666,7 @@ class OvertimeController extends Controller
 
     public function form_hapus_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -678,7 +678,7 @@ class OvertimeController extends Controller
     
     public function tampil_hapus_overtime(NamaKaryawanTanggalRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -705,7 +705,7 @@ class OvertimeController extends Controller
 
     public function form_approve_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -714,7 +714,7 @@ class OvertimeController extends Controller
 
     public function tampil_approve_overtime(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -744,7 +744,7 @@ class OvertimeController extends Controller
 
     public function proses_approve_overtime(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -773,7 +773,7 @@ class OvertimeController extends Controller
 
     public function form_cancel_approve_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -782,7 +782,7 @@ class OvertimeController extends Controller
 
     public function tampil_cancel_approve_overtime(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -813,7 +813,7 @@ class OvertimeController extends Controller
 
     public function proses_cancel_approve_overtime(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' ) {
             abort(403);
         }
 
@@ -842,7 +842,7 @@ class OvertimeController extends Controller
 
     public function proses_edit_approve_overtime(OvertimeUpdateRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
 
@@ -968,7 +968,7 @@ class OvertimeController extends Controller
 
     public function form_cetak_slip_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -980,7 +980,7 @@ class OvertimeController extends Controller
 
     public function cetak_slip_overtime(NamaTanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -1246,7 +1246,7 @@ class OvertimeController extends Controller
 
     public function form_cetak_rekap_overtime()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -1255,7 +1255,7 @@ class OvertimeController extends Controller
 
     public function cetak_rekap_overtime(StatusPenempatanTanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -1321,7 +1321,7 @@ class OvertimeController extends Controller
 
     public function exportPDF_rekap_overtime(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -1636,7 +1636,7 @@ class OvertimeController extends Controller
 
     public function exportExcell_rekap_overtime(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 

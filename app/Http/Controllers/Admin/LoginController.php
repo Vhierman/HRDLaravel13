@@ -27,7 +27,7 @@ class LoginController extends Controller
 
         $credentials = $request->only('email','password');
         // Tambahkan Kondisi Untuk Login Hanya Bisa Dengan Role Tertentu
-        $credentials['roles'] = ['admin','hrd','accounting','leader','supervisor','manager'];
+        $credentials['roles'] = ['admin','hrd','accounting','leader'];
         //Jika Benar
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();

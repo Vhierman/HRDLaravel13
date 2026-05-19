@@ -46,7 +46,7 @@ class EmployeeOutController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
@@ -427,7 +427,7 @@ class EmployeeOutController extends Controller
 
     public function EmployeeOutExportExcel()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
             abort(403);
         }
 
