@@ -150,6 +150,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('certification_other', CertificationOtherController::class);
     });
     //Overtimes
+    Route::get('overtime/notif_overtime_belum_rekap', [OvertimeController::class, 'notif_overtime_belum_rekap'])->name('overtime.notif_overtime_belum_rekap');
     Route::post('overtime/exportExcell_rekap_overtime', [OvertimeController::class, 'exportExcell_rekap_overtime'])->name('overtime.exportExcell_rekap_overtime');
     Route::post('overtime/exportPDF_rekap_overtime', [OvertimeController::class, 'exportPDF_rekap_overtime'])->name('overtime.exportPDF_rekap_overtime');
     Route::post('overtime/cetak_rekap_overtime', [OvertimeController::class, 'cetak_rekap_overtime'])->name('overtime.cetak_rekap_overtime');

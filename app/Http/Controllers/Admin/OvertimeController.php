@@ -1910,4 +1910,26 @@ class OvertimeController extends Controller
 
 
     }
+
+    public function notif_overtime_belum_rekap()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+        $item_overtimes     = Overtimes::with([
+                            'employees',
+                            'employees.divisions',
+                            'employees.positions',
+                            'employees.golongans',
+                            'employees.areas'
+                            ])->whereNull('acc_hrd')->get();
+
+    
+        return view('admin.pages.overtime.tampil_notif_overtime',[
+            'item_overtimes'        => $item_overtimes
+        ]);
+         
+    }
 }

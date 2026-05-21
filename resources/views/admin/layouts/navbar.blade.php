@@ -164,7 +164,8 @@
                     <p class="mb-0 order-price">{{ $belum_approve_overtime }}</p>
                 </div>
                 <div class="d-flex">
-                    <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+                    <a href="{{ route('overtime.notif_overtime_belum_rekap') }}" class="order-delete"><span
+                            class="material-icons-outlined">visibility</span></a>
                 </div>
             </div>
 
