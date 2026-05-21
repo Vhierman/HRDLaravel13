@@ -294,4 +294,43 @@ class InventoryCarController extends Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function notif_mobil_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+        $today = Carbon::today();
+        $inventory_cars = InventoryCars::with([
+                            'employees',
+                            'employees.divisions',
+                            'employees.positions',
+                            ])->whereDate('tanggal_akhir_pajak_mobil', '<', $today)
+                            ->get();
+
+        return view('admin.pages.inventory_car.index',[
+            'inventory_cars' => $inventory_cars
+        ]);
+    }
+
+    public function notif_mobil_akan_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+        $today = Carbon::today();
+        $inventory_cars = InventoryCars::with([
+                            'employees',
+                            'employees.divisions',
+                            'employees.positions',
+                            ])->whereBetween('tanggal_akhir_pajak_mobil', [
+                            $today,$today->copy()->addDays(30)
+                            ])->get();
+
+        return view('admin.pages.inventory_car.index',[
+            'inventory_cars' => $inventory_cars
+        ]);
+    }
 }

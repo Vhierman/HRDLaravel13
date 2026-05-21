@@ -2047,4 +2047,35 @@ class KontrakKerjaController extends Controller
                 exit;
         }
     }
+
+    public function notif_kontrak_habis()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+        $employees      = Employees::with(['areas','golongans','divisions','positions'])
+                        ->whereDate('tanggal_akhir_kerja', '<', $today)
+                        ->where('status_kerja','Harian')->get();
+
+
+        return view('admin.pages.kontrak_kerja.harian.index',['employees'=> $employees]);
+    }
+
+    public function notif_kontrak_akan_habis()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+            abort(403);
+        }
+        
+        $today = Carbon::today();
+        $employees      = Employees::with(['areas','golongans','divisions','positions'])
+                        ->whereBetween('tanggal_akhir_kerja', [
+                            $today,$today->copy()->addDays(30)
+                        ])->where('status_kerja','Harian')->get();
+
+
+        return view('admin.pages.kontrak_kerja.harian.index',['employees'=> $employees]);
+    }
 }

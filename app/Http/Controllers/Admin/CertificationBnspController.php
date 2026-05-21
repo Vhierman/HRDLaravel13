@@ -283,4 +283,39 @@ class CertificationBnspController extends Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function notif_bnsp_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' &&  auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+
+        $certification_bnsps = CertificationBnsps::with(['employees'])->whereDate('sampai_tanggal_bnsp', '<', $today)
+                        ->get();
+        
+        return view('admin.pages.certification_bnsp.index',[
+            'certification_bnsps' => $certification_bnsps
+        ]);
+    }
+
+    public function notif_bnsp_akan_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' &&  auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+
+        $certification_bnsps = CertificationBnsps::with(['employees'])->whereBetween('sampai_tanggal_bnsp', [
+                            $today,$today->copy()->addDays(30)
+                        ])->get();
+        
+        return view('admin.pages.certification_bnsp.index',[
+            'certification_bnsps' => $certification_bnsps
+        ]);
+    }
 }

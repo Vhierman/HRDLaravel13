@@ -294,4 +294,45 @@ class InventoryMotorcycleController extends Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function notif_motor_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+        $inventory_motorcycles = InventoryMotorcycles::with([
+                            'employees',
+                            'employees.divisions',
+                            'employees.positions',
+                            ])->whereDate('tanggal_akhir_pajak_motor', '<', $today)
+                            ->get();
+
+        return view('admin.pages.inventory_motorcycle.index',[
+            'inventory_motorcycles' => $inventory_motorcycles
+        ]);
+    }
+
+    public function notif_motor_akan_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+        $inventory_motorcycles = InventoryMotorcycles::with([
+                            'employees',
+                            'employees.divisions',
+                            'employees.positions',
+                            ])->whereBetween('tanggal_akhir_pajak_motor', [
+                            $today,$today->copy()->addDays(30)
+                            ])->get();
+
+        return view('admin.pages.inventory_motorcycle.index',[
+            'inventory_motorcycles' => $inventory_motorcycles
+        ]);
+    }
 }

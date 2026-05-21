@@ -283,4 +283,39 @@ class CertificationMinistryController extends Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function notif_ministry_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' &&  auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+
+        $certification_ministries = CertificationMinistries::with(['employees'])->whereDate('sampai_tanggal_kementrian', '<', $today)
+                        ->get();
+        
+        return view('admin.pages.certification_ministry.index',[
+            'certification_ministries' => $certification_ministries
+        ]);
+    }
+
+    public function notif_ministry_akan_habis()
+    {
+        //
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' &&  auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+
+        $certification_ministries = CertificationMinistries::with(['employees'])->whereBetween('sampai_tanggal_kementrian', [
+                            $today,$today->copy()->addDays(30)
+                        ])->get();
+        
+        return view('admin.pages.certification_ministry.index',[
+            'certification_ministries' => $certification_ministries
+        ]);
+    }
 }

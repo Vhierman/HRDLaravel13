@@ -86,6 +86,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('attendance/tampil_absen', [AttendanceController::class, 'tampil_absen'])->name('attendance.tampil_absen');
     Route::resource('attendance', AttendanceController::class);
     // Inventory
+    Route::get('inventory_car/notif_mobil_akan_habis', [InventoryCarController::class, 'notif_mobil_akan_habis'])->name('inventory_car.notif_mobil_akan_habis');
+    Route::get('inventory_car/notif_mobil_habis', [InventoryCarController::class, 'notif_mobil_habis'])->name('inventory_car.notif_mobil_habis');
+    Route::get('inventory_motorcycle/notif_motor_akan_habis', [InventoryMotorcycleController::class, 'notif_motor_akan_habis'])->name('inventory_motorcycle.notif_motor_akan_habis');
+    Route::get('inventory_motorcycle/notif_motor_habis', [InventoryMotorcycleController::class, 'notif_motor_habis'])->name('inventory_motorcycle.notif_motor_habis');
     Route::get('inventory_motorcycle/exportExcel', [InventoryMotorcycleController::class, 'exportExcel'])->name('inventory_motorcycle.exportExcel');
     Route::resource('inventory_motorcycle', InventoryMotorcycleController::class);
     Route::get('inventory_car/exportExcel', [InventoryCarController::class, 'exportExcel'])->name('inventory_car.exportExcel');
@@ -134,6 +138,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('training_internal/form_belum_training', [TrainingInternalController::class, 'form_belum_training'])->name('training_internal.form_belum_training');
     Route::resource('training_internal', TrainingInternalController::class);
     // Certification
+    Route::get('certification_ministry/notif_ministry_akan_habis', [CertificationMinistryController::class, 'notif_ministry_akan_habis'])->name('certification_ministry.notif_ministry_akan_habis');
+    Route::get('certification_ministry/notif_ministry_habis', [CertificationMinistryController::class, 'notif_ministry_habis'])->name('certification_ministry.notif_ministry_habis');
+    Route::get('certification_bnsp/notif_bnsp_akan_habis', [CertificationBnspController::class, 'notif_bnsp_akan_habis'])->name('certification_bnsp.notif_bnsp_akan_habis');
+    Route::get('certification_bnsp/notif_bnsp_habis', [CertificationBnspController::class, 'notif_bnsp_habis'])->name('certification_bnsp.notif_bnsp_habis');
     Route::get('certification_bnsp/exportExcel', [CertificationBnspController::class, 'exportExcel'])->name('certification_bnsp.exportExcel');
     Route::resource('certification_bnsp', CertificationBnspController::class);
     Route::get('certification_ministry/exportExcel', [CertificationMinistryController::class, 'exportExcel'])->name('certification_ministry.exportExcel');
@@ -164,6 +172,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('overtime/lihat_overtime', [OvertimeController::class, 'lihat_overtime'])->name('overtime.lihat_overtime');
     Route::resource('overtime', OvertimeController::class);
     //Kontrak Kerja
+    Route::get('kontrak_kerja/notif_kontrak_akan_habis', [KontrakKerjaController::class, 'notif_kontrak_akan_habis'])->name('kontrak_kerja.notif_kontrak_akan_habis');
+    Route::get('kontrak_kerja/notif_kontrak_habis', [KontrakKerjaController::class, 'notif_kontrak_habis'])->name('kontrak_kerja.notif_kontrak_habis');
     Route::post('kontrak_kerja/cetak_penilaian_karyawan', [KontrakKerjaController::class, 'cetak_penilaian_karyawan'])->name('kontrak_kerja.cetak_penilaian_karyawan');
     Route::get('kontrak_kerja/form_penilaian', [KontrakKerjaController::class, 'form_penilaian'])->name('kontrak_kerja.form_penilaian');
     Route::post('kontrak_kerja/proses_cetak_tanggal_pkwt', [KontrakKerjaController::class, 'proses_cetak_tanggal_pkwt'])->name('kontrak_kerja.proses_cetak_tanggal_pkwt');
@@ -182,6 +192,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('kontrak_kerja/form_kontrak_pkwt', [KontrakKerjaController::class, 'form_kontrak_pkwt'])->name('kontrak_kerja.form_kontrak_pkwt');
     Route::resource('kontrak_kerja', KontrakKerjaController::class);
     // Perijinan
+    Route::get('legal/notifPerijinanAkanHabis', [LegalController::class, 'notifPerijinanAkanHabis'])->name('legal.notifPerijinanAkanHabis');
+    Route::get('legal/notifPerijinanHabis', [LegalController::class, 'notifPerijinanHabis'])->name('legal.notifPerijinanHabis');
     Route::get('legal/exportExcel', [LegalController::class, 'exportExcel'])->name('legal.exportExcel');
     Route::resource('legal', LegalController::class);
     // Bonus

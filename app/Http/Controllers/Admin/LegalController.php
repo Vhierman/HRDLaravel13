@@ -238,4 +238,32 @@ class LegalController extends Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function notifPerijinanHabis()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+        $legals = Legals::whereDate('tanggal_habis', '<', $today)->get();
+        return view('admin.pages.legal.index',[
+            'legals' => $legals
+        ]);
+    }
+    
+    public function notifPerijinanAkanHabis()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $today = Carbon::today();
+        $legals = Legals::whereBetween('tanggal_habis', [
+                            $today,$today->copy()->addDays(30)
+                        ])->get();
+        return view('admin.pages.legal.index',[
+            'legals' => $legals
+        ]);
+    }
 }
