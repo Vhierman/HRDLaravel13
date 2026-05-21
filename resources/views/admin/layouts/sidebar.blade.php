@@ -241,9 +241,11 @@
                                     class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a></li>
                         <li><a href="{{ route('report.karyawan_keluar') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a></li>
-                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a>
+                        <li><a href="{{ route('report.turnover') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a>
                         </li>
-                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
+                        <li><a href="{{ route('report.overtime') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Overtime</a></li>
                     </ul>
                 </li>
             @endif

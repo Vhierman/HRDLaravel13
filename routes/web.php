@@ -199,6 +199,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('salary/rekon_salary', [SalaryController::class, 'rekon_salary'])->name('salary.rekon_salary');
     Route::resource('salary', SalaryController::class);
     // Laporan
+    Route::post('report/tampil_overtime', [ReportController::class, 'tampil_overtime'])->name('report.tampil_overtime');
+    Route::get('report/overtime', [ReportController::class, 'overtime'])->name('report.overtime');
+    Route::post('report/tampil_turnover', [ReportController::class, 'tampil_turnover'])->name('report.tampil_turnover');
+    Route::get('report/turnover', [ReportController::class, 'turnover'])->name('report.turnover');
     Route::post('report/tampil_karyawan_keluar', [ReportController::class, 'tampil_karyawan_keluar'])->name('report.tampil_karyawan_keluar');
     Route::get('report/karyawan_keluar', [ReportController::class, 'karyawan_keluar'])->name('report.karyawan_keluar');
     Route::post('report/tampil_karyawan_masuk', [ReportController::class, 'tampil_karyawan_masuk'])->name('report.tampil_karyawan_masuk');

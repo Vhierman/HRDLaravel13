@@ -10,6 +10,7 @@ use App\Models\Admin\Areas;
 use App\Models\Admin\Positions;
 use App\Models\Admin\Golongans;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardAdminController extends Controller
 {
@@ -45,56 +46,41 @@ class DashboardAdminController extends Controller
         }
 
         //Detail Status Kerja
-        $item_kontrak = Employees::all()
-                        ->where('status_kerja','PKWT')
+        $item_kontrak = Employees::where('status_kerja','PKWT')
                         ->count();
-        $item_tetap = Employees::all()
-                        ->where('status_kerja', 'PKWTT')
+        $item_tetap = Employees::where('status_kerja', 'PKWTT')
                         ->count();
-        $item_harian = Employees::all()
-                        ->where('status_kerja', 'Harian')
+        $item_harian = Employees::where('status_kerja', 'Harian')
                         ->count();
-        $item_outsourcing = Employees::all()
-                        ->where('status_kerja', 'Outsourcing')
+        $item_outsourcing = Employees::where('status_kerja', 'Outsourcing')
                         ->count();
         
         // Chart Status Menikah
-        $item_single = Employees::all()
-                        ->where('status_nikah', 'Single')
+        $item_single = Employees::where('status_nikah', 'Single')
                         ->count();
-        $item_menikah = Employees::all()
-                        ->where('status_nikah', 'Menikah')
+        $item_menikah = Employees::where('status_nikah', 'Menikah')
                         ->count();
-        $item_janda = Employees::all()
-                        ->where('status_nikah', 'Janda')
+        $item_janda = Employees::where('status_nikah', 'Janda')
                         ->count();
-        $item_duda = Employees::all()
-                        ->where('status_nikah', 'Duda')
+        $item_duda = Employees::where('status_nikah', 'Duda')
                         ->count();
         
         // Chart Jenis Kelamin
-        $item_pria = Employees::all()
-                        ->where('jenis_kelamin', 'Pria')
+        $item_pria = Employees::where('jenis_kelamin', 'Pria')
                         ->count();
-        $item_wanita = Employees::all()
-                        ->where('jenis_kelamin', 'Wanita')
+        $item_wanita = Employees::where('jenis_kelamin', 'Wanita')
                         ->count();
         
         // Chart Agama Produksi
-        $item_islam = Employees::all()
-                        ->where('agama', 'Islam')
+        $item_islam = Employees::where('agama', 'Islam')
                         ->count();
-        $item_kristenprotestan = Employees::all()
-                        ->where('agama', 'Kristen Protestan')
+        $item_kristenprotestan = Employees::where('agama', 'Kristen Protestan')
                         ->count();
-        $item_kristenkatholik = Employees::all()
-                        ->where('agama', 'Kristen Katholik')
+        $item_kristenkatholik = Employees::where('agama', 'Kristen Katholik')
                         ->count();
-        $item_hindu = Employees::all()
-                    ->where('agama', 'Hindu')
+        $item_hindu = Employees::where('agama', 'Hindu')
                     ->count();
-        $item_budha = Employees::all()
-                    ->where('agama', 'Budha')
+        $item_budha = Employees::where('agama', 'Budha')
                     ->count();
 
         return view('admin.dashboard_admin',

@@ -69,7 +69,7 @@
     <!--end footer-->
 
     <!--start cart-->
-    @include('admin.layouts.cart')
+    {{-- @include('admin.layouts.cart') --}}
     <!--end cart-->
 
     <!--start switcher-->

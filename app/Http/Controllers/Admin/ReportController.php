@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\TanggalAwalAkhirRequest;
+use App\Http\Requests\Admin\TahunRequest;
 use App\Http\Requests\Admin\NamaTanggalAwalAkhirRequest;
 use App\Models\Admin\Attendances;
 use App\Models\Admin\Employees;
 use App\Models\Admin\EmployeesOuts;
+use App\Models\Admin\Overtimes;
 use App\Models\Admin\Areas;
 use App\Models\Admin\Golongans;
 use App\Models\Admin\Divisions;
@@ -438,4 +440,134 @@ class ReportController extends Controller
             exit;
         }
     }
+
+    public function turnover()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        return view('admin.pages.report.form_turnover');
+    }
+
+    public function tampil_turnover(TahunRequest $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $tahun   = $request->input('tahun');
+
+        // dd($tahun);
+
+        // DATA MASUK
+        $masuk = Employees::selectRaw('MONTH(tanggal_mulai_kerja) as bulan, COUNT(*) as total')
+        ->whereYear('tanggal_mulai_kerja', $tahun)
+        ->groupByRaw('MONTH(tanggal_mulai_kerja)')
+        ->pluck('total', 'bulan');
+
+        // DATA KELUAR
+        $keluar = EmployeesOuts::selectRaw('MONTH(tanggal_keluar_karyawan_keluar) as bulan, COUNT(*) as total')
+        ->whereYear('tanggal_keluar_karyawan_keluar', $tahun)
+        ->groupByRaw('MONTH(tanggal_keluar_karyawan_keluar)')
+        ->pluck('total', 'bulan');
+
+        // FORMAT BULAN 1-12
+        $dataMasuk = [];
+        $dataKeluar = [];
+
+        for ($bulan = 1; $bulan <= 12; $bulan++) {
+            $dataMasuk[] = (int) ($masuk[$bulan] ?? 0);
+            $dataKeluar[] = (int) ($keluar[$bulan] ?? 0);
+        }
+
+        // 5. Lempar semua data langsung ke View
+        return view('admin.pages.report.tampil_turnover',[
+                'tahun'        => $tahun,
+                'dataMasuk'    => $dataMasuk,
+                'dataKeluar'   => $dataKeluar,
+        ]);
+
+
+
+    }
+
+    public function overtime()
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        return view('admin.pages.report.form_overtime');
+    }
+
+    public function tampil_overtime(TahunRequest $request)
+    {
+        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+            abort(403);
+        }
+
+        $tahun   = $request->input('tahun');
+
+        $groups = [
+            'Produksi'  => [11],
+            'PDC'       => [19, 20, 21, 22],
+            'Warehouse' => [13, 14],
+            'Delivery'  => [12, 15, 18]
+            // 'Quality'   => [8]
+            // 'PPC'       => [10]
+            // 'Office'    => [1, 2, 3, 4, 5, 6, 7, 9]
+        ];
+
+        // Flatten all division IDs into a single array for our query filter
+        $allDivisionIds = array_merge(...array_values($groups));
+
+        // 4. Run ONE single query to fetch aggregated monthly totals for all divisions
+        $overtimeData = Overtimes::query()
+                        ->join('employees', 'employees.id', '=', 'overtimes.employees_id')
+                        ->join('divisions', 'divisions.id', '=', 'employees.divisions_id')
+                        ->selectRaw('divisions.id as division_id,
+                                    MONTH(overtimes.tanggal_lembur) as bulan,
+                                    SUM(overtimes.jam_lembur) as total_jam')
+                        ->whereIn('divisions.id', $allDivisionIds)
+                        ->whereNotNull('overtimes.acc_hrd')
+                        ->whereYear('overtimes.tanggal_lembur', $tahun)
+                        ->groupBy('divisions.id',
+                            DB::raw('MONTH(overtimes.tanggal_lembur)')
+                        )->get();
+
+        // 5. Initialize a structured array for your view template (Months 1-12)
+        $result = [];
+        $monthNames = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
+            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+        ];
+
+        $indexedData = [];
+
+        foreach ($overtimeData as $row) {
+            $indexedData[$row->division_id][$row->bulan] = $row->total_jam;
+        }
+
+        foreach ($groups as $groupName => $ids) {
+
+            foreach ($monthNames as $monthNum => $monthName) {
+
+                $total = $overtimeData
+                    ->filter(function ($row) use ($ids, $monthNum) {
+                        return in_array($row->division_id, $ids)
+                            && (int)$row->bulan === $monthNum;
+                    })
+                    ->sum('total_jam');
+
+                $result[$groupName][$monthName] = (float) $total;
+            }
+        }
+        return view('admin.pages.report.tampil_overtime', [
+            'tahun'     => $tahun,
+            'result'    => $result
+        ]);
+    }
+    
 }
