@@ -29,7 +29,8 @@ class KontrakKerjaController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -40,7 +41,8 @@ class KontrakKerjaController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -51,7 +53,8 @@ class KontrakKerjaController extends Controller
     public function store(Request $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -62,7 +65,8 @@ class KontrakKerjaController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -73,7 +77,8 @@ class KontrakKerjaController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -84,7 +89,8 @@ class KontrakKerjaController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -95,14 +101,16 @@ class KontrakKerjaController extends Controller
     public function destroy(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
 
     public function form_kontrak_harian()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -112,7 +120,8 @@ class KontrakKerjaController extends Controller
 
     public function form_proses_tanggal_harian()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -121,7 +130,8 @@ class KontrakKerjaController extends Controller
 
     public function proses_tanggal_harian(ProsesTanggalKontrakKerjaRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -181,7 +191,8 @@ class KontrakKerjaController extends Controller
 
     public function form_proses_nama_harian()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -191,7 +202,8 @@ class KontrakKerjaController extends Controller
 
     public function proses_nama_harian(NamaTanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -251,7 +263,8 @@ class KontrakKerjaController extends Controller
 
     public function form_cetak_tanggal_harian()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -260,7 +273,8 @@ class KontrakKerjaController extends Controller
 
     public function proses_cetak_tanggal_harian(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1088,7 +1102,8 @@ class KontrakKerjaController extends Controller
 
     public function form_kontrak_pkwt()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1098,7 +1113,8 @@ class KontrakKerjaController extends Controller
     
     public function form_proses_tanggal_pkwt()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1107,7 +1123,8 @@ class KontrakKerjaController extends Controller
 
     public function proses_tanggal_pkwt(ProsesTanggalKontrakKerjaRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1169,7 +1186,8 @@ class KontrakKerjaController extends Controller
 
     public function form_proses_nama_pkwt()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1179,7 +1197,8 @@ class KontrakKerjaController extends Controller
 
     public function proses_nama_pkwt(NamaTanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1239,7 +1258,8 @@ class KontrakKerjaController extends Controller
 
     public function form_cetak_tanggal_pkwt()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1248,7 +1268,8 @@ class KontrakKerjaController extends Controller
 
     public function proses_cetak_tanggal_pkwt(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -1686,7 +1707,8 @@ class KontrakKerjaController extends Controller
 
     public function form_penilaian()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
         
@@ -1695,7 +1717,8 @@ class KontrakKerjaController extends Controller
 
     public function cetak_penilaian_karyawan(StatusPenempatanTanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -2050,7 +2073,8 @@ class KontrakKerjaController extends Controller
 
     public function notif_kontrak_habis()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -2065,7 +2089,8 @@ class KontrakKerjaController extends Controller
 
     public function notif_kontrak_akan_habis()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
         

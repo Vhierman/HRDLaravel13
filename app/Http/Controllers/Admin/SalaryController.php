@@ -37,7 +37,8 @@ class SalaryController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -50,7 +51,8 @@ class SalaryController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -61,7 +63,8 @@ class SalaryController extends Controller
     public function store(Request $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -72,7 +75,8 @@ class SalaryController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -83,7 +87,8 @@ class SalaryController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -106,7 +111,8 @@ class SalaryController extends Controller
     public function update(RekonSalaryUpdateRequest $request, string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -509,7 +515,8 @@ class SalaryController extends Controller
     public function destroy(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -517,7 +524,8 @@ class SalaryController extends Controller
     public function rekon_salary()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -526,7 +534,8 @@ class SalaryController extends Controller
 
     public function proses_rekon_salary (TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -560,7 +569,8 @@ class SalaryController extends Controller
     public function export_excell_rekon()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -709,7 +719,8 @@ class SalaryController extends Controller
 
     public function hasil_rekon_salary(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -757,7 +768,8 @@ class SalaryController extends Controller
 
     public function rekap_salary()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -766,7 +778,8 @@ class SalaryController extends Controller
 
     public function proses_rekap_salary(TanggalAwalAkhirRequest $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -797,7 +810,8 @@ class SalaryController extends Controller
 
     public function cancel_rekap_gaji(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -819,7 +833,8 @@ class SalaryController extends Controller
 
     public function export_excell_rekap(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
         
@@ -971,7 +986,8 @@ class SalaryController extends Controller
 
     public function cetak_slip(Request $request)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 

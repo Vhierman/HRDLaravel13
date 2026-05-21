@@ -18,7 +18,8 @@ class WorkingHourController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -34,7 +35,8 @@ class WorkingHourController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -47,7 +49,8 @@ class WorkingHourController extends Controller
     public function store(WorkingHourRequest $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -67,7 +70,8 @@ class WorkingHourController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -78,7 +82,8 @@ class WorkingHourController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -94,7 +99,8 @@ class WorkingHourController extends Controller
     public function update(WorkingHourRequest $request, string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -115,7 +121,8 @@ class WorkingHourController extends Controller
     public function destroy(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 

@@ -27,7 +27,8 @@ class LegalController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+        $allowedRoles = ['admin', 'hrd', 'accounting'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -44,7 +45,8 @@ class LegalController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -57,7 +59,8 @@ class LegalController extends Controller
     public function store(LegalRequest $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -80,7 +83,8 @@ class LegalController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+        $allowedRoles = ['admin', 'hrd', 'accounting'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -91,7 +95,8 @@ class LegalController extends Controller
     public function edit(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -107,7 +112,8 @@ class LegalController extends Controller
     public function update(LegalRequest $request, string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -131,7 +137,8 @@ class LegalController extends Controller
     public function destroy(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -148,7 +155,8 @@ class LegalController extends Controller
 
     public function exportExcel()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+        $allowedRoles = ['admin', 'hrd', 'accounting'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -241,7 +249,8 @@ class LegalController extends Controller
 
     public function notifPerijinanHabis()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -254,7 +263,8 @@ class LegalController extends Controller
     
     public function notifPerijinanAkanHabis()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'accounting') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 

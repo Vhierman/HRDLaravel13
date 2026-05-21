@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\UserUpdateRequest;
 use App\Models\User;
 use Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -17,7 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
@@ -35,9 +37,11 @@ class UserController extends Controller
     public function create()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
+
         return view('admin.pages.user.create');
     }
 
@@ -47,20 +51,20 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
-        $data = $request->all();
 
+        $data   = $request->except('_token');
         User::create([
-            'name'          => $request->input('name'),
-            'nik'           => $request->input('nik'),
-            'email'         => $request->input('email'),
-            'password'      => bcrypt($request->input('password')),
-            'roles'         => $request->input('roles'),
-            'input_oleh'     => Auth::user()->name
-            ]);
-
+        'name'         => $request->name,
+        'nik'          => $request->nik,
+        'email'        => $request->email,
+        'password'     => Hash::make($request->password),
+        'roles'        => $request->roles,
+        'input_oleh'   => auth()->user()->name,
+        ]);
 
         Alert::success('Success Input Data User','Oleh '.auth()->user()->name);
         return redirect()->route('user.index');
@@ -72,7 +76,8 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
     }
@@ -82,9 +87,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
+
         //Ambil Semua Data Dari Model User Berdasarkan ID
         $user = User::findOrFail($id);
 
@@ -99,11 +106,13 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
+
         //Ambil Semua Data Dari Form
-        $data = $request->all();
+        $data   = $request->except('_token');
 
         //Ambil Semua Data Dari Model User Berdasarkan ID
         $user = User::findOrFail($id);
@@ -139,9 +148,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd') {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
+        
         User::find($id)->delete();
         Alert::error('Menghapus Data User','Oleh '.auth()->user()->name);
         return redirect()->route('user.index')->with('success', 'User deleted');

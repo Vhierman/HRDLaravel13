@@ -30,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         View::composer('admin.layouts.navbar', function ($view) {
-
             $nama   = auth()->user()->name;
             $nik    = auth()->user()->nik;
             $roles  = auth()->user()->roles;
@@ -76,8 +75,6 @@ class AppServiceProvider extends ServiceProvider
             $inventaris_mobil_akanHabis = InventoryCars::whereBetween('tanggal_akhir_pajak_mobil', [
                             $today,$today->copy()->addDays(30)
                         ])->count();
-
-
         $view->with([
                         'nama'                              => $nama,
                         'today'                             => $today,
@@ -97,7 +94,6 @@ class AppServiceProvider extends ServiceProvider
                         'inventaris_mobil_expired'          => $inventaris_mobil_expired, 
                         'inventaris_mobil_akanHabis'        => $inventaris_mobil_akanHabis, 
                     ]);
-
         });
     }
 }
