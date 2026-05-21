@@ -54,7 +54,7 @@
                     </div>
                     <div class="col-12 col-lg-6">
                         <label class="form-label fs-6">Keterangan Absen</label>
-                        <input type="date" name="keterangan_absen" value="{{ $item_attendance->keterangan_absen }}"
+                        <input type="text" name="keterangan_absen" value="{{ $item_attendance->keterangan_absen }}"
                             class="form-control" placeholder="Keterangan Absen" readonly>
                     </div>
                 </div>

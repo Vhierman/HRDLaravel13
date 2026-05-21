@@ -34,150 +34,51 @@ class AttendanceController extends Controller
     public function index()
     {
         //
-        if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader'&& auth()->user()->roles != 'accounting') {
+        $allowedRoles = ['admin', 'hrd', 'leader', 'accounting'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
 
-        $attendances = Attendances::whereYear(
-        'tanggal_absen',now()->year)->get();
+        $currentYear = now()->year;
+
+        // 2. Ambil data absensi tahun ini (1 Query)
+        $attendances = Attendances::whereYear('tanggal_absen', $currentYear)->get();
+
+        // 3. Bangun query selectRaw untuk hitung total bulanan sekaligus (1 Query untuk statistik)
+        $categories = ['Sakit', 'Ijin', 'Alpa', 'Cuti Tahunan', 'OFF'];
+        $selectQueries = [];
         
-        //Sakit
-        $item_sakit_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Sakit")->count();
-        $item_sakit_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Sakit")->count();
-        //Sakit
+        foreach ($categories as $category) {
+            $key = strtolower(str_replace(' ', '_', $category)); 
+            for ($month = 1; $month <= 12; $month++) {
+                $selectQueries[] = "SUM(CASE WHEN MONTH(tanggal_absen) = {$month} AND keterangan_absen = '{$category}' THEN 1 ELSE 0 END) as item_{$key}_{$month}";
+            }
+        }
 
-        //Ijin
-        $item_ijin_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Ijin")->count();
-        $item_ijin_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Ijin")->count();
-        //Ijin
+        // Eksekusi query statistik ke database (Ini yang tadi terlewat)
+        $statistics = Attendances::whereYear('tanggal_absen', $currentYear)
+            ->selectRaw(implode(', ', $selectQueries))
+            ->first()
+            ->toArray();
 
-        //Alpa
-        $item_alpa_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Alpa")->count();
-        $item_alpa_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Alpa")->count();
-        //Alpa
-
-        //Cuti Tahunan
-        $item_cuti_tahunan_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"Cuti Tahunan")->count();
-        $item_cuti_tahunan_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"Cuti Tahunan")->count();
-        //Cuti Tahunan
-
-        //OFF
-        $item_off_januari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 1)->where('keterangan_absen',"OFF")->count();
-        $item_off_februari = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 2)->where('keterangan_absen',"OFF")->count();
-        $item_off_maret = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 3)->where('keterangan_absen',"OFF")->count();
-        $item_off_april = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 4)->where('keterangan_absen',"OFF")->count();
-        $item_off_mei = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 5)->where('keterangan_absen',"OFF")->count();
-        $item_off_juni = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 6)->where('keterangan_absen',"OFF")->count();
-        $item_off_juli = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 7)->where('keterangan_absen',"OFF")->count();
-        $item_off_agustus = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 8)->where('keterangan_absen',"OFF")->count();
-        $item_off_september = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 9)->where('keterangan_absen',"OFF")->count();
-        $item_off_oktober = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 10)->where('keterangan_absen',"OFF")->count();
-        $item_off_november = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 11)->where('keterangan_absen',"OFF")->count();
-        $item_off_desember = Attendances::whereYear('tanggal_absen',now()->year)->whereMonth('tanggal_absen', 12)->where('keterangan_absen',"OFF")->count();
-        //OFF
+        // 4. Format data ke dalam bentuk yang dipahami Highcharts
+        $chartData = [];
+        foreach ($categories as $category) {
+            $key = strtolower(str_replace(' ', '_', $category));
+            
+            $monthlyCounts = [];
+            for ($month = 1; $month <= 12; $month++) {
+                $monthlyCounts[] = (int) ($statistics["item_{$key}_{$month}"] ?? 0);
+            }
+            $chartData[] = [
+                'name' => $category,
+                'data' => $monthlyCounts
+            ];
+        }
 
         return view('admin.pages.attendance.index',[
-            'attendances' => $attendances,
-            'item_sakit_januari' => $item_sakit_januari,
-            'item_sakit_februari' => $item_sakit_februari,
-            'item_sakit_maret' => $item_sakit_maret,
-            'item_sakit_april' => $item_sakit_april,
-            'item_sakit_mei' => $item_sakit_mei,
-            'item_sakit_juni' => $item_sakit_juni,
-            'item_sakit_juli' => $item_sakit_juli,
-            'item_sakit_agustus' => $item_sakit_agustus,
-            'item_sakit_september' => $item_sakit_september,
-            'item_sakit_oktober' => $item_sakit_oktober,
-            'item_sakit_november' => $item_sakit_november,
-            'item_sakit_desember' => $item_sakit_desember,
-            'item_ijin_januari' => $item_ijin_januari,
-            'item_ijin_februari' => $item_ijin_februari,
-            'item_ijin_maret' => $item_ijin_maret,
-            'item_ijin_april' => $item_ijin_april,
-            'item_ijin_mei' => $item_ijin_mei,
-            'item_ijin_juni' => $item_ijin_juni,
-            'item_ijin_juli' => $item_ijin_juli,
-            'item_ijin_agustus' => $item_ijin_agustus,
-            'item_ijin_september' => $item_ijin_september,
-            'item_ijin_oktober' => $item_ijin_oktober,
-            'item_ijin_november' => $item_ijin_november,
-            'item_ijin_desember' => $item_ijin_desember,
-            'item_alpa_januari' => $item_alpa_januari,
-            'item_alpa_februari' => $item_alpa_februari,
-            'item_alpa_maret' => $item_alpa_maret,
-            'item_alpa_april' => $item_alpa_april,
-            'item_alpa_mei' => $item_alpa_mei,
-            'item_alpa_juni' => $item_alpa_juni,
-            'item_alpa_juli' => $item_alpa_juli,
-            'item_alpa_agustus' => $item_alpa_agustus,
-            'item_alpa_september' => $item_alpa_september,
-            'item_alpa_oktober' => $item_alpa_oktober,
-            'item_alpa_november' => $item_alpa_november,
-            'item_alpa_desember' => $item_alpa_desember,
-            'item_cuti_tahunan_januari' => $item_cuti_tahunan_januari,
-            'item_cuti_tahunan_februari' => $item_cuti_tahunan_februari,
-            'item_cuti_tahunan_maret' => $item_cuti_tahunan_maret,
-            'item_cuti_tahunan_april' => $item_cuti_tahunan_april,
-            'item_cuti_tahunan_mei' => $item_cuti_tahunan_mei,
-            'item_cuti_tahunan_juni' => $item_cuti_tahunan_juni,
-            'item_cuti_tahunan_juli' => $item_cuti_tahunan_juli,
-            'item_cuti_tahunan_agustus' => $item_cuti_tahunan_agustus,
-            'item_cuti_tahunan_september' => $item_cuti_tahunan_september,
-            'item_cuti_tahunan_oktober' => $item_cuti_tahunan_oktober,
-            'item_cuti_tahunan_november' => $item_cuti_tahunan_november,
-            'item_cuti_tahunan_desember' => $item_cuti_tahunan_desember,
-            'item_off_januari' => $item_off_januari,
-            'item_off_februari' => $item_off_februari,
-            'item_off_maret' => $item_off_maret,
-            'item_off_april' => $item_off_april,
-            'item_off_mei' => $item_off_mei,
-            'item_off_juni' => $item_off_juni,
-            'item_off_juli' => $item_off_juli,
-            'item_off_agustus' => $item_off_agustus,
-            'item_off_september' => $item_off_september,
-            'item_off_oktober' => $item_off_oktober,
-            'item_off_november' => $item_off_november,
-            'item_off_desember' => $item_off_desember
+            'chartData'   => $chartData,
+            'statistics'  => $statistics
         ]);
     }
 
@@ -190,8 +91,31 @@ class AttendanceController extends Controller
         if (auth()->user()->roles != 'admin' && auth()->user()->roles != 'hrd' && auth()->user()->roles != 'leader') {
             abort(403);
         }
-        
-        $employees      = Employees::with(['divisions'])->get();
+    
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions'
+            ])->whereIn('divisions_id',$divisionIds)->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions'
+            ])->get();
+        }
+
         return view('admin.pages.attendance.create',[
             'employees' => $employees
         ]);
@@ -297,7 +221,30 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::with(['divisions'])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions'
+            ])->whereIn('divisions_id',$divisionIds)->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions'
+            ])->get();
+        }
+
         return view('admin.pages.attendance.edit',[
             'employees' => $employees
         ]);
@@ -335,7 +282,29 @@ class AttendanceController extends Controller
             abort(403);
         }
         
-        $employees      = Employees::with(['divisions'])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions'
+            ])->whereIn('divisions_id',$divisionIds)->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions'
+            ])->get();
+        }
         return view('admin.pages.attendance.hapus',[
             'employees' => $employees
         ]);
@@ -382,15 +351,40 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        $data = $request->except('_token');
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
-        $item_attendances = Attendances::with([
-                            'employees',
-                            'employees.divisions',
-                            'employees.positions',
-                            'employees.golongans',
-                            ])->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir])->get();
+
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        $query = Attendances::with([
+        'employees',
+        'employees.divisions',
+        'employees.positions',
+        'employees.golongans' ])
+        ->whereBetween('tanggal_absen', [
+            $tanggal_awal,
+            $tanggal_akhir ]);
+
+        if (!empty($divisionIds)) 
+        {
+            $query->whereHas('employees', function ($q) use ($divisionIds) 
+            {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_attendances = $query->get();
+
         if (!$item_attendances->isEmpty()) {
             return view('admin.pages.attendance.show',[
                 'tanggal_awal'  => $tanggal_awal,
@@ -453,23 +447,48 @@ class AttendanceController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
+
         $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
         $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
 
-        $item_attendances = Attendances::with([
-                            'employees',
-                            'employees.areas',
-                            'employees.divisions',
-                            'employees.positions',
-                            'employees.golongans'
-                            ])
-                            ->when($request->tanggal_awal && $request->tanggal_akhir, function ($query) use ($request) 
-                            {
-                                $query->whereBetween('tanggal_absen', [
-                                $request->tanggal_awal,
-                                $request->tanggal_akhir
-                                ]);
-                            })->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
+
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        $query = Attendances::with([
+        'employees',
+        'employees.divisions',
+        'employees.positions',
+        'employees.golongans' ])
+        ->whereBetween('tanggal_absen', [
+            $tanggal_awal,
+            $tanggal_akhir ]);
+
+        if (!empty($divisionIds)) 
+        {
+            $query->whereHas('employees', function ($q) use ($divisionIds) 
+            {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_attendances = $query->get();
+
+
+
+
+
+
         
         $row = 2;
         $no = 1;
@@ -552,15 +571,38 @@ class AttendanceController extends Controller
         $data = $request->except('_token');
         $tanggal_awal  = $request->input('tanggal_awal');
         $tanggal_akhir = $request->input('tanggal_akhir');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
 
+        if (!empty($divisionIds)) {
         $item_employees = Employees::with([
             'divisions',
             'positions',
             'golongans'
-        ])->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
+        ])->whereIn('divisions_id',$divisionIds)->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
         {
             $query->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir]);
         })->get();
+        }
+        else{
+            $item_employees = Employees::with([
+            'divisions',
+            'positions',
+            'golongans'
+            ])->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
+            {
+            $query->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir]);
+            })->get();
+        }
 
         if ($item_employees->isNotEmpty()) {
             return view('admin.pages.attendance.show_non_absen', [
@@ -624,16 +666,42 @@ class AttendanceController extends Controller
         $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
         $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
 
+
+        // $tanggal_awal  = $request->input('tanggal_awal');
+        // $tanggal_akhir = $request->input('tanggal_akhir');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) {
         $item_employees = Employees::with([
             'divisions',
             'positions',
             'golongans'
-        ])->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
+        ])->whereIn('divisions_id',$divisionIds)->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
         {
             $query->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir]);
         })->get();
+        }
+        else{
+            $item_employees = Employees::with([
+            'divisions',
+            'positions',
+            'golongans'
+            ])->whereDoesntHave('attendances', function ($query) use ($tanggal_awal, $tanggal_akhir) 
+            {
+            $query->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir]);
+            })->get();
+        }
 
-        
         $row = 2;
         $no = 1;
         foreach ($item_employees as $item_employee) {

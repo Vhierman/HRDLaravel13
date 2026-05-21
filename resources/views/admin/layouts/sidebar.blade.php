@@ -4,7 +4,7 @@
             <img src="{{ asset('template_admin/assets/images/logo/LogoPrima.png') }}" class="logo-img" alt="">
         </div>
         <div class="logo-name flex-grow-1">
-            <h5 class="mb-0">HRIS_V3</h5>
+            <h5 class="mb-0">HRIS_v3</h5>
         </div>
         <div class="sidebar-close">
             <span class="material-icons-outlined">close</span>
@@ -252,13 +252,13 @@
             {{-- Laporan --}}
 
             {{-- Privacy Policy, Terms of Service, Documentation, and Support --}}
-            <li>
+            {{-- <li>
                 <a href="#">
                     <div class="parent-icon"><i class="material-icons-outlined">description</i>
                     </div>
                     <div class="menu-title">Privacy Policy</div>
                 </a>
-            </li>
+            </li> --}}
             {{-- Privacy Policy, Terms of Service, Documentation, and Support --}}
 
             {{-- Logout --}}
