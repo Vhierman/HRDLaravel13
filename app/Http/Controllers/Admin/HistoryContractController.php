@@ -187,17 +187,25 @@ class HistoryContractController extends Controller
         $tahun_bulan_salary     = $tahun_salary.'-'.$bulan_salary;
         $salary                 = RekapSalaries::with(['employees'])->where('employees_id', $karyawan->id)->where('periode_awal','like', '%'.$tahun_bulan_salary.'%')->first();
 
-        $companies          = Companies::all();
-        $divisions          = Divisions::all();
-        $positions          = Positions::all();
-        $working_hours      = WorkingHours::all();
-        $areas              = Areas::all();
+        if($salary == null)
+        {
+            Alert::error('Data Gaji Belum Direkap');
+            return redirect()->route('employee.index');
+        }
+
+        $companies              = Companies::all();
+        $divisions              = Divisions::all();
+        $positions              = Positions::all();
+        $working_hours          = WorkingHours::all();
+        $areas                  = Areas::all();
 
         //Create Nomor Dokumen
-        $nomor              = substr($nik_karyawan, 6,6);
-        $mytime             = Carbon::now();
-        $bulan              = substr($mytime, 5, -12);
-        $tahun              = substr($mytime, 0,4);
+        $nomor                  = substr($nik_karyawan, 6,6);
+        $mytime                 = Carbon::now();
+        $bulan                  = substr($mytime, 5, -12);
+        $tahun                  = substr($mytime, 0,4);
+
+
         if ($bulan == 1) {
             $romawi = 'I';
         }

@@ -1,17 +1,27 @@
 @section('css')
     <link href="{{ asset('template_admin/assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
     <style>
+        /* Membuat input pencarian kolom lebih tipis dan rapi */
+        .search-row th {
+            padding: 8px 4px !important;
+        }
+
         .search-row input {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
+            font-size: 13px;
+            padding: 4px 8px;
+        }
+
+        /* Menjaga tombol aksi tetap rapi dalam satu baris */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
         }
     </style>
 @endsection
 
 @extends('admin.layouts.base')
-@section('title', 'Data Karyawan');
-
+@section('title', 'Data Karyawan')
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">Karyawan</div>
@@ -23,27 +33,31 @@
             </nav>
         </div>
     </div>
+    @php
+        // Optimasi: Cek role di luar loop agar server tidak melakukan pengecekan berulang-ulang di setiap baris tabel
+        $userRole = Auth::user()->roles;
+        $canManage = in_array($userRole, ['admin', 'hrd']);
+        $canDelete = $userRole === 'admin';
+        $canExport = in_array($userRole, ['admin', 'hrd', 'accounting']);
+    @endphp
     <div class="card">
         <div class="card-body">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="btn-group position-static">
-                        <a href="{{ route('employee.create') }}" class="btn-group position-static">
-                            <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Karyawan
-                            </button>
-                        </a>
-                        <a href="{{ route('exportExcel') }}" target="_blank" class="btn-group position-static">
-                            <button type="button" class="btn btn-success">
-                                <i class="bi bi-cloud-arrow-down"></i> Download Database Karyawan
-                            </button>
-                        </a>
-                    </div>
-                </div>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                @if ($canManage)
+                    <a href="{{ route('employee.create') }}" class="btn btn-primary d-flex align-items-center gap-1">
+                        <i class="bi bi-person-plus"></i> Tambah Karyawan
+                    </a>
+                @endif
+                @if ($canExport)
+                    <a href="{{ route('exportExcel') }}" target="_blank"
+                        class="btn btn-success d-flex align-items-center gap-1">
+                        <i class="bi bi-cloud-arrow-down"></i> Download Database Karyawan
+                    </a>
+                @endif
             </div>
-            <br>
+
             <div class="table-responsive">
-                <table id="example2" class="table table-striped table-bordered">
+                <table id="example2" class="table table-striped table-bordered align-middle" style="width:100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -56,19 +70,17 @@
                             <th>Status</th>
                             <th>Awal Kerja</th>
                             <th>Akhir Kerja</th>
-                            <th>Action</th>
+                            <th class="text-center">Action</th>
                         </tr>
                         <tr class="search-row">
                             <th></th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Nama..." />
                             </th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari NIK..." />
-                            </th>
+                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari NIK..." /></th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Jabatan..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Penempatan..." />
-                            </th>
+                                    placeholder="Cari Penempatan..." /></th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Area..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Golongan..." />
@@ -76,87 +88,84 @@
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Status..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Awal Kerja..." />
-                            </th>
+                                    placeholder="Cari Awal Kerja..." /></th>
                             <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Cari Akhir Kerja..." />
-                            </th>
+                                    placeholder="Cari Akhir Kerja..." /></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $no = 1;
-                        @endphp
+                        @php $no = 1; @endphp
                         @foreach ($employees as $employee)
-                            @if ($employee->status_kerja == 'PKWTT')
-                                @php
-                                    $tanggal_akhir_kerja = $employee->status_kerja;
-                                    $status_kerja = 'Tetap';
-                                @endphp
-                            @elseif($employee->status_kerja == 'PKWT')
-                                @php
-                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
-                                        $employee->tanggal_akhir_kerja,
-                                    )->isoformat('DD-MM-Y');
-                                    $status_kerja = 'Kontrak';
-                                @endphp
-                            @elseif($employee->status_kerja == 'Harian')
-                                @php
-                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
-                                        $employee->tanggal_akhir_kerja,
-                                    )->isoformat('DD-MM-Y');
-                                    $status_kerja = 'Harian';
-                                @endphp
-                            @elseif($employee->status_kerja == 'Outsourcing')
-                                @php
-                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
-                                        $employee->tanggal_akhir_kerja,
-                                    )->isoformat('DD-MM-Y');
-                                    $status_kerja = 'Outsourcing';
-                                @endphp
-                            @else
-                                @php
-                                    $tanggal_akhir_kerja = \Carbon\Carbon::parse(
-                                        $employee->tanggal_akhir_kerja,
-                                    )->isoformat('DD-MM-Y');
+                            @php
+                                $tanggal_akhir_kerja = $employee->tanggal_akhir_kerja
+                                    ? \Carbon\Carbon::parse($employee->tanggal_akhir_kerja)->isoformat('DD-MM-Y')
+                                    : '-';
 
-                                @endphp
-                            @endif
+                                switch ($employee->status_kerja) {
+                                    case 'PKWTT':
+                                        $status_kerja = 'Tetap';
+                                        $tanggal_akhir_kerja = 'PKWTT';
+                                        $badge_color = 'success';
+                                        break;
+                                    case 'Outsourcing':
+                                        $status_kerja = 'Outsourcing';
+                                        $badge_color = 'danger';
+                                        break;
+                                    case 'Harian':
+                                        $status_kerja = 'Harian';
+                                        $badge_color = 'info text-dark';
+                                        break;
+                                    default:
+                                        $status_kerja = 'Kontrak';
+                                        $badge_color = 'info text-dark';
+                                }
+                            @endphp
                             <tr>
-                                <td>{{ $no++ }}</td>
+                                <td class="text-center">{{ $no++ }}</td>
                                 <td>{{ $employee->nama_karyawan }}</td>
                                 <td>{{ $employee->nik_karyawan }}</td>
-                                <td>{{ $employee->positions->jabatan }}</td>
-                                <td>{{ $employee->divisions->penempatan }}</td>
-                                <td>{{ $employee->areas->area }}</td>
-                                <td>{{ $employee->golongans->golongan }}</td>
-                                <td>{{ $status_kerja }}</td>
+                                <td>{{ $employee->positions->jabatan ?? '-' }}</td>
+                                <td>{{ $employee->divisions->penempatan ?? '-' }}</td>
+                                <td>{{ $employee->areas->area ?? '-' }}</td>
+                                <td class="text-center">{{ $employee->golongans->golongan ?? '-' }}</td>
+                                <td class="text-center">
+                                    <span class="badge bg-{{ $badge_color }}">
+                                        {{ $status_kerja }}
+                                    </span>
+                                </td>
                                 <td>{{ \Carbon\Carbon::parse($employee->tanggal_mulai_kerja)->isoformat('DD-MM-Y') }}</td>
                                 <td>{{ $tanggal_akhir_kerja }}</td>
                                 <td>
-                                    <div class="row row-cols-auto g-3">
-                                        <div class="col">
+                                    <div class="action-buttons">
+                                        {{-- Tombol Edit untuk Admin dan HRD disatukan --}}
+                                        @if ($canManage)
                                             <a href="{{ route('employee.edit', $employee->id) }}"
-                                                class="btn btn-sm btn-success raised d-flex gap-2">
-                                                <i class="material-icons-outlined">edit</i>
+                                                class="btn btn-sm btn-outline-success d-flex align-items-center p-1"
+                                                title="Edit">
+                                                <i class="material-icons-outlined fs-6">edit</i>
                                             </a>
-                                        </div>
-                                        <div class="col">
-                                            <a href="{{ route('employee.show', $employee->id) }}"
-                                                class="btn btn-sm btn-primary raised d-flex gap-2">
-                                                <i class="material-icons-outlined">visibility</i>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <form action="{{ route('employee.destroy', $employee->id) }}" method="POST">
+                                        @endif
+
+                                        {{-- Tombol Hapus khusus Admin --}}
+                                        @if ($canDelete)
+                                            <form action="{{ route('employee.destroy', $employee->id) }}" method="POST"
+                                                class="d-inline delete-form">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-sm btn-danger raised d-flex gap-2">
-                                                    <i class="material-icons-outlined">delete</i>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-danger d-flex align-items-center p-1 btn-delete"
+                                                    title="Hapus">
+                                                    <i class="material-icons-outlined fs-6">delete</i>
                                                 </button>
                                             </form>
-                                        </div>
+                                        @endif
+
+                                        <a href="{{ route('employee.show', $employee->id) }}"
+                                            class="btn btn-sm btn-outline-primary d-flex align-items-center p-1"
+                                            title="Lihat">
+                                            <i class="material-icons-outlined fs-6">visibility</i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -168,40 +177,66 @@
     </div>
 @endsection
 
-{{-- Datatables --}}
 @section('js')
-    {{-- <script src="{{ asset('template_admin/assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script> --}}
     <script src="{{ asset('template_admin/assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('template_admin/assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
-            // 1. Inisialisasi DataTable
             var table = $('#example2').DataTable({
-                lengthChange: false,
-                orderCellsTop: true, // Penting: Agar sorting tetap di baris header pertama
+                lengthChange: true,
+                orderCellsTop: true,
                 fixedHeader: false,
-                buttons: ['copy', 'excel', 'pdf', 'print']
+                language: {
+                    // Menggunakan objek bahasa lokal agar anti-blokir dan lebih cepat load-nya
+                    "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+                    "sProcessing": "Sedang memproses...",
+                    "sLengthMenu": "Tampilkan _MENU_ entri",
+                    "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                    "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                    "sSearch": "Cari:",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Selanjutnya",
+                        "sLast": "Terakhir"
+                    }
+                }
             });
 
-            // 2. Tambahkan Button Container
-            table.buttons().container()
-                .appendTo('#example2_wrapper .col-md-6:eq(0)');
-
-            // 3. Logika Pencarian Per Kolom
-            // Kita ambil setiap input dari baris '.search-row'
+            // Logika Pencarian Per Kolom dengan optimasi debounce
+            var delayTimer;
             $('#example2 .search-row input').on('keyup change', function() {
-                // Ambil index kolom dari elemen parent <th>
                 var columnIndex = $(this).parent().index();
+                var value = this.value;
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(function() {
+                    if (table.column(columnIndex).search() !== value) {
+                        table.column(columnIndex).search(value).draw();
+                    }
+                }, 300);
+            });
 
-                if (table.column(columnIndex).search() !== this.value) {
-                    table
-                        .column(columnIndex)
-                        .search(this.value)
-                        .draw();
-                }
+            // SweetAlert2 Delegasi Event (Supaya tetap bekerja saat halaman DataTables berpindah)
+            $('#example2').on('click', '.btn-delete', function(e) {
+                var form = $(this).closest('form');
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data karyawan ini akan dihapus permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>
-
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
-{{-- Datatables --}}

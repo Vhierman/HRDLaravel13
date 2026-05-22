@@ -681,10 +681,6 @@ class AttendanceController extends Controller
 
         $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
         $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
-
-
-        // $tanggal_awal  = $request->input('tanggal_awal');
-        // $tanggal_akhir = $request->input('tanggal_akhir');
         $nik            = auth()->user()->nik;
         $divisi         = Employees::where('nik_karyawan', $nik)
                                     ->value('divisions_id');

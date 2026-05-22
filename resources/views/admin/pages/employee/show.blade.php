@@ -121,16 +121,18 @@
                                 </div>
                             </a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-history" role="tab"
-                                aria-selected="false">
-                                <div class="d-flex align-items-center">
-                                    <div class="tab-icon"><i class='bi bi-tags me-1 fs-6'></i>
+                        @if (in_array(Auth::user()->roles, ['admin', 'hrd']))
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="pill" href="#primary-pills-history" role="tab"
+                                    aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='bi bi-tags me-1 fs-6'></i>
+                                        </div>
+                                        <div class="tab-title">History</div>
                                     </div>
-                                    <div class="tab-title">History</div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         {{-- Tab Karyawan --}}
