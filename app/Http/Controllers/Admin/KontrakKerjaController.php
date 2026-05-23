@@ -1297,11 +1297,8 @@ class KontrakKerjaController extends Controller
         $this->fpdf->SetAutoPageBreak(true);
         $this->fpdf->AddPage();
 
-        
-
-        foreach ($pkwtkontraks as $pkwtkontrak) {
-                    
-
+        foreach ($pkwtkontraks as $pkwtkontrak) 
+        {
                 $items = RekapSalaries::with([
                             'employees',
                             'employees.areas',
@@ -1317,8 +1314,8 @@ class KontrakKerjaController extends Controller
 
                     $nomor              = substr($pkwtkontrak->nik_karyawan, 6,6);
                     $mytime             = Carbon::now();
-                    $bulan              = substr($mytime, 5, -12);
-                    $tahun              = substr($mytime, 0,4);
+                    $bulan              = $mytime->month; // Menghasilkan angka 1 sampai 12 murni
+                    $tahun              = $mytime->year;
 
                     if ($bulan == 1) {
                         $romawi = 'I';
