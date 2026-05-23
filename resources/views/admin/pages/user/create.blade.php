@@ -77,12 +77,6 @@
                             <option value="leader" {{ old('roles') == 'leader' ? 'selected' : '' }}>
                                 Leader
                             </option>
-                            <option value="supervisor" {{ old('roles') == 'supervisor' ? 'selected' : '' }}>
-                                Supervisor
-                            </option>
-                            <option value="manager" {{ old('roles') == 'manager' ? 'selected' : '' }}>
-                                Manager
-                            </option>
                         </select>
 
                     </div>

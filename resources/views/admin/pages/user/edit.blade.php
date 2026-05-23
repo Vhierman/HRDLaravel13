@@ -81,13 +81,7 @@
                             <option value="leader" @if ($user->roles == 'leader') {{ 'selected="selected"' }} @endif>
                                 Leader
                             </option>
-                            <option value="supervisor"
-                                @if ($user->roles == 'supervisor') {{ 'selected="selected"' }} @endif>
-                                Supervisor
-                            </option>
-                            <option value="manager" @if ($user->roles == 'manager') {{ 'selected="selected"' }} @endif>
-                                Manager
-                            </option>
+
                         </select>
 
                     </div>
