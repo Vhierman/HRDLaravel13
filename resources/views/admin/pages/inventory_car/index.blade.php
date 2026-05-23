@@ -8,10 +8,8 @@
         }
     </style>
 @endsection
-
 @extends('admin.layouts.base')
 @section('title', 'Data Inventaris Mobil');
-
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">Inventaris</div>
@@ -23,16 +21,23 @@
             </nav>
         </div>
     </div>
+    @php
+        $userRole = Auth::user()->roles;
+        $canManage = in_array($userRole, ['admin', 'hrd']);
+        $canView = in_array($userRole, ['admin', 'hrd', 'accounting']);
+    @endphp
     <div class="card">
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <div class="btn-group position-static">
-                        <a href="{{ route('inventory_car.create') }}" class="btn-group position-static">
-                            <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Inventaris Mobil
-                            </button>
-                        </a>
+                        @if ($canManage)
+                            <a href="{{ route('inventory_car.create') }}" class="btn-group position-static">
+                                <button type="button" class="btn btn-primary">
+                                    <i class="bi bi-person-plus"></i> Tambah Inventaris Mobil
+                                </button>
+                            </a>
+                        @endif
                         <a href="{{ route('inventory_car.exportExcel') }}" target="_blank"
                             class="btn-group position-static">
                             <button type="button" class="btn btn-success">
@@ -55,12 +60,12 @@
                             <th>Nomor Polisi</th>
                             <th>Akhir Pajak</th>
                             <th>Akhir Plat</th>
-                            <th>Action</th>
+                            @if ($canManage)
+                                <th>Action</th>
+                            @endif
                         </tr>
                         <tr class="search-row">
                             <th></th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Area..." />
-                            </th>
                             <th><input type="text"
                                     class="form-control form-control-sm"placeholder="Cari Nama Karyawan..." /></th>
                             <th><input type="text" class="form-control form-control-sm"placeholder="Cari Jabatan..." />
@@ -75,7 +80,9 @@
                                     class="form-control form-control-sm"placeholder="Cari Akhir Pajak..." /></th>
                             <th><input type="text"
                                     class="form-control form-control-sm"placeholder="Cari Akhir Plat..." /></th>
-                            <th></th>
+                            @if ($canManage)
+                                <th></th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -94,26 +101,28 @@
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($inventory_car->tanggal_akhir_plat_mobil)->isoformat('DD-MM-Y') }}
                                 </td>
-                                <td>
-                                    <div class="row row-cols-auto g-3">
-                                        <div class="col">
-                                            <a href="{{ route('inventory_car.edit', $inventory_car->id) }}"
-                                                class="btn btn-success raised d-flex gap-2">
-                                                <i class="material-icons-outlined">edit</i>
-                                            </a>
+                                @if ($canManage)
+                                    <td>
+                                        <div class="row row-cols-auto g-3">
+                                            <div class="col">
+                                                <a href="{{ route('inventory_car.edit', $inventory_car->id) }}"
+                                                    class="btn btn-success raised d-flex gap-2">
+                                                    <i class="material-icons-outlined">edit</i>
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <form action="{{ route('inventory_car.destroy', $inventory_car->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-danger raised d-flex gap-2">
+                                                        <i class="material-icons-outlined">delete</i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <form action="{{ route('inventory_car.destroy', $inventory_car->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger raised d-flex gap-2">
-                                                    <i class="material-icons-outlined">delete</i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
