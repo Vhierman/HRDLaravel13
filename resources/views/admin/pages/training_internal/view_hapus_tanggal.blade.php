@@ -53,7 +53,6 @@
                             <th>Lokasi</th>
                             <th>Materi</th>
                             <th>Trainer</th>
-
                         </tr>
                         <tr class="search-row">
                             <th></th>
@@ -78,7 +77,6 @@
                             </th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Trainer..." />
                             </th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +95,6 @@
                                 <td>{{ $item_training_internal->lokasi_training_internal }}</td>
                                 <td>{{ $item_training_internal->materi_training_internal }}</td>
                                 <td>{{ $item_training_internal->trainer_training_internal }}</td>
-
                             </tr>
                         @endforeach
                     </tbody>

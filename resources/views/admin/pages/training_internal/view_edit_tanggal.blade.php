@@ -45,11 +45,13 @@
                 <div class="row g-3">
                     <div class="col-12 col-lg-12">
                         <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
-                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field" multiple>
+                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field"
+                            data-placeholder="Pilih Nama Karyawan" multiple>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
                                     {{ in_array($employee->id, old('employees_id', $selectedEmployees)) ? 'selected' : '' }}>
-                                    {{ $employee->nama_karyawan }}
+                                    {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
+                                    {{ $employee->divisions->penempatan }}
                                 </option>
                             @endforeach
                         </select>

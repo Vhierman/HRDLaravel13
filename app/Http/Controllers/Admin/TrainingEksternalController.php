@@ -164,18 +164,37 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
-        $data   = $request->except('_token');
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
-        $item_training_eksternals = TrainingEksternals::with([
-                            'employees',
-                            'employees.areas',
-                            'employees.golongans',
-                            'employees.positions',
-                            'employees.divisions',
-                            ])->whereBetween('tanggal_awal_training_eksternal', [$tanggal_awal, $tanggal_akhir])->get();
 
-        // dd($item_training_eksternals);
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingEksternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_awal_training_eksternal', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_eksternals = $query->get();
 
         if (!$item_training_eksternals->isEmpty()) {
             return view('admin.pages.training_eksternal.view_tanggal',[
@@ -243,22 +262,36 @@ class TrainingEksternalController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
-        $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
-        $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
 
-        $item_training_eksternals = TrainingEksternals::with([
-                            'employees',
-                            'employees.areas',
-                            'employees.positions',
-                            'employees.divisions'
-                            ])
-                            ->when($request->tanggal_awal && $request->tanggal_akhir, function ($query) use ($request) 
-                            {
-                                $query->whereBetween('tanggal_awal_training_eksternal', [
-                                $request->tanggal_awal,
-                                $request->tanggal_akhir
-                                ]);
-                            })->get();
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingEksternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_awal_training_eksternal', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_eksternals = $query->get();
         
         $row = 2;
         $no = 1;
@@ -333,7 +366,30 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::with(['divisions'])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions'
+            ])->whereIn('divisions_id',$divisionIds)->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions'
+            ])->get();
+        }
+
         return view('admin.pages.training_eksternal.form_view_nama',[
             'employees' => $employees
         ]);
@@ -689,15 +745,37 @@ class TrainingEksternalController extends Controller
             abort(403);
         }
 
-        $data                        = $request->except('_token');
+        $data                       = $request->except('_token');
+        $nik                        = auth()->user()->nik;
+        $divisi                     = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $perihal_training_eksternal   = $request->input('perihal_training_eksternal');
-        $training_eksternal          = TrainingEksternals::where('perihal_training_eksternal',$perihal_training_eksternal)->first();
-        $item_training_eksternals    = TrainingEksternals::with([
-                                        'employees',
-                                        'employees.divisions',
-                                        'employees.positions',
-                                        ])->where('perihal_training_eksternal', $perihal_training_eksternal)->get();
-                            
+
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingEksternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->where('perihal_training_eksternal', $perihal_training_eksternal)
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_eksternals = $query->get();
+                
         if (!$item_training_eksternals->isEmpty()) {
             return view('admin.pages.training_eksternal.view_materi',[
                 'perihal_training_eksternal'    => $perihal_training_eksternal,
@@ -762,14 +840,35 @@ class TrainingEksternalController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
-
+        $nik                        = auth()->user()->nik;
+        $divisi                     = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $perihal_training_eksternal   = $request->perihal_training_eksternal;
-        
-        $item_training_eksternals = TrainingEksternals::with([
-                            'employees',
-                            'employees.divisions',
-                            'employees.positions',
-                            ])->where('perihal_training_eksternal', $perihal_training_eksternal)->get();
+
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingEksternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->where('perihal_training_eksternal', $perihal_training_eksternal)
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_eksternals = $query->get();
 
         $row = 2;
         $no = 1;

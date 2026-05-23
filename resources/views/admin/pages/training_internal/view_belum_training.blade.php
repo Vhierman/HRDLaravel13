@@ -33,7 +33,7 @@
                         <input type="hidden" name="tanggal_awal" class="form-control" value="{{ $tanggal_awal }}">
                         <input type="hidden" name="tanggal_akhir" class="form-control" value="{{ $tanggal_akhir }}">
                         <button type="submit" class="btn btn-success px-5 raised">
-                            Download Training Internal Periode
+                            Download Karyawan Belum Pernah Training Internal Periode
                             {{ \Carbon\Carbon::parse($tanggal_awal)->isoformat('DD-MM-Y') }}
                             s/d
                             {{ \Carbon\Carbon::parse($tanggal_akhir)->isoformat('DD-MM-Y') }}

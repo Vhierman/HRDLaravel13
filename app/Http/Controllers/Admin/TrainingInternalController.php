@@ -156,15 +156,37 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
-        $item_training_internals = TrainingInternals::with([
-                            'employees',
-                            'employees.areas',
-                            'employees.golongans',
-                            'employees.positions',
-                            'employees.divisions',
-                            ])->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir])->get();
+
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingInternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_internals = $query->get();
 
         if (!$item_training_internals->isEmpty()) {
             return view('admin.pages.training_internal.view_tanggal',[
@@ -228,23 +250,38 @@ class TrainingInternalController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
-        $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
-        $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
 
-        $item_training_internals = TrainingInternals::with([
-                            'employees',
-                            'employees.areas',
-                            'employees.positions',
-                            'employees.divisions'
-                            ])
-                            ->when($request->tanggal_awal && $request->tanggal_akhir, function ($query) use ($request) 
-                            {
-                                $query->whereBetween('tanggal_training_internal', [
-                                $request->tanggal_awal,
-                                $request->tanggal_akhir
-                                ]);
-                            })->get();
-        
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingInternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_internals = $query->get();
+
         $row = 2;
         $no = 1;
         foreach ($item_training_internals as $item_training_internal) {
@@ -315,7 +352,30 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::with(['divisions'])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions'
+            ])->whereIn('divisions_id',$divisionIds)->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions'
+            ])->get();
+        }
+
         return view('admin.pages.training_internal.form_view_nama',[
             'employees' => $employees
         ]);
@@ -402,8 +462,6 @@ class TrainingInternalController extends Controller
         
         $nama_karyawan = $request->input('nama_karyawan');
         
-        // dd($request->input('employees_id'));
-
         $row = 2;
         $no = 1;
         foreach ($item_training_internals as $item_training_internal) {
@@ -654,15 +712,36 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
+        $data                       = $request->except('_token');
+        $nik                        = auth()->user()->nik;
+        $divisi                     = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $materi_training_internal   = $request->input('materi_training_internal');
-        $training_internal          = TrainingInternals::where('materi_training_internal',$materi_training_internal)->first();
-        $item_training_internals    = TrainingInternals::with([
-                                        'employees',
-                                        'employees.divisions',
-                                        'employees.positions',
-                                        ])->where('materi_training_internal', $materi_training_internal)->get();
 
-        // dd($item_training_internals);
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingInternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->where('materi_training_internal', $materi_training_internal)
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_internals = $query->get();
                             
         if (!$item_training_internals->isEmpty()) {
             return view('admin.pages.training_internal.view_materi',[
@@ -724,14 +803,35 @@ class TrainingInternalController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
-
+        $nik                        = auth()->user()->nik;
+        $divisi                     = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $materi_training_internal   = $request->materi_training_internal;
-        
-        $item_training_internals = TrainingInternals::with([
-                            'employees',
-                            'employees.divisions',
-                            'employees.positions',
-                            ])->where('materi_training_internal', $materi_training_internal)->get();
+
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = TrainingInternals::with([
+            'employees',
+            'employees.areas',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->where('materi_training_internal', $materi_training_internal)
+        ->whereHas('employees');
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            });
+        }
+        $item_training_internals = $query->get();
 
         $row = 2;
         $no = 1;
@@ -811,7 +911,8 @@ class TrainingInternalController extends Controller
 
         $tanggal_training_internal  = $request->input('tanggal_training_internal');
 
-        $employees = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
+
         $item_training_internals = TrainingInternals::with([
                             'employees',
                             'employees.divisions',
@@ -840,9 +941,9 @@ class TrainingInternalController extends Controller
             abort(403);
         }
         
-        $tanggal    = $request->input('tanggal_training_internal');
-        $tanggal_lama    = $request->input('tanggal_lama_training_internal');
-        $hari       = \Carbon\Carbon::parse($tanggal)->isoformat('dddd');
+        $tanggal            = $request->input('tanggal_training_internal');
+        $tanggal_lama       = $request->input('tanggal_lama_training_internal');
+        $hari               = \Carbon\Carbon::parse($tanggal)->isoformat('dddd');
 
         TrainingInternals::where('tanggal_training_internal', $tanggal_lama)->delete();
 
@@ -939,17 +1040,32 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
 
-        $item_training_internals = Employees::with([
-                                'areas',
-                                'golongans',
-                                'positions',
-                                'divisions'
-                            ])->whereDoesntHave('training_internals', function ($query) use ($tanggal_awal, $tanggal_akhir) {
-                                $query->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir]);
-                            })->get();
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = Employees::with(['areas', 'divisions', 'positions', 'golongans'])
+        ->whereDoesntHave('training_internals', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+            $q->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir]);
+        });
+
+        if ($divisi && array_key_exists($divisi, $divisionMap)) 
+        {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereIn('divisions_id', $divisionIds);
+        }
+        $item_training_internals = $query->get();
 
         if (!$item_training_internals->isEmpty()) {
             return view('admin.pages.training_internal.view_belum_training',[
@@ -1008,17 +1124,32 @@ class TrainingInternalController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
-        $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
-        $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
 
-        $item_training_internals = Employees::with([
-                                'areas',
-                                'golongans',
-                                'positions',
-                                'divisions'
-                            ])->whereDoesntHave('training_internals', function ($query) use ($tanggal_awal, $tanggal_akhir) {
-                                $query->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir]);
-                            })->get();
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $query = Employees::with(['areas', 'divisions', 'positions', 'golongans'])
+        ->whereDoesntHave('training_internals', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+            $q->whereBetween('tanggal_training_internal', [$tanggal_awal, $tanggal_akhir]);
+        });
+
+        if ($divisi && array_key_exists($divisi, $divisionMap)) 
+        {
+            $divisionIds = $divisionMap[$divisi];
+            $query->whereIn('divisions_id', $divisionIds);
+        }
+        $item_training_internals = $query->get();
 
         $row = 2;
         $no = 1;
