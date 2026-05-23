@@ -11,7 +11,6 @@
 
 @extends('admin.layouts.base')
 @section('title', 'Data Perijinan');
-
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">Perijinan</div>
@@ -23,16 +22,22 @@
             </nav>
         </div>
     </div>
+    @php
+        $userRole = Auth::user()->roles;
+        $canManage = in_array($userRole, ['admin', 'hrd']);
+    @endphp
     <div class="card">
         <div class="card-body">
             <div class="row row-cols-auto g-3">
                 <div class="col">
                     <div class="btn-group position-static">
-                        <a href="{{ route('legal.create') }}" class="btn-group position-static">
-                            <button type="button" class="btn btn-primary">
-                                <i class="bi bi-person-plus"></i> Tambah Perijinan
-                            </button>
-                        </a>
+                        @if ($canManage)
+                            <a href="{{ route('legal.create') }}" class="btn-group position-static">
+                                <button type="button" class="btn btn-primary">
+                                    <i class="bi bi-person-plus"></i> Tambah Perijinan
+                                </button>
+                            </a>
+                        @endif
                         <a href="{{ route('legal.exportExcel') }}" target="_blank" class="btn-group position-static">
                             <button type="button" class="btn btn-success">
                                 <i class="bi bi-cloud-arrow-down"></i> Download Data Perijinan Perusahaan
@@ -52,7 +57,9 @@
                             <th>Instansi</th>
                             <th>Tanggal Dikeluarkan Ijin</th>
                             <th>Tanggal Habis Ijin</th>
-                            <th>Action</th>
+                            @if ($canManage)
+                                <th>Action</th>
+                            @endif
                         </tr>
                         <tr class="search-row">
                             <th></th>
@@ -69,7 +76,9 @@
                             <th><input type="text"
                                     class="form-control form-control-sm"placeholder="Cari Tanggal Habis Ijin..." />
                             </th>
-                            <th></th>
+                            @if ($canManage)
+                                <th></th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -86,25 +95,27 @@
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($legal->tanggal_habis)->isoformat('DD-MM-Y') }}
                                 </td>
-                                <td>
-                                    <div class="row row-cols-auto g-3">
-                                        <div class="col">
-                                            <a href="{{ route('legal.edit', $legal->id) }}"
-                                                class="btn btn-success raised d-flex gap-2">
-                                                <i class="material-icons-outlined">edit</i>
-                                            </a>
+                                @if ($canManage)
+                                    <td>
+                                        <div class="row row-cols-auto g-3">
+                                            <div class="col">
+                                                <a href="{{ route('legal.edit', $legal->id) }}"
+                                                    class="btn btn-success raised d-flex gap-2">
+                                                    <i class="material-icons-outlined">edit</i>
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <form action="{{ route('legal.destroy', $legal->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-danger raised d-flex gap-2">
+                                                        <i class="material-icons-outlined">delete</i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <form action="{{ route('legal.destroy', $legal->id) }}" method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger raised d-flex gap-2">
-                                                    <i class="material-icons-outlined">delete</i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

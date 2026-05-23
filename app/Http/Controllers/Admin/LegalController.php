@@ -222,7 +222,11 @@ class LegalController extends Controller
 
                 $sheet->getStyle("A1:F{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         
-                $sheet->getStyle("A2:F{$lastRow}")
+                $sheet->getStyle("A2:A{$lastRow}")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $sheet->getStyle("C2:F{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 
