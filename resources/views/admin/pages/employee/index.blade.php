@@ -118,7 +118,7 @@
                                         break;
                                     default:
                                         $status_kerja = 'Kontrak';
-                                        $badge_color = 'info text-dark';
+                                        $badge_color = 'primary';
                                 }
                             @endphp
                             <tr>

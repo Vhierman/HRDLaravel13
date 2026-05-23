@@ -96,6 +96,7 @@ class EmployeeController extends Controller
         $divisions      = Divisions::all();
         $positions      = Positions::all();
         $areas          = Areas::all();
+
         return view ('admin.pages.employee.create',[
                     'companies'     => $companies,
                     'working_hours' => $working_hours,
@@ -747,8 +748,8 @@ class EmployeeController extends Controller
         {
             $employee = Employees::with([
             'history_contracts', 'history_salaries', 'history_families', 'history_positions', 
-            'training_eksternals', 'training_internals', 'overtimes', 'rekap_salaries', 
-            'inventory_motorcycles', 'inventory_cars'
+            'training_eksternals', 'training_internals', 'overtimes', 'rekap_salaries', 'attendances', 
+            'inventory_motorcycles', 'inventory_cars','certification_bnsps','certification_ministries','certification_others'
             ])->findOrFail($id);
 
             $allRelations = [
@@ -761,7 +762,11 @@ class EmployeeController extends Controller
                 'inventory_motorcycles', 
                 'overtimes', 
                 'rekap_salaries', 
-                'inventory_cars'
+                'attendances', 
+                'inventory_cars',
+                'certification_bnsps',
+                'certification_ministries',
+                'certification_others'
             ];
 
             foreach ($allRelations as $relation) {

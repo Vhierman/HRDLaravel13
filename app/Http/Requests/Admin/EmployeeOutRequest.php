@@ -24,7 +24,7 @@ class EmployeeOutRequest extends FormRequest
     {
         return [
             //
-            'employee_id'                       => 'required|integer|exists:employees,id',
+            'employees_id'                      => 'required|integer|exists:employees,id',
             'keterangan_keluar'                 => 'required|string|in:Berakhir Kontrak Kerja,Pengunduran Diri,Pemutusan Hubungan Kerja,Memasuki Usia Pensiun',
             'tanggal_keluar_karyawan_keluar'    => 'required|date',
         ];

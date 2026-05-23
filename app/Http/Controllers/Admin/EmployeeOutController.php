@@ -11,6 +11,7 @@ use App\Models\Admin\Divisions;
 use App\Models\Admin\Positions;
 use App\Models\Admin\Areas;
 use App\Models\Admin\Golongans;
+use App\Models\Admin\Attendances;
 use App\Models\Admin\HistoryContracts;
 use App\Models\Admin\HistoryPositions;
 use App\Models\Admin\HistoryFamilies;
@@ -51,13 +52,28 @@ class EmployeeOutController extends Controller
             abort(403);
         }
 
-        $employees_outs = EmployeesOuts::with([
-                            'employees',
-                            'areas',
-                            'golongans',
-                            'divisions',
-                            'positions'
-                            ])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)->value('divisions_id');
+        $divisionMap = [
+                        19 => [19,20,21],
+                        11 => [11],
+                        10 => [10],
+                        14 => [14],
+                        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+                        ];
+        $divisionIds = $divisionMap[$divisi] ?? null;
+        $query = EmployeesOuts::with([
+                'employees',
+                'areas',
+                'golongans',
+                'divisions',
+                'positions'
+                ]);
+        if ($divisionIds) 
+        {
+            $query->whereIn('divisions_id', $divisionIds);
+        }
+        $employees_outs = $query->get();
 
         return view('admin.pages.employee_out.index',[
             'employees_outs' => $employees_outs
@@ -75,7 +91,7 @@ class EmployeeOutController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::all();
+        $employees      = Employees::with(['divisions'])->get();
         return view ('admin.pages.employee_out.create',[
             'employees'     => $employees
         ]);
@@ -95,139 +111,88 @@ class EmployeeOutController extends Controller
         $data   = $request->except('_token');
         DB::beginTransaction();
         try {
-            $employee      = Employees::findOrFail($request->input('employee_id'));
-            $item_employee  = Employees::where('id', $request->input('employee_id'))->first();
+            $employee = Employees::findOrFail($request->input('employees_id'));
+            $id = $employee->id;
+
             EmployeesOuts::create([
-            'employees_id'                              => $request->input('employee_id'),
-            'companies_id'                              => $item_employee->companies_id,
-            'golongans_id'                              => $item_employee->golongans_id,
-            'areas_id'                                  => $item_employee->areas_id,
-            'divisions_id'                              => $item_employee->divisions_id,
-            'positions_id'                              => $item_employee->positions_id,
-            'nik_karyawan_keluar'                       => $item_employee->nik_karyawan,
-            'nama_karyawan_keluar'                      => $item_employee->nama_karyawan,
-            'nomor_npwp_karyawan_keluar'                => $item_employee->nomor_npwp,
-            'email_karyawan_keluar'                     => $item_employee->email_karyawan,
-            'nomor_handphone_karyawan_keluar'           => $item_employee->nomor_handphone,
-            'tempat_lahir_karyawan_keluar'              => $item_employee->tempat_lahir,
-            'tanggal_lahir_karyawan_keluar'             => $item_employee->tanggal_lahir,
-            'nomor_bpjsketenagakerjaan_karyawan_keluar' => $item_employee->nomor_bpjsketenagakerjaan,
-            'nomor_bpjskesehatan_karyawan_keluar'       => $item_employee->nomor_bpjskesehatan,
-            'nomor_rekening_karyawan_keluar'            => $item_employee->nomor_rekening,
-            'pendidikan_terakhir_karyawan_keluar'       => $item_employee->pendidikan_terakhir,
-            'jenis_kelamin_karyawan_keluar'             => $item_employee->jenis_kelamin,
-            'agama_karyawan_keluar'                     => $item_employee->agama,
-            'alamat_karyawan_keluar'                    => $item_employee->alamat,
-            'rt_karyawan_keluar'                        => $item_employee->rt,
-            'rw_karyawan_keluar'                        => $item_employee->rw,
-            'kelurahan_karyawan_keluar'                 => $item_employee->kelurahan,
-            'kecamatan_karyawan_keluar'                 => $item_employee->kecamatan,
-            'kota_karyawan_keluar'                      => $item_employee->kota,
-            'provinsi_karyawan_keluar'                  => $item_employee->provinsi,
-            'kode_pos_karyawan_keluar'                  => $item_employee->kode_pos,
-            'nomor_absen_karyawan_keluar'               => $item_employee->nomor_absen,
-            'golongan_darah_karyawan_keluar'            => $item_employee->golongan_darah,
-            'nomor_kartu_keluarga_karyawan_keluar'      => $item_employee->nomor_kartu_keluarga,
-            'status_nikah_karyawan_keluar'              => $item_employee->status_nikah,
-            'nama_ayah_karyawan_keluar'                 => $item_employee->nama_ayah,
-            'nama_ibu_karyawan_keluar'                  => $item_employee->nama_ibu,
-            'tanggal_masuk_karyawan_keluar'             => $item_employee->tanggal_mulai_kerja,
+            'employees_id'                              => $id,
+            'companies_id'                              => $employee->companies_id,
+            'golongans_id'                              => $employee->golongans_id,
+            'areas_id'                                  => $employee->areas_id,
+            'divisions_id'                              => $employee->divisions_id,
+            'positions_id'                              => $employee->positions_id,
+            'nik_karyawan_keluar'                       => $employee->nik_karyawan,
+            'nama_karyawan_keluar'                      => $employee->nama_karyawan,
+            'nomor_npwp_karyawan_keluar'                => $employee->nomor_npwp,
+            'email_karyawan_keluar'                     => $employee->email_karyawan,
+            'nomor_handphone_karyawan_keluar'           => $employee->nomor_handphone,
+            'tempat_lahir_karyawan_keluar'              => $employee->tempat_lahir,
+            'tanggal_lahir_karyawan_keluar'             => $employee->tanggal_lahir,
+            'nomor_bpjsketenagakerjaan_karyawan_keluar' => $employee->nomor_bpjsketenagakerjaan,
+            'nomor_bpjskesehatan_karyawan_keluar'       => $employee->nomor_bpjskesehatan,
+            'nomor_rekening_karyawan_keluar'            => $employee->nomor_rekening,
+            'pendidikan_terakhir_karyawan_keluar'       => $employee->pendidikan_terakhir,
+            'jenis_kelamin_karyawan_keluar'             => $employee->jenis_kelamin,
+            'agama_karyawan_keluar'                     => $employee->agama,
+            'alamat_karyawan_keluar'                    => $employee->alamat,
+            'rt_karyawan_keluar'                        => $employee->rt,
+            'rw_karyawan_keluar'                        => $employee->rw,
+            'kelurahan_karyawan_keluar'                 => $employee->kelurahan,
+            'kecamatan_karyawan_keluar'                 => $employee->kecamatan,
+            'kota_karyawan_keluar'                      => $employee->kota,
+            'provinsi_karyawan_keluar'                  => $employee->provinsi,
+            'kode_pos_karyawan_keluar'                  => $employee->kode_pos,
+            'nomor_absen_karyawan_keluar'               => $employee->nomor_absen,
+            'golongan_darah_karyawan_keluar'            => $employee->golongan_darah,
+            'nomor_kartu_keluarga_karyawan_keluar'      => $employee->nomor_kartu_keluarga,
+            'status_nikah_karyawan_keluar'              => $employee->status_nikah,
+            'nama_ayah_karyawan_keluar'                 => $employee->nama_ayah,
+            'nama_ibu_karyawan_keluar'                  => $employee->nama_ibu,
+            'tanggal_masuk_karyawan_keluar'             => $employee->tanggal_mulai_kerja,
             'tanggal_keluar_karyawan_keluar'            => $request->input('tanggal_keluar_karyawan_keluar'),
-            'status_kerja_karyawan_keluar'              => $item_employee->status_kerja,
+            'status_kerja_karyawan_keluar'              => $employee->status_kerja,
             'keterangan_keluar'                         => $request->input('keterangan_keluar'),
             'input_oleh'                                => auth()->user()->name
         ]);
 
-        $id                         = $item_employee->id;
-        $employee                   = Employees::where('id', $id)->first();
-        $contracts                  = HistoryContracts::where('employees_id', $id)->get();
-        $positions                  = HistoryPositions::where('employees_id', $id)->get();
-        $families                   = HistoryFamilies::where('employees_id', $id)->get();
-        $salaries                   = HistorySalaries::where('employees_id', $id)->get();
-        $rekap_salaries             = RekapSalaries::where('employees_id', $id)->get();
-        $overtimes                  = Overtimes::where('employees_id', $id)->get();
-        $certification_bnsps        = CertificationBnsps::where('employees_id', $id)->get();
-        $certification_ministries   = CertificationMinistries::where('employees_id', $id)->get();
-        $certification_others       = CertificationOthers::where('employees_id', $id)->get();
-        $trainining_internals       = TrainingInternals::where('employees_id', $id)->get();
-        $trainining_eksternals      = TrainingEksternals::where('employees_id', $id)->get();
-        $inventory_cars             = InventoryCars::where('employees_id', $id)->get();
-        $inventory_motorcycles      = InventoryMotorcycles::where('employees_id', $id)->get();
+        $fileFields = ['foto_karyawan' => 'assets/foto/karyawan'];
+        foreach ($fileFields as $field => $path) {
+            if ($employee->$field) {
+                Storage::disk('public')->delete($path . '/' . $employee->$field);
+            }
+        }
 
+        $relations = [
+            HistoryContracts::class,
+            HistoryPositions::class,
+            HistoryFamilies::class,
+            HistorySalaries::class,
+            RekapSalaries::class,
+            Overtimes::class,
+            CertificationBnsps::class,
+            CertificationMinistries::class,
+            CertificationOthers::class,
+            Attendances::class,
+            TrainingInternals::class,
+            TrainingEksternals::class,
+            InventoryCars::class,
+            InventoryMotorcycles::class,
+        ];
+        foreach ($relations as $model) {
+            $model::where('employees_id', $id)->update(['hapus_oleh' => auth()->user()->name]);
+            $model::where('employees_id', $id)->delete();
+        }
+
+        $employee->update(['hapus_oleh' => auth()->user()->name]);
         $employee->delete();
-        
-        HistoryContracts::where('employees_id', $employee->id)->delete();
-        HistoryPositions::where('employees_id', $employee->id)->delete();
-        HistoryFamilies::where('employees_id', $employee->id)->delete();
-        HistorySalaries::where('employees_id', $employee->id)->delete();
-        RekapSalaries::where('employees_id', $employee->id)->delete();
-        Overtimes::where('employees_id', $employee->id)->delete();
-        
-
-        if ($certification_bnsps <> null) {
-        foreach ($certification_bnsps as $certification_bnsp ) {
-            $certification_bnsp->delete();
-        }
-        } else {}
-
-        if ($certification_ministries <> null) {
-        foreach ($certification_ministries as $certification_ministry ) {
-            $certification_ministry->delete();
-        }
-        } else {}
-
-        if ($certification_others <> null) {
-        foreach ($certification_others as $certification_other ) {
-            $certification_other->delete();
-        }
-        } else {}
-
-        if ($trainining_internals <> null) {
-        foreach ($trainining_internals as $trainining_internal ) {
-            $trainining_internal->delete();
-        }
-        } else {}
-
-        if ($trainining_eksternals <> null) {
-        foreach ($trainining_eksternals as $trainining_eksternal ) {
-            $trainining_eksternal->delete();
-        }
-        } else {}
-
-        if ($inventory_cars <> null) {
-        foreach ($inventory_cars as $inventory_car ) {
-            $inventory_car->delete();
-        }
-        } else {}
-
-        if ($inventory_motorcycles <> null) {
-        foreach ($inventory_motorcycles as $inventory_motorcycle ) {
-            $inventory_motorcycle->delete();
-        }
-        } else {}
-
-        //Menghapus Foto
-        $fileFields = [
-                'foto_karyawan' => 'assets/foto/karyawan'
-                ];
-
-                // Proses penghapusan file fisik dari storage
-                foreach ($fileFields as $field => $path) {
-                    if ($employee->$field) {
-                        Storage::disk('public')->delete($path . '/' . $employee->$field);
-                    }
-                }
-        //Menghapus Foto
 
         DB::commit();
-
         Alert::success('Success Input Data Karyawan Keluar','Oleh ' . auth()->user()->name);
-
         return redirect()->route('employee_out.index');
-
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) 
+        {
             DB::rollBack();
-            // dd($e->getMessage());
             Alert::error('Salah','Oleh '.auth()->user()->name);
             return redirect()->route('employee_out.index');
         }

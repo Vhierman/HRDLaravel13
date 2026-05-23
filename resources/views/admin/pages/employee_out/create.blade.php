@@ -42,13 +42,14 @@
                     <div class="row mb-3">
                         <label for="input35" class="col-sm-3 col-form-label fs-6">Nama</label>
                         <div class="col-sm-9">
-                            <select name="employee_id" class="form-select" id="nama_karyawan_keluar-select"
+                            <select name="employees_id" class="form-select" id="karyawan-select"
                                 data-placeholder="Pilih Karyawan">
                                 <option value="">Pilih Karyawan</option>
                                 @foreach ($employees as $employee)
                                     <option value="{{ $employee->id }}"
-                                        {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
-                                        {{ $employee->nama_karyawan }}
+                                        {{ old('employees_id') == $employee->id ? 'selected' : '' }}>
+                                        {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
+                                        {{ $employee->divisions->penempatan }}
                                     </option>
                                 @endforeach
                             </select>
