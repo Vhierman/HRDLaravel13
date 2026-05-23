@@ -55,7 +55,7 @@ class AttendanceController extends Controller
             }
         }
 
-        // Eksekusi query statistik ke database (Ini yang tadi terlewat)
+        // Eksekusi query statistik ke database 
         $statistics = Attendances::whereYear('tanggal_absen', $currentYear)
             ->selectRaw(implode(', ', $selectQueries))
             ->first()
@@ -377,27 +377,26 @@ class AttendanceController extends Controller
         14 => [14],
         5  => [5,6,9,11,12,13,14,15,16,19,20,21],
         ];
-        $divisionIds = $divisionMap[$divisi] ?? [];
 
         $query = Attendances::with([
-        'employees',
-        'employees.divisions',
-        'employees.positions',
-        'employees.golongans' ])
-        ->whereBetween('tanggal_absen', [
-            $tanggal_awal,
-            $tanggal_akhir ]);
+            'employees',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_absen', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees');
 
-        if (!empty($divisionIds)) 
-        {
-            $query->whereHas('employees', function ($q) use ($divisionIds) 
-            {
+        if ($divisi && array_key_exists($divisi, $divisionMap)) {
+            $divisionIds = $divisionMap[$divisi];
+            
+            $query->whereHas('employees', function ($q) use ($divisionIds) {
                 $q->whereIn('divisions_id', $divisionIds);
             });
         }
         $item_attendances = $query->get();
 
-        if (!$item_attendances->isEmpty()) {
+        if ($item_attendances->isNotEmpty()) {
             return view('admin.pages.attendance.show',[
                 'tanggal_awal'  => $tanggal_awal,
                 'tanggal_akhir' => $tanggal_akhir,
@@ -497,12 +496,6 @@ class AttendanceController extends Controller
         }
         $item_attendances = $query->get();
 
-
-
-
-
-
-        
         $row = 2;
         $no = 1;
         foreach ($item_attendances as $item_attendance) {
