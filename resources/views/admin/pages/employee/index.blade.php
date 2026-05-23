@@ -34,7 +34,6 @@
         </div>
     </div>
     @php
-        // Optimasi: Cek role di luar loop agar server tidak melakukan pengecekan berulang-ulang di setiap baris tabel
         $userRole = Auth::user()->roles;
         $canManage = in_array($userRole, ['admin', 'hrd']);
         $canDelete = $userRole === 'admin';

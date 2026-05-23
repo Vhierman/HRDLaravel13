@@ -67,7 +67,7 @@
 
     </div>
 
-    @if (in_array(Auth::user()->roles, ['admin', 'hrd']))
+    @if (in_array(Auth::user()->roles, ['admin', 'hrd', 'accounting']))
         {{-- Chart --}}
         <div class="col-12 col-xl-12">
             <div class="card rounded-4">

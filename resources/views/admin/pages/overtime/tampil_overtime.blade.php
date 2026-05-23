@@ -8,10 +8,8 @@
         }
     </style>
 @endsection
-
 @extends('admin.layouts.base')
 @section('title', 'Data Overtime');
-
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">Overtime</div>
@@ -23,21 +21,28 @@
             </nav>
         </div>
     </div>
+    @php
+        $userRole = Auth::user()->roles;
+        $canExport = in_array($userRole, ['admin', 'hrd', 'accounting']);
+    @endphp
     <div class="card">
         <div class="card-body">
             <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <form action="{{ route('overtime.export_excell_overtime') }}" method="POST" class="d-inline">
-                        @csrf
-                        <input type="hidden" name="tanggal_awal" class="form-control" value="{{ $tanggal_awal }}">
-                        <input type="hidden" name="tanggal_akhir" class="form-control" value="{{ $tanggal_akhir }}">
-                        <button type="submit" class="btn btn-success px-5 raised">
-                            Download Data Overtime Periode {{ \Carbon\Carbon::parse($tanggal_awal)->isoformat('DD-MM-Y') }}
-                            s/d
-                            {{ \Carbon\Carbon::parse($tanggal_akhir)->isoformat('DD-MM-Y') }}
-                        </button>
-                    </form>
-                </div>
+                @if ($canExport)
+                    <div class="col">
+                        <form action="{{ route('overtime.export_excell_overtime') }}" method="POST" class="d-inline">
+                            @csrf
+                            <input type="hidden" name="tanggal_awal" class="form-control" value="{{ $tanggal_awal }}">
+                            <input type="hidden" name="tanggal_akhir" class="form-control" value="{{ $tanggal_akhir }}">
+                            <button type="submit" class="btn btn-success px-5 raised">
+                                Download Data Overtime Periode
+                                {{ \Carbon\Carbon::parse($tanggal_awal)->isoformat('DD-MM-Y') }}
+                                s/d
+                                {{ \Carbon\Carbon::parse($tanggal_akhir)->isoformat('DD-MM-Y') }}
+                            </button>
+                        </form>
+                    </div>
+                @endif
                 <div class="col">
                     <button type="button" class="btn btn-danger position-relative d-flex gap-2"><i
                             class="material-icons-outlined">chat_bubble_outline</i>Overtime Belum Direkap<span

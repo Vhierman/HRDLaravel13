@@ -41,10 +41,7 @@
             </div>
             <div class="row mt-1">
                 <div class="col">
-                    <a href="{{ route('overtime.index') }}" class="btn btn-danger px-5 raised w-100">Cancel Approve
-                        Overtime Periode {{ \Carbon\Carbon::parse($tanggal_awal)->isoformat('DD-MM-Y') }}
-                        s/d
-                        {{ \Carbon\Carbon::parse($tanggal_akhir)->isoformat('DD-MM-Y') }}</a>
+                    <a href="{{ route('overtime.index') }}" class="btn btn-danger px-5 raised w-100">Kembali</a>
                 </div>
             </div>
 

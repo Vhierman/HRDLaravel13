@@ -229,8 +229,7 @@ class AttendanceController extends Controller
         }
 
         $nik            = auth()->user()->nik;
-        $divisi         = Employees::where('nik_karyawan', $nik)
-                                    ->value('divisions_id');
+        $divisi         = Employees::where('nik_karyawan', $nik)->value('divisions_id');
         $divisionMap = [
         19 => [19,20,21],
         11 => [11],

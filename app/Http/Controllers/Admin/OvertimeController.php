@@ -59,7 +59,31 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::with(['divisions','golongans',])->whereIn('golongans_id',[2,3])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions','golongans'
+            ])->whereIn('divisions_id',$divisionIds)->whereIn('golongans_id',[2,3])->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions'
+            ])->get();
+        }
+
+        
         return view('admin.pages.overtime.create',['employees'=> $employees]);
     }
 
@@ -249,6 +273,7 @@ class OvertimeController extends Controller
                             'employees.golongans',
                             'employees.areas'
                             ])->where('id', $id)->first();
+
         return view('admin.pages.overtime.tampil_edit_approval_overtime',['item_overtime' => $item_overtime]);
     }
 
@@ -357,6 +382,7 @@ class OvertimeController extends Controller
         //Rumus Lembur
 
         $overtimes                  = Overtimes::where('id', $id)->first();
+        if ($overtimes != null) {
         $overtimes->update([
             'jam_masuk'             => $jam_masuk,
             'jam_istirahat'         => $jam_istirahat,
@@ -376,13 +402,11 @@ class OvertimeController extends Controller
             'uang_makan_lembur'     => $uang_makan_lembur,
             'edit_oleh'             => auth()->user()->name
         ]);
-
-        if ($overtimes > 0) 
-        {
             Alert::success('Success Edit Data Overtime', 'Oleh ' . auth()->user()->name);
             return redirect()->route('overtime.index');
-        }
-        else{
+
+        } else {
+            // Jika data tidak ditemukan sejak awal
             Alert::error('Data Tidak Ditemukan');
             return redirect()->route('overtime.index');
         }
@@ -430,35 +454,56 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        $data               = $request->except('_token');
-        $tanggal_awal       = $request->input('tanggal_awal');
-        $tanggal_akhir      = $request->input('tanggal_akhir');
-        $item_overtimes     = Overtimes::with([
-                            'employees',
-                            'employees.divisions',
-                            'employees.positions',
-                            'employees.golongans',
-                            'employees.areas'
-                            ])->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])->get();
+        $data           = $request->except('_token');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
 
-        $jumlah_belum_direkap     = Overtimes::with([
-                                    'employees',
-                                    'employees.divisions',
-                                    'employees.positions',
-                                    'employees.golongans',
-                                    'employees.areas'
-                                    ])->whereNull('acc_hrd')
-                                    ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])->count();
-        
-        $jumlah_sudah_direkap     = Overtimes::with([
-                                    'employees',
-                                    'employees.divisions',
-                                    'employees.positions',
-                                    'employees.golongans',
-                                    'employees.areas'
-                                    ])->whereNotNull('acc_hrd')
-                                    ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])->count();
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
 
+        $divisionIds = ($divisi && array_key_exists($divisi, $divisionMap)) ? $divisionMap[$divisi] : null;
+
+        $query = Overtimes::with([
+            'employees',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees', function ($q) use ($divisionIds) {
+            if ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            }
+        });
+
+        $item_overtimes = $query->get();
+
+        $query_belum_rekap = Overtimes::whereNull('acc_hrd') 
+        ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees', function ($q) use ($divisionIds) {
+            if ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            }
+        });
+        $jumlah_belum_direkap = $query_belum_rekap->count();
+
+        $query_sudah_rekap = Overtimes::whereNotNull('acc_hrd')
+        ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees', function ($q) use ($divisionIds) {
+            if ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            }
+        });
+
+        $jumlah_sudah_direkap = $query_sudah_rekap->count();
 
         if (!$item_overtimes->isEmpty()) {
             return view('admin.pages.overtime.tampil_overtime',[
@@ -533,23 +578,36 @@ class OvertimeController extends Controller
             $sheet->getRowDimension(1)->setRowHeight(30);
         //Style
 
-        $tanggal_awal   = Carbon::parse($request->tanggal_awal)->format('Y-m-d');
-        $tanggal_akhir  = Carbon::parse($request->tanggal_akhir)->format('Y-m-d');
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $tanggal_awal   = $request->input('tanggal_awal');
+        $tanggal_akhir  = $request->input('tanggal_akhir');
 
-        $item_overtimes = Overtimes::with([
-                                            'employees',
-                                            'employees.areas',
-                                            'employees.divisions',
-                                            'employees.positions',
-                                            'employees.golongans'
-                                            ])
-                                            ->when($request->tanggal_awal && $request->tanggal_akhir, function ($query) use ($request) 
-                                            {
-                                                $query->whereBetween('tanggal_lembur', [
-                                                $request->tanggal_awal,
-                                                $request->tanggal_akhir
-                                                ]);
-                                            })->get();
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+
+        $divisionIds = ($divisi && array_key_exists($divisi, $divisionMap)) ? $divisionMap[$divisi] : null;
+
+        $query = Overtimes::with([
+            'employees',
+            'employees.divisions',
+            'employees.positions',
+            'employees.golongans'
+        ])
+        ->whereBetween('tanggal_lembur', [$tanggal_awal, $tanggal_akhir])
+        ->whereHas('employees', function ($q) use ($divisionIds) {
+            if ($divisionIds) {
+                $q->whereIn('divisions_id', $divisionIds);
+            }
+        });
+
+        $item_overtimes = $query->get();
         
         $row = 2;
         $no = 1;
@@ -639,8 +697,31 @@ class OvertimeController extends Controller
         if (!in_array(auth()->user()->roles, $allowedRoles)) {
             abort(403);
         }
+        
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
 
-        $employees      = Employees::with(['divisions','golongans',])->whereIn('golongans_id',[2,3])->get();
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions','golongans'
+            ])->whereIn('divisions_id',$divisionIds)->whereIn('golongans_id',[2,3])->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions','golongans'
+            ])->get();
+        }
+
         return view('admin.pages.overtime.edit_overtime',[
             'employees' => $employees
         ]);
@@ -655,13 +736,14 @@ class OvertimeController extends Controller
 
         $data               = $request->except('_token');
         $tanggal_lembur     = $request->input('tanggal');
+        $employees_id       = $request->input('employees_id');
         $item_overtime      = Overtimes::with([
                             'employees',
                             'employees.divisions',
                             'employees.positions',
                             'employees.golongans',
                             'employees.areas'
-                            ])->where('tanggal_lembur',$tanggal_lembur)->first();
+                            ])->where('tanggal_lembur',$tanggal_lembur)->where('employees_id',$employees_id)->first();
 
         if ($item_overtime != NULL) {
             return view('admin.pages.overtime.tampil_edit_overtime',[
@@ -672,8 +754,6 @@ class OvertimeController extends Controller
             Alert::error('Data Tidak Ditemukan');
             return redirect()->route('overtime.index');
         }   
-
-        
     }
 
     public function form_hapus_overtime()
@@ -683,7 +763,30 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        $employees      = Employees::with(['divisions','golongans',])->whereIn('golongans_id',[2,3])->get();
+        $nik            = auth()->user()->nik;
+        $divisi         = Employees::where('nik_karyawan', $nik)
+                                    ->value('divisions_id');
+        $divisionMap = [
+        19 => [19,20,21],
+        11 => [11],
+        10 => [10],
+        14 => [14],
+        5  => [5,6,9,11,12,13,14,15,16,19,20,21],
+        ];
+        $divisionIds = $divisionMap[$divisi] ?? [];
+
+        if (!empty($divisionIds)) 
+        {
+            $employees = Employees::with([
+                'divisions','golongans'
+            ])->whereIn('divisions_id',$divisionIds)->whereIn('golongans_id',[2,3])->get();
+        }
+        else{
+            $employees = Employees::with([
+                'divisions','golongans'
+            ])->get();
+        }
+
         return view('admin.pages.overtime.hapus_overtime',[
             'employees' => $employees
         ]);
@@ -697,6 +800,7 @@ class OvertimeController extends Controller
         }
 
         $data               = $request->except('_token');
+        $employees_id       = $request->input('employees_id');
         $tanggal_lembur     = $request->input('tanggal');
         $item_overtime      = Overtimes::with([
                             'employees',
@@ -704,7 +808,7 @@ class OvertimeController extends Controller
                             'employees.positions',
                             'employees.golongans',
                             'employees.areas'
-                            ])->where('tanggal_lembur',$tanggal_lembur)->first();
+                            ])->where('tanggal_lembur',$tanggal_lembur)->where('employees_id',$employees_id)->first();
 
         if ($item_overtime != NULL) {
             return view('admin.pages.overtime.tampil_hapus_overtime',[
@@ -1299,35 +1403,33 @@ class OvertimeController extends Controller
             default         => abort(403),
         };
 
-        $item_overtimes = Overtimes::with('employees')
-                            ->join('employees', 'employees.id', '=', 'overtimes.employees_id')
-                            ->select(
-                            'overtimes.employees_id',
-                            'overtimes.nik_karyawan',
-                            'employees.nama_karyawan',
-                            'employees.status_kerja'
-                            )
-                            ->selectRaw('
-                            SUM(jumlah_jam_pertama) as jumlah_jam_pertama,
-                            SUM(jumlah_jam_kedua) as jumlah_jam_kedua,
-                            SUM(jumlah_jam_ketiga) as jumlah_jam_ketiga,
-                            SUM(jumlah_jam_keempat) as jumlah_jam_keempat,
-                            SUM(uang_makan_lembur) as uang_makan_lembur
-                            ')
-                            ->whereIn('employees.divisions_id', $divisi)
-                            ->whereNotNull('overtimes.acc_hrd')
-                            ->whereNull('overtimes.deleted_at')
-                            ->whereNull('employees.deleted_at')
-                            ->where('employees.status_kerja', $status_kerja)
-                            ->whereBetween('overtimes.tanggal_lembur', [$awal, $akhir])
-                            ->groupBy(
-                            'overtimes.employees_id',
-                            'overtimes.nik_karyawan',
-                            'employees.nama_karyawan',
-                            'employees.status_kerja'
-                            )
-                            ->orderBy('employees.nama_karyawan')
-                            ->get();
+        $item_overtimes = Overtimes::join('employees', 'employees.id', '=', 'overtimes.employees_id')
+                                    ->select(
+                                        'overtimes.employees_id',
+                                        'overtimes.nik_karyawan',
+                                        'employees.nama_karyawan',
+                                        'employees.status_kerja'
+                                    )
+                                    ->selectRaw('
+                                        SUM(overtimes.jumlah_jam_pertama) as jumlah_jam_pertama,
+                                        SUM(overtimes.jumlah_jam_kedua) as jumlah_jam_kedua,
+                                        SUM(overtimes.jumlah_jam_ketiga) as jumlah_jam_ketiga,
+                                        SUM(overtimes.jumlah_jam_keempat) as jumlah_jam_keempat,
+                                        SUM(overtimes.uang_makan_lembur) as uang_makan_lembur
+                                    ')
+                                    ->whereIn('employees.divisions_id', $divisi)
+                                    ->where('employees.status_kerja', $status_kerja)
+                                    ->whereBetween('overtimes.tanggal_lembur', [$awal, $akhir])
+                                    ->whereNotNull('overtimes.acc_hrd')
+                                    // Catatan: Hapus manual whereNull('deleted_at') jika model sudah pakai trait SoftDeletes bawaan Laravel
+                                    ->groupBy(
+                                        'overtimes.employees_id',
+                                        'overtimes.nik_karyawan',
+                                        'employees.nama_karyawan',
+                                        'employees.status_kerja'
+                                    )
+                                    ->orderBy('employees.nama_karyawan')
+                                    ->get();
 
         if ($item_overtimes->isEmpty()) {
             Alert::error('Data Overtime Tidak Ditemukan Atau Belum Di Rekap HRD');
@@ -1721,7 +1823,10 @@ class OvertimeController extends Controller
         $awal           = $request->input('awal');
         $akhir          = $request->input('akhir');
 
-        $tahunlembur        = \Carbon\Carbon::parse($awal)->isoformat('YYYY');
+        $bulanawal    = \Carbon\Carbon::parse($awal)->isoformat('MM');
+        $tahunawal    = \Carbon\Carbon::parse($awal)->isoformat('YYYY');
+        $bulanakhir   = \Carbon\Carbon::parse($akhir)->isoformat('MM');
+        $tahunakhir   = \Carbon\Carbon::parse($akhir)->isoformat('YYYY');
 
         $divisi = match ($penempatan) {
             'Produksi'      => [11],
@@ -1729,169 +1834,115 @@ class OvertimeController extends Controller
             'PPC'           => [5, 6, 12, 13, 14, 15, 16],
             'Quality'       => [10],
             'PDC Daihatsu'  => [19, 20, 21],
-            default         => abort(403),
+            default         => abort(404, 'Penempatan tidak valid'),
         };
 
-        $item_overtimes = Overtimes::with('employees')
-                            ->join('employees', 'employees.id', '=', 'overtimes.employees_id')
+        $item_overtimes = Overtimes::join('employees', 'employees.id', '=', 'overtimes.employees_id')
+                            ->with([
+                                'employees.golongans',
+                                'employees.areas',
+                                'employees.divisions',
+                                'employees.positions',
+                                'employees.rekap_salaries' => function ($query) use ($bulanawal, $tahunawal) {
+                                    $query->whereMonth('periode_akhir', $bulanawal)
+                                        ->whereYear('periode_akhir', $tahunawal);
+                                }
+                            ])
                             ->select(
-                            'overtimes.employees_id',
-                            'overtimes.nik_karyawan',
-                            'employees.nama_karyawan',
-                            'employees.status_kerja'
+                                'overtimes.employees_id',
+                                'overtimes.nik_karyawan'
                             )
                             ->selectRaw('
-                            SUM(jumlah_jam_pertama) as jumlah_jam_pertama,
-                            SUM(jumlah_jam_kedua) as jumlah_jam_kedua,
-                            SUM(jumlah_jam_ketiga) as jumlah_jam_ketiga,
-                            SUM(jumlah_jam_keempat) as jumlah_jam_keempat,
-                            SUM(uang_makan_lembur) as uang_makan_lembur
+                                SUM(overtimes.jumlah_jam_pertama) as jam_1,
+                                SUM(overtimes.jumlah_jam_kedua) as jam_2,
+                                SUM(overtimes.jumlah_jam_ketiga) as jam_3,
+                                SUM(overtimes.jumlah_jam_keempat) as jam_4,
+                                SUM(overtimes.uang_makan_lembur) as total_uang_makan
                             ')
                             ->whereIn('employees.divisions_id', $divisi)
-                            ->whereNotNull('overtimes.acc_hrd')
-                            ->whereNull('overtimes.deleted_at')
-                            ->whereNull('employees.deleted_at')
                             ->where('employees.status_kerja', $status_kerja)
                             ->whereBetween('overtimes.tanggal_lembur', [$awal, $akhir])
-                            ->groupBy(
-                            'overtimes.employees_id',
-                            'overtimes.nik_karyawan',
-                            'employees.nama_karyawan',
-                            'employees.status_kerja'
-                            )
+                            ->whereNotNull('overtimes.acc_hrd')
+                            ->groupBy('overtimes.employees_id', 'overtimes.nik_karyawan')
                             ->orderBy('employees.nama_karyawan')
                             ->get();
+        
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $headers = [
+            'A1' => 'No', 'B1' => 'NIK Karyawan', 'C1' => 'Nama Karyawan', 'D1' => 'Golongan',
+            'E1' => 'Area', 'F1' => 'Jabatan', 'G1' => 'Penempatan', 'H1' => 'Nomor Rekening',
+            'I1' => 'Jam Lembur', 'J1' => 'Upah Lembur Perjam', 'K1' => 'Jumlah Uang Lembur',
+            'L1' => 'Uang Makan Lembur', 'M1' => 'Jumlah Uang Diterima', 'N1' => 'Hasil Uang Lembur'
+        ];
+        foreach ($headers as $cell => $value) {
+            $sheet->setCellValue($cell, $value);
+        }
+
+        $sheet->getStyle('A1:N1')->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'size' => 12],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4CAF50']],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+        ]);
+        $sheet->getRowDimension(1)->setRowHeight(30);
 
         $row = 2;
         $no = 1;
-        foreach ($item_overtimes as $item_overtime) {
-                
 
-                $no = 1;
-                $totaljumlahuanglembur = 0;
-                $totaluangmakanlembur = 0;
-                $totaljumlahuangditerima = 0;
-                $totalhasiluangditerima = 0;
+        foreach ($item_overtimes as $item) 
+        {
+            $employee = $item->employees;
+            if (!$employee) continue; // Skip jika data karyawan tidak sengaja hilang
 
-                $bulanawal   = Carbon::parse($awal)->isoformat('MM');
-                $bulanakhir  = Carbon::parse($akhir)->isoformat('MM');
-                $tahunawal   = Carbon::parse($awal)->isoformat('YYYY');
-                $tahunakhir  = Carbon::parse($akhir)->isoformat('YYYY');
+            $jumlahjam = $item->jam_1 + $item->jam_2 + $item->jam_3 + $item->jam_4;
+            $uangmakanlembur = $item->total_uang_makan;
 
-            foreach ($item_overtimes as $item_overtime) {
+            // Logika Penempatan Cabang/Divisi
+            $penempatan_nama = match ($employee->divisions?->id) {
+                19 => "Sunter",
+                20 => "Cibitung",
+                21 => "Karawang Timur",
+                default => $employee->divisions?->penempatan ?? '-',
+            };
 
-                $jumlahjam = $item_overtime->jumlah_jam_pertama + $item_overtime->jumlah_jam_kedua + $item_overtime->jumlah_jam_ketiga + $item_overtime->jumlah_jam_keempat;
-                $uangmakanlembur = $item_overtime->uang_makan_lembur;
+            $rekapSalary = $employee->rekap_salaries->first();
+            $upahlemburperjam = $rekapSalary?->upah_lembur_perjam ?? 0;
+            $jumlahuanglembur = $upahlemburperjam * $jumlahjam;
+            $jumlahuangditerima = $jumlahuanglembur + $uangmakanlembur;
 
-                $collection = Employees::with([
-                                    'golongans',
-                                    'areas',
-                                    'divisions',
-                                    'positions',
-                                    'history_salaries',
-                                    'rekap_salaries' => function ($query) use (
-                                        $bulanawal,
-                                        $bulanakhir,
-                                        $tahunawal,
-                                        $tahunakhir,
-                                    ) {
-                                            $query
-                                            ->whereMonth('periode_akhir', $bulanawal)
-                                            ->whereYear('periode_akhir', $tahunawal);
-                                    },
-                                    'overtimes' => function ($query) use ($awal, $akhir) {
-                                        $query
-                                            ->whereNotNull('acc_hrd')
-                                            ->whereBetween('tanggal_lembur', [$awal, $akhir]);
-                                    },
-                                ])
-                                    ->where('id', $item_overtime->employees_id)
-                                    ->whereHas('overtimes', function ($query) use ($awal, $akhir) {
-                                        $query
-                                            ->whereNotNull('acc_hrd')
-                                            ->whereBetween('tanggal_lembur', [$awal, $akhir]);
-                                    })
-                                    ->whereHas('rekap_salaries', function ($query) use (
-                                        $bulanawal,
-                                        $bulanakhir,
-                                        $tahunawal,
-                                        $tahunakhir,
-                                    ) {
-                                        $query
-                                            ->whereMonth('periode_awal', $bulanawal)
-                                            ->whereMonth('periode_akhir', $bulanakhir)
-                                            ->whereYear('periode_awal', $tahunawal)
-                                            ->whereYear('periode_akhir', $tahunakhir);
-                                    })
-                                    ->first();
+            // Logika Pembulatan Nominal Uang
+            $pembulatan = ceil($jumlahuangditerima);
+            $dua_angka_terakhir = $pembulatan % 100;
 
-                $namakaryawan = $collection->nama_karyawan;
-                $nikkaryawan = $collection->nik_karyawan;
-                $golongan = $collection->golongans->golongan;
-                $jabatan = $collection->positions->jabatan;
-
-                if ($collection->divisions->id == 19) {
-                    $penempatan = "Sunter";
-                }
-                elseif ($collection->divisions->id == 20)
-                {
-                    $penempatan = "Cibitung";
-                }
-                elseif ($collection->divisions->id == 21)
-                {
-                    $penempatan = "Karawang Timur";
-                }
-                else{
-                    $penempatan = $collection->divisions->penempatan;
-                }
-
-                $nomorrekening = $collection->nomor_rekening;
-                $area = $collection->areas->area;
-                $nomorrekening = $collection->nomor_rekening;
-                $rekapSalary = $collection->rekap_salaries->first();
-                $upahlemburperjam = $rekapSalary?->upah_lembur_perjam ?? 0;
-                $jumlahuanglembur = $upahlemburperjam * $jumlahjam;
-                $jumlahuangditerima = $jumlahuanglembur + $uangmakanlembur;
-
-                $jumlahuangditerimapembulatan = ceil($jumlahuangditerima);
-
-                if (substr($jumlahuangditerimapembulatan, -2) > 50 && substr($jumlahuangditerimapembulatan, -2) < 100) {
-                    $total_jumlahuangditerima = round($jumlahuangditerimapembulatan, -2);
-                } elseif (substr($jumlahuangditerimapembulatan, -2) < 50 && substr($jumlahuangditerimapembulatan, -2) > 0) {
-                    $total_jumlahuangditerima = round($jumlahuangditerimapembulatan, -2) + 100;
-                } elseif (substr($jumlahuangditerimapembulatan, -2) <= 0) {
-                    $total_jumlahuangditerima = round($jumlahuangditerimapembulatan, -2);
-                }
-                elseif (substr($jumlahuangditerimapembulatan, -2) == 50) {
-                    $total_jumlahuangditerima = round($jumlahuangditerimapembulatan, -2);
-                } else {
-                    $total_jumlahuangditerima = 0;
-                }
-
-                $sheet->getRowDimension($row)->setRowHeight(25);
-                $sheet->setCellValue('A'.$row, $no);
-                $sheet->setCellValue('B'.$row, "'".$nikkaryawan);
-                $sheet->setCellValue('C'.$row, "'".$namakaryawan);
-                $sheet->setCellValue('D'.$row, $golongan);
-                $sheet->setCellValue('E'.$row, $area);
-                $sheet->setCellValue('F'.$row, $jabatan);
-                $sheet->setCellValue('G'.$row, $penempatan);
-                $sheet->setCellValue('H'.$row, "'".$nomorrekening);
-                $sheet->setCellValue('I'.$row, $jumlahjam);
-                $sheet->setCellValue('J'.$row, $upahlemburperjam);
-                $sheet->setCellValue('K'.$row, $jumlahuanglembur);
-                $sheet->setCellValue('L'.$row, $uangmakanlembur);
-                $sheet->setCellValue('M'.$row, $jumlahuangditerima);
-                $sheet->setCellValue('N'.$row, $total_jumlahuangditerima);
-                $row++;
-                $no++;
-
-                $totaljumlahuanglembur += $jumlahuanglembur;
-                $totaluangmakanlembur += $uangmakanlembur;
-                $totaljumlahuangditerima += $jumlahuangditerima;
-                $totalhasiluangditerima += $total_jumlahuangditerima;
+            if ($dua_angka_terakhir > 50 && $dua_angka_terakhir < 100) {
+                $total_jumlahuangditerima = round($pembulatan, -2);
+            } elseif ($dua_angka_terakhir < 50 && $dua_angka_terakhir > 0) {
+                $total_jumlahuangditerima = round($pembulatan, -2) + 100;
+            } else {
+                $total_jumlahuangditerima = round($pembulatan, -2);
             }
 
+            // Isi Cell Data
+            $sheet->getRowDimension($row)->setRowHeight(25);
+            $sheet->setCellValue('A'.$row, $no);
+            $sheet->setCellValue('B'.$row, "'".$employee->nik_karyawan);
+            $sheet->setCellValue('C'.$row, "'".$employee->nama_karyawan);
+            $sheet->setCellValue('D'.$row, $employee->golongans?->golongan ?? '-');
+            $sheet->setCellValue('E'.$row, $employee->areas?->area ?? '-');
+            $sheet->setCellValue('F'.$row, $employee->positions?->jabatan ?? '-');
+            $sheet->setCellValue('G'.$row, $penempatan_nama);
+            $sheet->setCellValue('H'.$row, "'".$employee->nomor_rekening);
+            $sheet->setCellValue('I'.$row, $jumlahjam);
+            $sheet->setCellValue('J'.$row, $upahlemburperjam);
+            $sheet->setCellValue('K'.$row, $jumlahuanglembur);
+            $sheet->setCellValue('L'.$row, $uangmakanlembur);
+            $sheet->setCellValue('M'.$row, $jumlahuangditerima);
+            $sheet->setCellValue('N'.$row, $total_jumlahuangditerima);
+            
+            $row++;
+            $no++;
         }
 
          // Border seluruh data

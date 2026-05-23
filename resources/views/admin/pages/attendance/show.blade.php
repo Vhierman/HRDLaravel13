@@ -97,7 +97,6 @@
                                 <td>{{ \Carbon\Carbon::parse($item_attendance->tanggal_absen)->isoformat('DD-MM-Y') }}</td>
                                 <td>{{ $item_attendance->keterangan_absen }}</td>
                                 <td>{{ $item_attendance->keterangan_cuti_khusus }}</td>
-
                             </tr>
                         @endforeach
                     </tbody>

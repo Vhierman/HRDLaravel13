@@ -36,6 +36,7 @@
     @php
         $userRole = Auth::user()->roles;
         $canManage = in_array($userRole, ['admin', 'hrd']);
+        $canDelete = $userRole === 'admin';
         $canView = in_array($userRole, ['admin', 'hrd', 'leader', 'accounting']);
     @endphp
 
@@ -132,16 +133,18 @@
                                                 title="Print" target="_blank">
                                                 <i class="material-icons-outlined fs-6">print</i>
                                             </a>
-                                            <form action="{{ route('employee_out.destroy', $employee_out->id) }}"
-                                                method="POST" class="d-inline m-0">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="button"
-                                                    class="btn btn-sm btn-outline-danger p-1 d-inline-flex align-items-center btn-delete"
-                                                    title="Hapus">
-                                                    <i class="material-icons-outlined fs-6">delete</i>
-                                                </button>
-                                            </form>
+                                            @if ($canDelete)
+                                                <form action="{{ route('employee_out.destroy', $employee_out->id) }}"
+                                                    method="POST" class="d-inline m-0">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger p-1 d-inline-flex align-items-center btn-delete"
+                                                        title="Hapus">
+                                                        <i class="material-icons-outlined fs-6">delete</i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                         @endif
                                         @if ($canView)
                                             <button type="button"
