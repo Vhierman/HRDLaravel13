@@ -87,7 +87,7 @@
                             <div class="row row-cols-auto g-3">
                                 <div class="col">
                                     <button type="submit" class="btn btn-danger px-4 raised d-flex gap-2"><i
-                                            class="material-icons-outlined">save</i>Hapus</button>
+                                            class="material-icons-outlined">delete</i>Hapus</button>
                                 </div>
                                 <div class="col">
                                     <a href="{{ route('overtime.index') }}"

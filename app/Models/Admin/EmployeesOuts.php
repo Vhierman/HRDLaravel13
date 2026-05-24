@@ -15,7 +15,6 @@ class EmployeesOuts extends Model
     protected $table = 'employees_outs';
 
     protected $fillable = [
-        'employees_id',
         'companies_id',
         'golongans_id',
         'areas_id',
@@ -62,9 +61,9 @@ class EmployeesOuts extends Model
     ];
 
     //To Table Employees Outs
-    public function employees() {
-        return $this->belongsTo(Employees::class,'employees_id','id');
-    }
+    // public function employees() {
+    //     return $this->belongsTo(Employees::class,'employees_id','id');
+    // }
     public function companies() {
         return $this->belongsTo(Companies::class,'companies_id','id');
     }

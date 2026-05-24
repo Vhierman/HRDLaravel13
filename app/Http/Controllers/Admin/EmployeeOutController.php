@@ -63,7 +63,6 @@ class EmployeeOutController extends Controller
                         ];
         $divisionIds = $divisionMap[$divisi] ?? null;
         $query = EmployeesOuts::with([
-                'employees',
                 'areas',
                 'golongans',
                 'divisions',
@@ -211,14 +210,10 @@ class EmployeeOutController extends Controller
 
         $item_employee_out      = EmployeesOuts::findOrFail($id);
         $nikkaryawan            = $item_employee_out->nik_karyawan_keluar;
-        $item_employee_outs = EmployeesOuts::with([
-                            'employees',
-                            'companies',
-                            'golongans',
-                            'areas',
-                            'divisions',
-                            'positions'
-                            ])->where('employees_id', $item_employee_out->employees_id)->first();
+        $item_employee_outs     = EmployeesOuts::with([
+                                    'divisions',
+                                    'positions'
+                                    ])->where('id', $item_employee_out->id)->first();
 
         //Create Nomor DOkumen
         $nomor          = substr($item_employee_out->nik_karyawan_keluar, 6,6);

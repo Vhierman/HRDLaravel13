@@ -53,18 +53,18 @@
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-4">
                         <label class="form-label fs-6">Jam Masuk</label>
-                        <input type="text" name="jam_masuk" value="{{ old('jam_masuk') }}" class="form-control"
-                            placeholder="Masukan Jam Masuk">
+                        <input type="number" step="0.01"name="jam_masuk" value="{{ old('jam_masuk') }}"
+                            class="form-control" placeholder="Masukan Jam Masuk">
                     </div>
                     <div class="col-12 col-lg-4">
                         <label class="form-label fs-6">Jam Istirahat</label>
-                        <input type="text" name="jam_istirahat" value="{{ old('jam_istirahat') }}" class="form-control"
-                            placeholder="Masukan Jam Istirahat">
+                        <input type="number" step="0.01" name="jam_istirahat" value="{{ old('jam_istirahat') }}"
+                            class="form-control" placeholder="Masukan Jam Istirahat">
                     </div>
                     <div class="col-12 col-lg-4">
                         <label class="form-label fs-6">Jam Pulang</label>
-                        <input type="text" name="jam_pulang" value="{{ old('jam_pulang') }}" class="form-control"
-                            placeholder="Masukan Jam Pulang">
+                        <input type="number" step="0.01" name="jam_pulang" value="{{ old('jam_pulang') }}"
+                            class="form-control" placeholder="Masukan Jam Pulang">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">

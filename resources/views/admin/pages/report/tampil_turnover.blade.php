@@ -63,7 +63,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Temperature (°C)'
+                    text: 'Jumlah Karyawan'
                 }
             },
             plotOptions: {

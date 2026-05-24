@@ -73,7 +73,7 @@
                             <div class="row row-cols-auto g-3">
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary px-4 raised d-flex gap-2"><i
-                                            class="material-icons-outlined">print</i>Cetak Slip Overtime</button>
+                                            class="material-icons-outlined">search</i>Tampilkan Data</button>
                                 </div>
                             </div>
                         </div>

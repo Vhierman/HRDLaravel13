@@ -16,14 +16,25 @@
         $canProcess = in_array($userRole, ['admin', 'hrd', 'leader']);
         $canRekap = in_array($userRole, ['admin', 'hrd']);
         $canExport = in_array($userRole, ['admin', 'hrd', 'accounting']);
+        $canView = in_array($userRole, ['accounting']);
     @endphp
     <div class="card">
         <div class="card-body">
             <div class="row justify-content-center g-3 text-center">
-                <div class="col-md-3">
-                    <a href="{{ route('overtime.lihat_overtime') }}" class="btn btn-primary px-5 btn-lg py-3 w-100">Lihat
-                        Data</a>
-                </div>
+                @if ($canView)
+                    <div class="col-md-4">
+                        <a href="{{ route('overtime.lihat_overtime') }}"
+                            class="btn btn-primary px-5 btn-lg py-3 w-100">Lihat
+                            Data</a>
+                    </div>
+                @endif
+                @if ($canProcess)
+                    <div class="col-md-3">
+                        <a href="{{ route('overtime.lihat_overtime') }}"
+                            class="btn btn-primary px-5 btn-lg py-3 w-100">Lihat
+                            Data</a>
+                    </div>
+                @endif
                 @if ($canProcess)
                     <div class="col-md-3">
                         <a href="{{ route('overtime.create') }}" class="btn btn-success px-5 btn-lg py-3 w-100">Tambah
@@ -46,7 +57,10 @@
                             class="btn btn-primary px-5 btn-lg py-3 w-100">Rekap Data</a>
                     </div>
                 @endif
-                @if ($canExport)
+
+
+
+                @if ($canRekap)
                     <div class="col-md-3">
                         <a href="{{ route('overtime.form_cetak_slip_overtime') }}"
                             class="btn btn-success px-5 btn-lg py-3 w-100">Cetak Slip</a>
@@ -56,6 +70,18 @@
                             class="btn btn-warning px-5 btn-lg py-3 w-100">Cetak Rekap</a>
                     </div>
                 @endif
+
+                @if ($canView)
+                    <div class="col-md-4">
+                        <a href="{{ route('overtime.form_cetak_slip_overtime') }}"
+                            class="btn btn-success px-5 btn-lg py-3 w-100">Cetak Slip</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ route('overtime.form_cetak_rekap_overtime') }}"
+                            class="btn btn-warning px-5 btn-lg py-3 w-100">Cetak Rekap</a>
+                    </div>
+                @endif
+
                 @if ($canRekap)
                     <div class="col-md-3">
                         <a href="{{ route('overtime.form_cancel_approve_overtime') }}"

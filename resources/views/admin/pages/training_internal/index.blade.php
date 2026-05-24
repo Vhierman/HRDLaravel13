@@ -14,6 +14,7 @@
     @php
         $userRole = Auth::user()->roles;
         $canManage = in_array($userRole, ['admin', 'hrd']);
+        $canView = in_array($userRole, ['leader']);
     @endphp
     <div class="card">
         <div class="card-body">
@@ -48,10 +49,20 @@
                             Data</a>
                     </div>
                 @endif
-                <div class="col-md-6">
-                    <a href="{{ route('training_internal.form_belum_training') }}"
-                        class="btn btn-grd btn-primary px-5 btn-lg py-3 w-100">Lihat Data Karyawan Belum Pernah Training</a>
-                </div>
+                @if ($canManage)
+                    <div class="col-md-6">
+                        <a href="{{ route('training_internal.form_belum_training') }}"
+                            class="btn btn-grd btn-primary px-5 btn-lg py-3 w-100">Lihat Data Karyawan Belum Pernah
+                            Training</a>
+                    </div>
+                @endif
+                @if ($canView)
+                    <div class="col-md-12">
+                        <a href="{{ route('training_internal.form_belum_training') }}"
+                            class="btn btn-grd btn-primary px-5 btn-lg py-3 w-100">Lihat Data Karyawan Belum Pernah
+                            Training</a>
+                    </div>
+                @endif
                 @if ($canManage)
                     <div class="col-md-6">
                         <a href="{{ route('training_internal.form_hapus_tanggal') }}"

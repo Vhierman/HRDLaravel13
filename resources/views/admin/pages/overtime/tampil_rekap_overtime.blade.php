@@ -4,10 +4,96 @@
 @section('css')
     <link href="{{ asset('template_admin/assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
     <style>
+        /* Memastikan container responsive membungkus dengan sempurna */
+        .table-responsive {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+        }
+
+        /* Memaksa tabel memanfaatkan lebar maksimal */
+        #example2 {
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        /* Desain Header Utama Tabel */
+        #example2 thead tr:first-child th {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 2px solid #dee2e6;
+            padding: 12px 8px !important;
+            white-space: nowrap;
+            /* Mencegah judul kolom patah baris berantakan */
+        }
+
+        /* Desain Baris Pencarian Kolom */
+        .search-row th {
+            background-color: #ffffff !important;
+            padding: 6px 4px !important;
+            border-bottom: 2px solid #dee2e6 !important;
+        }
+
         .search-row input {
+            font-size: 12px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            transition: all 0.2s ease-in-out;
             width: 100%;
-            padding: 5px;
+            min-width: 100px;
+            /* Batas minimal agar input tidak mengecil habis */
             box-sizing: border-box;
+        }
+
+        .search-row input:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        /* Merapikan Ukuran & Layout Tombol Aksi */
+        .action-container {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Mengunci ukuran tombol agar tetap simetris & responsive */
+        .action-container .btn-action {
+            width: 32px !important;
+            height: 32px !important;
+            padding: 0 !important;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            flex-shrink: 0;
+            /* Mencegah tombol gepeng saat layar menyempit */
+        }
+
+        .action-container .btn-action i {
+            font-size: 16px !important;
+            line-height: 1;
+        }
+
+        /* Merapikan isi cell */
+        #example2 tbody td {
+            vertical-align: middle;
+            padding: 10px 8px !important;
+            font-size: 14px;
+            white-space: nowrap;
+            /* Menjaga data teks seperti Nopol/Tanggal tetap satu baris */
+        }
+
+        /* Berikan kelonggaran khusus kolom nama agar teks panjang bisa turun jika space habis */
+        #example2 tbody td:nth-child(2) {
+            white-space: normal;
+            min-width: 150px;
         }
     </style>
 @endsection
@@ -230,38 +316,66 @@
 
 {{-- Datatables --}}
 @section('js')
-    {{-- <script src="{{ asset('template_admin/assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script> --}}
     <script src="{{ asset('template_admin/assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('template_admin/assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
-            // 1. Inisialisasi DataTable
             var table = $('#example2').DataTable({
-                lengthChange: false,
-                orderCellsTop: true, // Penting: Agar sorting tetap di baris header pertama
+                lengthChange: true,
+                orderCellsTop: true,
                 fixedHeader: false,
-                buttons: ['copy', 'excel', 'pdf', 'print']
+                language: {
+                    // Menggunakan objek bahasa lokal agar anti-blokir dan lebih cepat load-nya
+                    "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+                    "sProcessing": "Sedang memproses...",
+                    "sLengthMenu": "Tampilkan _MENU_ entri",
+                    "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                    "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                    "sSearch": "Cari:",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Selanjutnya",
+                        "sLast": "Terakhir"
+                    }
+                }
             });
 
-            // 2. Tambahkan Button Container
-            table.buttons().container()
-                .appendTo('#example2_wrapper .col-md-6:eq(0)');
-
-            // 3. Logika Pencarian Per Kolom
-            // Kita ambil setiap input dari baris '.search-row'
+            // Logika Pencarian Per Kolom dengan optimasi debounce
+            var delayTimer;
             $('#example2 .search-row input').on('keyup change', function() {
-                // Ambil index kolom dari elemen parent <th>
                 var columnIndex = $(this).parent().index();
+                var value = this.value;
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(function() {
+                    if (table.column(columnIndex).search() !== value) {
+                        table.column(columnIndex).search(value).draw();
+                    }
+                }, 300);
+            });
 
-                if (table.column(columnIndex).search() !== this.value) {
-                    table
-                        .column(columnIndex)
-                        .search(this.value)
-                        .draw();
-                }
+            // SweetAlert2 Delegasi Event (Supaya tetap bekerja saat halaman DataTables berpindah)
+            $('#example2').on('click', '.btn-delete', function(e) {
+                var form = $(this).closest('form');
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data Sertifikasi Kementrian ini akan dihapus permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>
-
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 {{-- Datatables --}}
