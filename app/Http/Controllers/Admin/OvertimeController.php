@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\NamaKaryawanTanggalRequest;
 use App\Http\Requests\Admin\OvertimeUpdateRequest;
 use App\Http\Requests\Admin\NamaTanggalAwalAkhirRequest;
 use App\Http\Requests\Admin\StatusPenempatanTanggalAwalAkhirRequest;
+use App\Http\Requests\Admin\UpahLemburPerjamRequest;
 use App\Models\Admin\Overtimes;
 use App\Models\Admin\Employees;
 use App\Models\Admin\Companies;
@@ -1882,5 +1883,63 @@ class OvertimeController extends Controller
             'item_overtimes'        => $item_overtimes
         ]);
          
+    }
+
+    public function upah_lembur_perjam()
+    {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        $item_overtimes     = HistorySalaries::with([
+                            'employees',
+                            'employees.divisions',
+                            'employees.positions',
+                            'employees.golongans',
+                            'employees.areas'
+                            ])->whereHas('employees', function($query) {
+                                $query->whereIn('golongans_id', [2, 3]);
+                            })
+                            ->get();
+    
+        return view('admin.pages.overtime.tampil_upah_lembur_perjam',[
+            'item_overtimes'        => $item_overtimes
+        ]);
+    }
+
+    public function proses_lembur_perjam($id)
+    {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        $historySalary      = HistorySalaries::findOrFail($id);
+        $item               = HistorySalaries::with(['employees'])->where('employees_id',$id)->first();
+
+        // dd($item->employees->nama_karyawan);
+       
+        return view('admin.pages.overtime.tampil_edit_lembur_perjam',[
+                    'item'          => $item
+        ]);
+    }
+
+    public function update_upah_lembur_perjam(UpahLemburPerjamRequest $request, string $id)
+    {
+        $allowedRoles = ['admin', 'hrd'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        $data               = $request->except('_token');
+        $item               = HistorySalaries::findOrFail($id);
+        $item->update([
+            'upah_lembur_perjam'    => $request->upah_lembur_perjam,
+            'edit_oleh'             => auth()->user()->name
+        ]);
+
+        Alert::info('Success Edit Upah Lembur Perjam','Oleh '.auth()->user()->name);
+        return redirect()->route('overtime.index');
     }
 }

@@ -150,6 +150,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('certification_other', CertificationOtherController::class);
     });
     //Overtimes
+    Route::put('overtime/update_upah_lembur_perjam/{id}', [OvertimeController::class, 'update_upah_lembur_perjam'])->name('overtime.update_upah_lembur_perjam');
+    Route::post('overtime/proses_lembur_perjam/{id}', [OvertimeController::class, 'proses_lembur_perjam'])->name('overtime.proses_lembur_perjam');
+    Route::get('overtime/upah_lembur_perjam', [OvertimeController::class, 'upah_lembur_perjam'])->name('overtime.upah_lembur_perjam');
     Route::get('overtime/notif_overtime_belum_rekap', [OvertimeController::class, 'notif_overtime_belum_rekap'])->name('overtime.notif_overtime_belum_rekap');
     Route::post('overtime/exportExcell_rekap_overtime', [OvertimeController::class, 'exportExcell_rekap_overtime'])->name('overtime.exportExcell_rekap_overtime');
     Route::post('overtime/exportPDF_rekap_overtime', [OvertimeController::class, 'exportPDF_rekap_overtime'])->name('overtime.exportPDF_rekap_overtime');

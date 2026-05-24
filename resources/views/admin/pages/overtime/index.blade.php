@@ -87,6 +87,10 @@
                         <a href="{{ route('overtime.form_cancel_approve_overtime') }}"
                             class="btn btn-danger px-5 btn-lg py-3 w-100">Cancel Rekap</a>
                     </div>
+                    <div class="col-md-12">
+                        <a href="{{ route('overtime.upah_lembur_perjam') }}"
+                            class="btn btn-grd btn-grd-branding px-5 btn-lg py-3 w-100">Upah Lembur Perjam</a>
+                    </div>
                 @endif
             </div>
         </div>
