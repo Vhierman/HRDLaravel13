@@ -86,7 +86,7 @@
             {{-- Absensi --}}
             <li>
                 <a href="#" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">access_alarms</i>
+                    <div class="parent-icon"><i class="material-icons-outlined">fingerprint</i>
                     </div>
                     <div class="menu-title">Absensi</div>
                 </a>
@@ -189,6 +189,22 @@
             @endif
             {{-- Kontrak Kerja --}}
 
+            {{-- Pelanggaran --}}
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">back_hand</i>
+                        </div>
+                        <div class="menu-title">Pelanggaran</div>
+                    </a>
+                    <ul>
+                        <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Pelanggaran
+                                Karyawan</a></li>
+                    </ul>
+                </li>
+            @endif
+            {{-- Pelanggaran --}}
+
             {{-- Perijinan --}}
             @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'accounting')
                 <li>
@@ -200,6 +216,26 @@
                     <ul>
                         <li><a href="{{ route('legal.index') }}"><i
                                     class="material-icons-outlined">arrow_right</i>Perijinan Perusahaan</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+            {{-- Perijinan --}}
+
+            {{-- Perijinan --}}
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">health_and_safety</i>
+                        </div>
+                        <div class="menu-title">Safety</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('safety.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Data Kecelakaan Kerja</a>
+                        </li>
+                        <li><a href="{{ route('safety.form_statistik_kecelakaan') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Statistik Kecelakaan Kerja</a>
                         </li>
                     </ul>
                 </li>

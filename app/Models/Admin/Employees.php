@@ -127,5 +127,8 @@ class Employees extends Model
     public function rekap_salaries() {
         return $this->hasMany(RekapSalaries::class,'employees_id','id');
     }
+    public function safetys() {
+        return $this->hasMany(Safetys::class,'employees_id','id');
+    }
     // From Table Karyawan
 }

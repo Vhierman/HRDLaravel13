@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\LegalController;
 use App\Http\Controllers\Admin\BonusController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SafetyController;
 
 // Halaman Utama
 Route::view('/','index');
@@ -228,6 +229,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('report/tampil_rekap_absensi', [ReportController::class, 'tampil_rekap_absensi'])->name('report.tampil_rekap_absensi');
     Route::get('report/rekap_absensi', [ReportController::class, 'rekap_absensi'])->name('report.rekap_absensi');
     Route::resource('report', ReportController::class);
+    // Safety
+    Route::post('safety/tampil_statistik_kecelakaan', [SafetyController::class, 'tampil_statistik_kecelakaan'])->name('safety.tampil_statistik_kecelakaan');
+    Route::get('safety/form_statistik_kecelakaan', [SafetyController::class, 'form_statistik_kecelakaan'])->name('safety.form_statistik_kecelakaan');
+    Route::get('safety/exportExcel', [SafetyController::class, 'exportExcel'])->name('safety.exportExcel');
+    Route::resource('safety', SafetyController::class);
     // Route Admin Area
     
     
