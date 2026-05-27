@@ -80,10 +80,20 @@
                                         <i class="material-icons-outlined">cancel</i>Cancel
                                     </a>
                                 </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-warning position-relative d-flex gap-2"><i
+                                            class="material-icons-outlined">warning</i>Periode Overtime Mulai dari Tanggal
+                                        16 sampai
+                                        Tanggal
+                                        15 Setiap Bulannya<i class="material-icons-outlined">warning</i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
+
             </form>
         </div>
     </div>

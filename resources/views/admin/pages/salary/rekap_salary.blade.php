@@ -63,6 +63,14 @@
                                         <i class="material-icons-outlined">cancel</i>Cancel
                                     </a>
                                 </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-warning position-relative d-flex gap-2"><i
+                                            class="material-icons-outlined">warning</i>Periode Rekap Gaji Mulai dari Tanggal
+                                        26 sampai
+                                        Tanggal
+                                        25 Setiap Bulannya<i class="material-icons-outlined">warning</i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 

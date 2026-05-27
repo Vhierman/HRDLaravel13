@@ -39,28 +39,12 @@
             <form action="{{ route('attendance.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3">
-                    <div class="col-12 col-lg-6">
-                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
-                        <select name="employees_id" class="form-select" id="karyawan-select"
-                            data-placeholder="Pilih Karyawan">
-                            <option value="">Pilih Karyawan</option>
-                            @foreach ($employees as $employee)
-                                <option value="{{ $employee->id }}"
-                                    {{ old('employees_id') == $employee->id ? 'selected' : '' }}>
-                                    {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
-                                    {{ $employee->divisions->penempatan }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-4">
                         <label class="form-label fs-6">Tanggal Absen</label>
                         <input type="date" name="tanggal_absen" value="{{ old('tanggal_absen') }}" class="form-control"
                             placeholder="dd/mm/yyyy">
                     </div>
-                </div>
-                <div class="row g-3 mt-3">
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-4">
                         <label for="karyawan-select" class="form-label fs-6">Keterangan Absen</label>
                         <select class="form-select" name="keterangan_absen" id="keterangan_absen-select"
                             data-placeholder="Pilih Keterangan Absen">
@@ -77,15 +61,35 @@
                             <option value="Cuti Khusus" {{ old('keterangan_absen') == 'Cuti Khusus' ? 'selected' : '' }}>
                                 Cuti Khusus
                             </option>
+                            <option value="Cuti Panjang" {{ old('keterangan_absen') == 'Cuti Panjang' ? 'selected' : '' }}>
+                                Cuti Panjang
+                            </option>
                             <option value="OFF" {{ old('keterangan_absen') == 'OFF' ? 'selected' : '' }}>
                                 OFF
                             </option>
                         </select>
                     </div>
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-4">
                         <label for="karyawan-select" class="form-label fs-6">Keterangan</label>
                         <input type="text" name="keterangan_cuti_khusus" value="{{ old('keterangan_cuti_khusus') }}"
                             class="form-control" placeholder="Masukan Keterangan">
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mt-2">
+                    <div class="col-12 col-lg-12">
+                        <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
+                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field"
+                            data-placeholder="Pilih Nama Karyawan" multiple>
+                            @foreach ($employees as $employee)
+                                <option value="{{ $employee->id }}"
+                                    {{ in_array($employee->id, old('employees_id', [])) ? 'selected' : '' }}>
+                                    {{ $employee->nik_karyawan }} - {{ $employee->nama_karyawan }} -
+                                    {{ $employee->divisions->penempatan }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <br>

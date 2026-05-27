@@ -180,7 +180,8 @@
                                                 data-rw="{{ $employee_out->rw_karyawan_keluar }}"
                                                 data-kelurahan="{{ $employee_out->kelurahan_karyawan_keluar }}"
                                                 data-kecamatan="{{ $employee_out->kecamatan_karyawan_keluar }}"
-                                                data-kota="{{ $employee_out->kota_karyawan_keluar }}">
+                                                data-kota="{{ $employee_out->kota_karyawan_keluar }}"
+                                                data-alasan_keluar="{{ $employee_out->alasan_keluar }}">
                                                 <i class="material-icons-outlined fs-6">visibility</i>
                                             </button>
                                         @endif
@@ -474,6 +475,15 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-start gap-3 border p-3 rounded">
+                                                    <div class="detail-icon fs-5"><i class="bi bi-geo-alt"></i> </div>
+                                                    <div class="detail-info">
+                                                        <p class="fw-bold mb-1">Alasan Keluar</p>
+                                                        <p class="mb-0" id="modal-alasan_keluar">-</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -582,6 +592,7 @@
             var kelurahan = $(this).data('kelurahan');
             var kecamatan = $(this).data('kecamatan');
             var kota = $(this).data('kota');
+            var alasan_keluar = $(this).data('alasan_keluar');
 
             $('#modal-perusahaan').text(perusahaan);
             $('#modal-area').text(area);
@@ -611,6 +622,7 @@
             $('#modal-kelurahan').text(kelurahan);
             $('#modal-kecamatan').text(kecamatan);
             $('#modal-kota').text(kota);
+            $('#modal-alasan_keluar').text(alasan_keluar);
         });
     </script>
 @endsection

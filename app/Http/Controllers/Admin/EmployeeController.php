@@ -24,6 +24,7 @@ use App\Models\Admin\HistoryTrainingInternals;
 use App\Models\Admin\HistoryTrainingEksternals;
 use App\Models\Admin\InventoryCars;
 use App\Models\Admin\InventoryMotorcycles;
+use App\Models\Admin\Safetys;
 use Alert;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Carbon\Carbon;
@@ -61,6 +62,10 @@ class EmployeeController extends Controller
                         5  => [5,6,9,11,12,13,14,15,16,19,20,21],
                         ];
         $divisionIds = $divisionMap[$divisi] ?? null;
+
+        $today = Carbon::today();
+        $expired_akhir_kerja = Employees::whereDate('tanggal_akhir_kerja', '<', $today)->where('status_kerja','Harian')->count();
+
         
         $query = Employees::with([
                 'areas',
@@ -75,7 +80,8 @@ class EmployeeController extends Controller
         $employees = $query->get();
 
         return view('admin.pages.employee.index',[
-            'employees' => $employees
+            'employees'         => $employees,
+            'expired_akhir_kerja'     => $expired_akhir_kerja
         ]);
     }
 
@@ -140,6 +146,7 @@ class EmployeeController extends Controller
                 }
             }
 
+            $data['input_oleh'] = auth()->user()->name;
             $employee = Employees::create($data);
 
             $awal_kontrak   = date_create($request->input('tanggal_mulai_kerja'));
@@ -171,7 +178,7 @@ class EmployeeController extends Controller
                 'status_kontrak_kerja'  => $request->status_kerja,
                 'masa_kontrak'          => $masa_kontrak,
                 'jumlah_kontrak'        => 1,
-                'input_oleh'            => $request->input_oleh,
+                'input_oleh'            => auth()->user()->name,
             ]);
             $employee->history_positions()->create([
                 'employees_id'          => $employee->id,
@@ -181,7 +188,7 @@ class EmployeeController extends Controller
                 'divisions_id_history'  => $request->input('divisions_id'),
                 'positions_id_history'  => $request->input('positions_id'),
                 'tanggal_mutasi'        => $request->input('tanggal_mulai_kerja'),
-                'input_oleh'            => $request->input('input_oleh')
+                'input_oleh'            => auth()->user()->name
             ]);
 
             // Input History Salaries
@@ -591,7 +598,7 @@ class EmployeeController extends Controller
                 'potongan_jp_karyawan'          => $hasil_potongan_jp_karyawan,
                 'jumlah_bpjstk_karyawan'        => $jumlah_bpjstk_karyawan,
                 'take_home_pay'                 => $take_home_pay,
-                'input_oleh'                    => $request->input('input_oleh')
+                'input_oleh'                    => auth()->user()->name
             ]);
         
             DB::commit();
@@ -727,6 +734,8 @@ class EmployeeController extends Controller
                 unset($data[$field]);
             }
         }
+
+        $data['edit_oleh'] = auth()->user()->name;
         $employee->update($data);
         Alert::success('Success Update Data Karyawan','Oleh '.auth()->user()->name);
         return redirect()->route('employee.index');
@@ -749,7 +758,7 @@ class EmployeeController extends Controller
             $employee = Employees::with([
             'history_contracts', 'history_salaries', 'history_families', 'history_positions', 
             'training_eksternals', 'training_internals', 'overtimes', 'rekap_salaries', 'attendances', 
-            'inventory_motorcycles', 'inventory_cars','certification_bnsps','certification_ministries','certification_others'
+            'inventory_motorcycles', 'inventory_cars','certification_bnsps','certification_ministries','certification_others','safetys'
             ])->findOrFail($id);
 
             $allRelations = [
@@ -766,7 +775,8 @@ class EmployeeController extends Controller
                 'inventory_cars',
                 'certification_bnsps',
                 'certification_ministries',
-                'certification_others'
+                'certification_others',
+                'safetys'
             ];
 
             foreach ($allRelations as $relation) {

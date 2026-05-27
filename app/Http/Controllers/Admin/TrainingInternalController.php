@@ -40,7 +40,68 @@ class TrainingInternalController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.training_internal.index');
+        $tahun_sekarang = Carbon::now()->year;
+        
+        $training = TrainingInternals::select(
+                DB::raw('MONTH(tanggal_training_internal) as bulan'),
+                'materi_training_internal',
+                DB::raw('COUNT(id) as total')
+            )
+            ->whereYear('tanggal_training_internal', $tahun_sekarang)
+            ->groupBy('bulan', 'materi_training_internal')
+            ->orderBy('bulan', 'ASC')
+            ->get();
+
+        $nama_bulan = [
+            1  => 'Januari',
+            2  => 'Februari',
+            3  => 'Maret',
+            4  => 'April',
+            5  => 'Mei',
+            6  => 'Juni',
+            7  => 'Juli',
+            8  => 'Agustus',
+            9  => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
+
+        $categories = array_values($nama_bulan);
+
+        // Ambil semua nama materi unik
+        $materi_list = $training
+            ->pluck('materi_training_internal')
+            ->unique()
+            ->values();
+
+        $series = [];
+
+        foreach ($materi_list as $materi)
+        {
+            $dataBulanan = [];
+
+            for ($bulan = 1; $bulan <= 12; $bulan++)
+            {
+                $jumlah = $training
+                    ->where('materi_training_internal', $materi)
+                    ->where('bulan', $bulan)
+                    ->first();
+
+                $dataBulanan[] = $jumlah ? (int)$jumlah->total : 0;
+            }
+
+            $series[] = [
+                'name' => $materi,
+                'data' => $dataBulanan
+            ];
+        }
+
+        return view('admin.pages.training_internal.index',[
+            'categories' => $categories,
+            'series' => $series,
+            'tahun_sekarang' => $tahun_sekarang
+        ]);
     }
 
     /**

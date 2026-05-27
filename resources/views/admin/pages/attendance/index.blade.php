@@ -1,6 +1,3 @@
-@section('css')
-@endsection
-
 @extends('admin.layouts.base')
 @section('title', 'Data Absensi');
 
@@ -40,8 +37,7 @@
                 <div class="row justify-content-center g-3 text-center mt-2">
                     <div class="col-md-12">
                         <a href="{{ route('attendance.form_non_absen') }}" class="btn btn-info px-5 btn-lg py-3 w-100">Lihat
-                            Data
-                            Karyawan Yang Tidak Pernah Absen</a>
+                            Data Karyawan Yang Full Hadir</a>
                     </div>
                 </div>
             </div>
@@ -58,8 +54,7 @@
                 <div class="row justify-content-center g-3 text-center mt-2">
                     <div class="col-md-12">
                         <a href="{{ route('attendance.form_non_absen') }}" class="btn btn-info px-5 btn-lg py-3 w-100">Lihat
-                            Data
-                            Karyawan Yang Tidak Pernah Absen</a>
+                            Data Karyawan Yang Full Hadir</a>
                     </div>
                 </div>
             </div>
@@ -73,7 +68,7 @@
             <div class="card rounded-4">
                 <div class="card-header py-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="mb-0">Rekap Absensi Karyawan Tahun {{ \Carbon\Carbon::now()->year }}</h5>
+                        <h5 class="mb-0">Tren Absensi Karyawan Tahun {{ \Carbon\Carbon::now()->year }}</h5>
                     </div>
                 </div>
                 <div class="card-body">
@@ -86,78 +81,77 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('template_admin/assets/plugins/apexchart/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('template_admin/assets/plugins/apexchart/apex-custom-chart.js') }}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
     <script>
-        // 1. Ambil data yang sudah diformat otomatis dari Controller
-        const seriesData = {!! json_encode($chartData) !!};
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Parsing data dari Controller Laravel ke JavaScript secara aman
+            const seriesData = @json($chartData);
 
-        var options = {
-            // 2. Cukup panggil variabelnya di sini. ApexCharts langsung paham strukturnya!
-            series: seriesData,
-
-            legend: {
-                fontSize: '16px'
-            },
-            chart: {
-                foreColor: "#9ba7b2",
-                height: 470,
-                type: 'bar',
-                zoom: {
-                    enabled: false
-                },
-                toolbar: {
-                    show: false,
-                }
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shade: 'dark',
-                    gradientToColors: ['#00c6fb', '#ffcc33', '#b31217', '#00CDAC', '#333399'],
-                    shadeIntensity: 1,
-                    type: 'vertical',
-                    stops: [0, 100, 100, 100]
-                },
-            },
-            colors: ['#005bea', "#ffb347", "#e52d27", "#02AAB0", "#ff00cc"],
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    borderRadius: 4,
-                    borderRadiusApplication: 'around',
-                    borderRadiusWhenStacked: 'last',
-                    columnWidth: '50%',
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 4,
-                colors: ["transparent"]
-            },
-            grid: {
-                show: true,
-                borderColor: 'rgba(0, 0, 0, 0.15)',
-                strokeDashArray: 4,
-            },
-            tooltip: {
-                theme: "dark",
-            },
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des'],
-                labels: {
+            // 2. Inisialisasi Highcharts Line Chart
+            Highcharts.chart('chartAbsensi', {
+                chart: {
+                    type: 'line', // Menentukan format Line Chart
                     style: {
-                        fontSize: '16px'
+                        fontFamily: 'system-ui, -apple-system, sans-serif'
                     }
-                }
-            }
-        };
+                },
+                title: {
+                    text: null // Atau gunakan '' jika tidak ingin menampilkan judul
+                },
+                // Menentukan Sumbu X (Bulan Januari - Desember)
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt',
+                        'Nov', 'Des'
+                    ],
+                    crosshair: true
+                },
+                // Menentukan Sumbu Y
+                yAxis: {
+                    title: {
+                        text: 'Jumlah Man Power'
+                    },
+                    allowDecimals: false, // Menghindari angka desimal (misal: 1.5 orang)
+                    min: 0
+                },
+                // Pengaturan ketika pointer mouse mendekati garis (Hover)
+                tooltip: {
+                    headerFormat: '<span style="font-size:8px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                // Pengaturan visual untuk tipe grafik line
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: true // Set ke true jika ingin memunculkan angka langsung di atas titik grafik
+                        },
+                        enableMouseTracking: true
+                    }
+                },
+                // Memasukkan data dari Laravel. Formatnya langsung match!
+                series: seriesData,
 
-        // Pastikan di HTML kamu sudah ada tag <div id="chartAbsensi"></div>
-        var chart = new ApexCharts(document.querySelector("#chartAbsensi"), options);
-        chart.render();
+                // Pengaturan warna kustom (Opsional - sesuaikan dengan tema HRIS-mu)
+                colors: ['#457B9D', '#E9C46A', '#E63946', '#2A9D8F', '#6C757D'],
+
+                // Mengatur posisi legenda/keterangan warna kategori
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                },
+                // Menyembunyikan credit tulisan "Highcharts.com" di sudut kanan bawah chart
+                credits: {
+                    enabled: false
+                }
+            });
+        });
     </script>
 @endsection

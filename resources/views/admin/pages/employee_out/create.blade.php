@@ -42,7 +42,7 @@
                     <div class="row mb-3">
                         <label for="input35" class="col-sm-3 col-form-label fs-6">Nama</label>
                         <div class="col-sm-9">
-                            <select name="employees_id" class="form-select" id="karyawan-select"
+                            <select name="employees_id" class="form-select" id="nama_karyawan_keluar-select"
                                 data-placeholder="Pilih Karyawan">
                                 <option value="">Pilih Karyawan</option>
                                 @foreach ($employees as $employee)
@@ -57,9 +57,19 @@
                     </div>
 
                     <div class="row mb-3">
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Tanggal Keluar</label>
+                        <div class="col-sm-9">
+                            <input type="date" name="tanggal_keluar_karyawan_keluar"
+                                value="{{ old('tanggal_keluar_karyawan_keluar') }}" class="form-control"
+                                placeholder="dd/mm/yyyy">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <label for="input35" class="col-sm-3 col-form-label fs-6">Keterangan Keluar</label>
                         <div class="col-sm-9">
-                            <select id="input39" class="form-select" name="keterangan_keluar">
+                            <select class="form-select" name="keterangan_keluar" id="keterangan_keluar-select"
+                                data-placeholder="Pilih Keterangan Keluar">
                                 <option value="">Pilih Keterangan Keluar</option>
                                 <option value="Berakhir Kontrak Kerja"
                                     {{ old('keterangan_keluar') == 'Berakhir Kontrak Kerja' ? 'selected' : '' }}>
@@ -74,18 +84,141 @@
                                     {{ old('keterangan_keluar') == 'Memasuki Usia Pensiun' ? 'selected' : '' }}>
                                     Memasuki Usia Pensiun
                                 </option>
+                                <option value="Meninggal Dunia"
+                                    {{ old('keterangan_keluar') == 'Meninggal Dunia' ? 'selected' : '' }}>
+                                    Meninggal Dunia
+                                </option>
                             </select>
                         </div>
                     </div>
 
+
                     <div class="row mb-3">
-                        <label for="input35" class="col-sm-3 col-form-label fs-6">Tanggal Keluar</label>
+                        <label for="input35" class="col-sm-3 col-form-label fs-6">Alasan Keluar</label>
                         <div class="col-sm-9">
-                            <input type="date" name="tanggal_keluar_karyawan_keluar"
-                                value="{{ old('tanggal_keluar_karyawan_keluar') }}" class="form-control"
-                                placeholder="dd/mm/yyyy">
+                            <select class="form-select" name="alasan_keluar" id="alasan_keluar-select"
+                                data-placeholder="Pilih Alasan Keluar">
+                                <option value="">Pilih Alasan Keluar</option>
+                                <option value="Peluang Karir Lebih Baik"
+                                    {{ old('alasan_keluar') == 'Peluang Karir Lebih Baik' ? 'selected' : '' }}>
+                                    Peluang Karir Lebih Baik</option>
+                                <option value="Gaji / Benefit Tidak Sesuai"
+                                    {{ old('alasan_keluar') == 'Gaji / Benefit Tidak Sesuai' ? 'selected' : '' }}>
+                                    Gaji / Benefit Tidak Sesuai</option>
+                                <option value="Lingkungan Kerja Tidak Nyaman"
+                                    {{ old('alasan_keluar') == 'Lingkungan Kerja Tidak Nyaman' ? 'selected' : '' }}>
+                                    Lingkungan Kerja Tidak Nyaman</option>
+                                <option value="Work-Life Balance Buruk"
+                                    {{ old('alasan_keluar') == 'Work-Life Balance Buruk' ? 'selected' : '' }}>
+                                    Work-Life Balance Buruk
+                                </option>
+                                <option value="Absensi Tinggi"
+                                    {{ old('alasan_keluar') == 'Absensi Tinggi' ? 'selected' : '' }}>
+                                    Absensi Tinggi
+                                </option>
+                                <option value="Relokasi Tempat Tinggal"
+                                    {{ old('alasan_keluar') == 'Relokasi Tempat Tinggal' ? 'selected' : '' }}>
+                                    Relokasi Tempat Tinggal
+                                </option>
+                                <option value="Melanjutkan Pendidikan"
+                                    {{ old('alasan_keluar') == 'Melanjutkan Pendidikan' ? 'selected' : '' }}>
+                                    Melanjutkan Pendidikan
+                                </option>
+                                <option value="Kondisi Kesehatan"
+                                    {{ old('alasan_keluar') == 'Kondisi Kesehatan' ? 'selected' : '' }}>
+                                    Kondisi Kesehatan
+                                </option>
+                                <option value="Konflik Dengan Atasan"
+                                    {{ old('alasan_keluar') == 'Konflik Dengan Atasan' ? 'selected' : '' }}>
+                                    Konflik Dengan Atasan
+                                </option>
+                                <option value="Konflik Dengan Rekan Kerja"
+                                    {{ old('alasan_keluar') == 'Konflik Dengan Rekan Kerja' ? 'selected' : '' }}>
+                                    Konflik Dengan Rekan Kerja
+                                </option>
+                                <option value="Beban Kerja Terlalu Tinggi"
+                                    {{ old('alasan_keluar') == 'Beban Kerja Terlalu Tinggi' ? 'selected' : '' }}>
+                                    Beban Kerja Terlalu Tinggi
+                                </option>
+                                <option value="Kurangnya Kesempatan Promosi"
+                                    {{ old('alasan_keluar') == 'Kurangnya Kesempatan Promosi' ? 'selected' : '' }}>
+                                    Kurangnya Kesempatan Promosi
+                                </option>
+                                <option value="Ketidakcocokan Budaya Perusahaan"
+                                    {{ old('alasan_keluar') == 'Ketidakcocokan Budaya Perusahaan' ? 'selected' : '' }}>
+                                    Ketidakcocokan Budaya Perusahaan
+                                </option>
+                                <option value="Perubahan Jalur Karir"
+                                    {{ old('alasan_keluar') == 'Perubahan Jalur Karir' ? 'selected' : '' }}>
+                                    Perubahan Jalur Karir
+                                </option>
+                                <option value="PHK / Efisiensi Perusahaan"
+                                    {{ old('alasan_keluar') == 'PHK / Efisiensi Perusahaan' ? 'selected' : '' }}>
+                                    PHK / Efisiensi Perusahaan
+                                </option>
+                                <option value="Pensiun" {{ old('alasan_keluar') == 'Pensiun' ? 'selected' : '' }}>
+                                    Pensiun
+                                </option>
+                                <option value="Alasan Keluarga"
+                                    {{ old('alasan_keluar') == 'Alasan Keluarga' ? 'selected' : '' }}>
+                                    Alasan Keluarga
+                                </option>
+                                <option value="Menikah / Mengurus Anak"
+                                    {{ old('alasan_keluar') == 'Menikah / Mengurus Anak' ? 'selected' : '' }}>
+                                    Menikah / Mengurus Anak
+                                </option>
+                                <option value="Perusahaan Tutup"
+                                    {{ old('alasan_keluar') == 'Perusahaan Tutup' ? 'selected' : '' }}>
+                                    Perusahaan Tutup
+                                </option>
+                                <option value="Pelanggaran Disiplin"
+                                    {{ old('alasan_keluar') == 'Pelanggaran Disiplin' ? 'selected' : '' }}>
+                                    Pelanggaran Disiplin
+                                </option>
+                                <option value="Tidak Lulus Masa Percobaan"
+                                    {{ old('alasan_keluar') == 'Tidak Lulus Masa Percobaan' ? 'selected' : '' }}>
+                                    Tidak Lulus Masa Percobaan
+                                </option>
+                                <option value="Resign Tanpa Keterangan"
+                                    {{ old('alasan_keluar') == 'Resign Tanpa Keterangan' ? 'selected' : '' }}>
+                                    Resign Tanpa Keterangan
+                                </option>
+                                <option value="Transportasi / Jarak Tempuh"
+                                    {{ old('alasan_keluar') == 'Transportasi / Jarak Tempuh' ? 'selected' : '' }}>
+                                    Transportasi / Jarak Tempuh
+                                </option>
+                                <option value="Jadwal Kerja Tidak Sesuai"
+                                    {{ old('alasan_keluar') == 'Jadwal Kerja Tidak Sesuai' ? 'selected' : '' }}>
+                                    Jadwal Kerja Tidak Sesuai
+                                </option>
+                                <option value="Tekanan Kerja / Stress Kerja"
+                                    {{ old('alasan_keluar') == 'Tekanan Kerja / Stress Kerja' ? 'selected' : '' }}>
+                                    Tekanan Kerja / Stress Kerja
+                                </option>
+                                <option value="Ketidakpuasan Terhadap Manajemen"
+                                    {{ old('alasan_keluar') == 'Ketidakpuasan Terhadap Manajemen' ? 'selected' : '' }}>
+                                    Ketidakpuasan Terhadap Manajemen
+                                </option>
+                                <option value="Ingin Membuka Usaha Sendiri"
+                                    {{ old('alasan_keluar') == 'Ingin Membuka Usaha Sendiri' ? 'selected' : '' }}>
+                                    Ingin Membuka Usaha Sendiri
+                                </option>
+                                <option value="Pindah Industri Pekerjaan"
+                                    {{ old('alasan_keluar') == 'Pindah Industri Pekerjaan' ? 'selected' : '' }}>
+                                    Pindah Industri Pekerjaan
+                                </option>
+                                <option value="Mendapatkan Penawaran Luar Negeri"
+                                    {{ old('alasan_keluar') == 'Mendapatkan Penawaran Luar Negeri' ? 'selected' : '' }}>
+                                    Mendapatkan Penawaran Luar Negeri
+                                </option>
+                                <option value="Lainnya" {{ old('alasan_keluar') == 'Lainnya' ? 'selected' : '' }}>
+                                    Lainnya
+                                </option>
+                            </select>
                         </div>
                     </div>
+
+
 
                     <div class="row">
                         <label class="col-sm-3 col-form-label"></label>
@@ -125,6 +258,12 @@
     <script src="{{ asset('template_admin/assets/plugins/select2/js/select2-custom.js') }}"></script>
     <script>
         $('#nama_karyawan_keluar-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#keterangan_keluar-select').select2({
+            theme: 'bootstrap-5'
+        });
+        $('#alasan_keluar-select').select2({
             theme: 'bootstrap-5'
         });
     </script>

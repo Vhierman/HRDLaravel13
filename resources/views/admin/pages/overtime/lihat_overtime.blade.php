@@ -50,7 +50,7 @@
                             placeholder="dd/mm/yyyy">
                     </div>
                 </div>
-                <div class="row g-3 mt-2">
+                <div class="row g-3 mt-1">
                     <div class="col-sm-12">
                         <div class="d-md-flex d-grid align-items-center gap-3">
                             <div class="row row-cols-auto g-3">
@@ -65,11 +65,8 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>

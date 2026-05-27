@@ -72,4 +72,61 @@
             </div>
         </div>
     </div>
+
+    {{-- Chart --}}
+    <div class="col-12 col-xl-12">
+        <div class="card rounded-4">
+            <div class="card-header py-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Tren Training Internal Karyawan Tahun {{ \Carbon\Carbon::now()->year }}</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="trainingChart"></div>
+            </div>
+        </div>
+    </div>
+    {{-- Chart --}}
+@endsection
+
+
+@section('js')
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+        Highcharts.chart('trainingChart', {
+
+            chart: {
+                type: 'line'
+            },
+
+            title: {
+                text: null // Atau gunakan '' jika tidak ingin menampilkan judul
+            },
+
+            subtitle: {
+                text: null
+            },
+
+            xAxis: {
+                categories: @json($categories)
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Jumlah Training'
+                }
+            },
+
+            tooltip: {
+                shared: true
+            },
+
+            series: @json($series)
+
+        });
+    </script>
 @endsection

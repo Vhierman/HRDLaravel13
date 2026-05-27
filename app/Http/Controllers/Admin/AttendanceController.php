@@ -134,16 +134,20 @@ class AttendanceController extends Controller
         }
 
         $data_attendance    = $request->except('_token');
-        $employee           = Employees::where('id',$request->input('employees_id'))->first();
-        Attendances::create([
-            'employees_id'              => $request->input('employees_id'),
-            'nik_karyawan'              => $employee->nik_karyawan,
-            'tanggal_absen'             => $request->input('tanggal_absen'),
-            'lama_absen'                => 1,
-            'keterangan_absen'          => $request->input('keterangan_absen'),
-            'keterangan_cuti_khusus'    => $request->input('keterangan_cuti_khusus'),
-            'input_oleh'                => Auth::user()->name
-            ]);
+        foreach ($request->employees_id as $employeeId) 
+        {
+            $employee = Employees::find($employeeId);
+            $insert = [
+                'employees_id'              => $employee->id,
+                'nik_karyawan'              => $employee->nik_karyawan,
+                'tanggal_absen'             => $request->input('tanggal_absen'),
+                'lama_absen'                => 1,
+                'keterangan_absen'          => $request->input('keterangan_absen'),
+                'keterangan_cuti_khusus'    => $request->input('keterangan_cuti_khusus'),
+                'input_oleh'                => Auth::user()->name
+                ];
+                Attendances::create($insert);
+        }
         Alert::success('Success Input Data Absensi','Oleh '.auth()->user()->name);
         return redirect()->route('attendance.index');
     }

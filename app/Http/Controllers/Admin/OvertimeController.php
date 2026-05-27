@@ -46,7 +46,69 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.overtime.index');
+        $tahun = Carbon::now()->year;
+
+        $groups = [
+            'Produksi'  => [11],
+            'PDC'       => [19, 20, 21, 22],
+            'Warehouse' => [13, 14],
+            'Delivery'  => [12, 15, 18]
+            // 'Quality'   => [8]
+            // 'PPC'       => [10]
+            // 'Office'    => [1, 2, 3, 4, 5, 6, 7, 9]
+        ];
+
+        // Flatten all division IDs into a single array for our query filter
+        $allDivisionIds = array_merge(...array_values($groups));
+
+        // 4. Run ONE single query to fetch aggregated monthly totals for all divisions
+        $overtimeData = Overtimes::query()
+                        ->join('employees', 'employees.id', '=', 'overtimes.employees_id')
+                        ->join('divisions', 'divisions.id', '=', 'employees.divisions_id')
+                        ->selectRaw('divisions.id as division_id,
+                                    MONTH(overtimes.tanggal_lembur) as bulan,
+                                    SUM(overtimes.jam_lembur) as total_jam')
+                        ->whereIn('divisions.id', $allDivisionIds)
+                        ->whereNotNull('overtimes.acc_hrd')
+                        ->whereYear('overtimes.tanggal_lembur', $tahun)
+                        ->groupBy('divisions.id',
+                            DB::raw('MONTH(overtimes.tanggal_lembur)')
+                        )->get();
+
+        // 5. Initialize a structured array for your view template (Months 1-12)
+        $result = [];
+        $monthNames = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
+            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+        ];
+
+        $indexedData = [];
+
+        foreach ($overtimeData as $row) {
+            $indexedData[$row->division_id][$row->bulan] = $row->total_jam;
+        }
+
+        foreach ($groups as $groupName => $ids) {
+
+            foreach ($monthNames as $monthNum => $monthName) {
+
+                $total = $overtimeData
+                    ->filter(function ($row) use ($ids, $monthNum) {
+                        return in_array($row->division_id, $ids)
+                            && (int)$row->bulan === $monthNum;
+                    })
+                    ->sum('total_jam');
+
+                $result[$groupName][$monthName] = (float) $total;
+            }
+        }
+
+        return view('admin.pages.overtime.index',
+        [
+            'tahun'     => $tahun,
+            'result'    => $result
+        ]);
     }
 
     /**

@@ -37,7 +37,6 @@ class EmployeeRequest extends FormRequest
             'nik_karyawan'              => 'required|numeric|min:16',
             'nama_karyawan'             => 'required|string',
             'email_karyawan'            => 'required|email',
-            'nomor_absen'               => 'required',
             'nomor_handphone'           => 'required|numeric',
             'tempat_lahir'              => 'required',
             'tanggal_lahir'             => 'required|date',

@@ -97,30 +97,32 @@
     {{-- StatistikHarian --}}
 
     <div class="row mt-2">
-        {{-- Kecelakaan Berdasarkan Jenis Kecelakaan --}}
-        <div class="col-md-6">
-            <div id="containerKecelakaanBerdasarkanJenisKecelakaan"></div>
-        </div>
-        {{-- Kecelakaan Berdasarkan Jenis Kecelakaan --}}
-        {{-- Kecelakaan Berdasarkan Penempatan --}}
-        <div class="col-md-6">
-            <div id="containerKecelakaanBerdasarkanPenempatan"></div>
-        </div>
-        {{-- Kecelakaan Berdasarkan Penempatan --}}
-    </div>
-
-    <div class="row mt-2">
-        {{-- Kecelakaan Berdasarkan Lokasi Kecelakaan --}}
-        <div class="col-md-6">
-            <div id="containerKecelakaanBerdasarkanLokasiKecelakaan"></div>
-        </div>
-        {{-- Kecelakaan Berdasarkan Lokasi Kecelakaan --}}
         {{-- Hari Hilang Berdasarkan Penempatan --}}
         <div class="col-md-6">
             <div id="containerKecelakaanBerdasarkanHariHilang"></div>
         </div>
         {{-- Hari Hilang Berdasarkan Penempatan --}}
+        {{-- Kecelakaan Berdasarkan Jenis Kecelakaan --}}
+        <div class="col-md-6">
+            <div id="containerKecelakaanBerdasarkanJenisKecelakaan"></div>
+        </div>
+        {{-- Kecelakaan Berdasarkan Jenis Kecelakaan --}}
     </div>
+
+    <div class="row mt-2">
+        {{-- Kecelakaan Berdasarkan Penempatan --}}
+        <div class="col-md-6">
+            <div id="containerKecelakaanBerdasarkanPenempatan"></div>
+        </div>
+        {{-- Kecelakaan Berdasarkan Penempatan --}}
+
+        {{-- Kecelakaan Berdasarkan Lokasi Kecelakaan --}}
+        <div class="col-md-6">
+            <div id="containerKecelakaanBerdasarkanLokasiKecelakaan"></div>
+        </div>
+        {{-- Kecelakaan Berdasarkan Lokasi Kecelakaan --}}
+    </div>
+
 
 @endsection
 
@@ -237,7 +239,7 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'Data Kecelakaan Berdasarkan Jenis Kecelakaan',
+                    text: 'Persentase Kecelakaan Berdasarkan Jenis Kecelakaan',
                     align: 'left'
                 },
                 subtitle: {
@@ -289,7 +291,7 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'Data Kecelakaan Berdasarkan Penempatan',
+                    text: 'Persentase Kecelakaan Berdasarkan Penempatan',
                     align: 'left',
                     style: {
                         fontWeight: 'bold'
@@ -427,6 +429,7 @@
                         }
                     },
                     { // Sumbu Y Kedua (Kanan) - Hari Hilang
+                        allowDecimals: false,
                         title: {
                             text: 'Total Hari Kerja Hilang (Hari)',
                             style: {

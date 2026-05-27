@@ -51,6 +51,7 @@ class EmployeesOuts extends Model
         'tanggal_keluar_karyawan_keluar',
         'status_kerja_karyawan_keluar',
         'keterangan_keluar',
+        'alasan_keluar',
         'input_oleh',
         'edit_oleh',
         'hapus_oleh'

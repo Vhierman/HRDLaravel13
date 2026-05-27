@@ -25,6 +25,7 @@ use App\Models\Admin\TrainingInternals;
 use App\Models\Admin\TrainingEksternals;
 use App\Models\Admin\InventoryCars;
 use App\Models\Admin\InventoryMotorcycles;
+use App\Models\Admin\Safetys;
 use Alert;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Carbon\Carbon;
@@ -151,6 +152,7 @@ class EmployeeOutController extends Controller
             'tanggal_keluar_karyawan_keluar'            => $request->input('tanggal_keluar_karyawan_keluar'),
             'status_kerja_karyawan_keluar'              => $employee->status_kerja,
             'keterangan_keluar'                         => $request->input('keterangan_keluar'),
+            'alasan_keluar'                             => $request->input('alasan_keluar'),
             'input_oleh'                                => auth()->user()->name
         ]);
 
@@ -176,6 +178,7 @@ class EmployeeOutController extends Controller
             TrainingEksternals::class,
             InventoryCars::class,
             InventoryMotorcycles::class,
+            Safetys::class,
         ];
         foreach ($relations as $model) {
             $model::where('employees_id', $id)->update(['hapus_oleh' => auth()->user()->name]);
@@ -346,7 +349,7 @@ class EmployeeOutController extends Controller
         }
 
         $item_employee_out  = EmployeesOuts::findOrFail($id);
-
+        
         return view ('admin.pages.employee_out.edit',[
                     'item_employee_out'  => $item_employee_out
         ]);
@@ -365,6 +368,7 @@ class EmployeeOutController extends Controller
 
         $data_employee_out   = $request->except('_token');
         $item_employee_out   = EmployeesOuts::findOrFail($id);
+        $data_employee_out['edit_oleh'] = auth()->user()->name;
         $item_employee_out->update($data_employee_out);
         Alert::info('Success Edit Data Karyawan Keluar','Oleh '.auth()->user()->name);
         return redirect()->route('employee_out.index');

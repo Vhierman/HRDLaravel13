@@ -32,22 +32,15 @@
             <form action="{{ route('report.tampil_turnover') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3">
-                    <div class="col-12 col-lg-12">
-                        <label class="form-label fs-6">Pilih Tahun</label>
-                        <select id="input39" class="form-select" name="tahun" id="tahun-select"
-                            data-placeholder="Pilih Tahun">
-                            <option value="">Pilih Tahun</option>
-                            @php
-                                $tahunSekarang = date('Y');
-                                // Mengambil tahun yang sedang dipilih dari variabel $Tahun di controller, jika kosong default ke tahun sekarang
-                                $tahunTerpilih = $Tahun ?? $tahunSekarang;
-                            @endphp
-                            @for ($i = $tahunSekarang; $i >= $tahunSekarang - 2; $i--)
-                                <option value="{{ $i }}" {{ $tahunTerpilih == $i ? 'selected' : '' }}>
-                                    {{ $i }}
-                                </option>
-                            @endfor
-                        </select>
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label fs-6">Dari Tanggal</label>
+                        <input type="date" name="tanggal_awal" value="{{ old('tanggal_awal') }}" class="form-control"
+                            placeholder="dd/mm/yyyy">
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="form-label fs-6">Sampai Tanggal</label>
+                        <input type="date" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" class="form-control"
+                            placeholder="dd/mm/yyyy">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">

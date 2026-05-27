@@ -24,7 +24,7 @@ class AttendanceRequest extends FormRequest
     {
         return [
             //
-            'employees_id'      => 'required|integer|exists:employees,id',
+            'employees_id'      => 'required',
             'tanggal_absen'     => 'required|date',
             'keterangan_absen'  => 'required'
         ];

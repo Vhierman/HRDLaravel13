@@ -69,6 +69,10 @@
                                 @if ($item_attendance->keterangan_absen == 'Cuti Khusus') {{ 'selected="selected"' }} @endif>
                                 Cuti Khusus
                             </option>
+                            <option value="Cuti Panjang"
+                                @if ($item_attendance->keterangan_absen == 'Cuti Panjang') {{ 'selected="selected"' }} @endif>
+                                Cuti Panjang
+                            </option>
                             <option value="OFF" @if ($item_attendance->keterangan_absen == 'OFF') {{ 'selected="selected"' }} @endif>
                                 OFF
                             </option>

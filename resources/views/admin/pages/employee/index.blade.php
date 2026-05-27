@@ -128,6 +128,14 @@
                         <i class="bi bi-cloud-arrow-down"></i> Download Database Karyawan
                     </a>
                 @endif
+                @if ($canManage)
+                    <a href="{{ route('kontrak_kerja.notif_kontrak_habis') }}"
+                        class="btn btn-danger d-flex align-items-center gap-1"><i
+                            class="material-icons-outlined">settings_accessibility</i>Berakhirnya Kontrak Kerja Harian<span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">{{ $expired_akhir_kerja }}<span
+                                class="visually-hidden">unread messages</span></span>
+                    </a>
+                @endif
             </div>
 
             <div class="table-responsive">
@@ -140,7 +148,6 @@
                             <th>Jabatan</th>
                             <th>Penempatan</th>
                             <th>Area</th>
-                            <th>Golongan</th>
                             <th>Status</th>
                             <th>Awal Kerja</th>
                             <th>Akhir Kerja</th>
@@ -156,8 +163,6 @@
                             <th><input type="text" class="form-control form-control-sm"
                                     placeholder="Cari Penempatan..." /></th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Area..." />
-                            </th>
-                            <th><input type="text" class="form-control form-control-sm" placeholder="Cari Golongan..." />
                             </th>
                             <th><input type="text" class="form-control form-control-sm" placeholder="Cari Status..." />
                             </th>
@@ -202,7 +207,6 @@
                                 <td>{{ $employee->positions->jabatan ?? '-' }}</td>
                                 <td>{{ $employee->divisions->penempatan ?? '-' }}</td>
                                 <td>{{ $employee->areas->area ?? '-' }}</td>
-                                <td class="text-center">{{ $employee->golongans->golongan ?? '-' }}</td>
                                 <td class="text-center">
                                     <span class="badge bg-{{ $badge_color }}">
                                         {{ $status_kerja }}

@@ -253,14 +253,6 @@
                                 <p class="mb-4">Biodata Karyawan</p>
 
                                 <div class="row g-3">
-
-                                    <div class="col-12 col-lg-6">
-                                        <label class="form-label fs-6">NIK KTP</label>
-                                        <input type="text" onkeyup="angka(this);" maxlength="16" name="nik_karyawan"
-                                            value="{{ old('nik_karyawan') }}" class="form-control"
-                                            placeholder="Masukan NIK Karyawan">
-                                    </div>
-
                                     <div class="col-12 col-lg-6">
                                         <label class="form-label fs-6">NIK KTP</label>
                                         <input type="text" onkeyup="angka(this);" maxlength="16" name="nik_karyawan"

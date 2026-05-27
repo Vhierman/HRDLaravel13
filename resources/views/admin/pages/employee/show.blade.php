@@ -1248,13 +1248,13 @@
                                                                 name="hubungan_keluarga">
                                                                 <option value="">Pilih Hubungan Keluarga</option>
                                                                 <option value="Istri"
-                                                                    {{ old('hubungan_keluarga') == 'PKWTT' ? 'selected' : '' }}>
+                                                                    {{ old('hubungan_keluarga') == 'Istri' ? 'selected' : '' }}>
                                                                     Istri</option>
                                                                 <option value="Suami"
-                                                                    {{ old('hubungan_keluarga') == 'PKWT' ? 'selected' : '' }}>
+                                                                    {{ old('hubungan_keluarga') == 'Suami' ? 'selected' : '' }}>
                                                                     Suami</option>
                                                                 <option value="Anak"
-                                                                    {{ old('hubungan_keluarga') == 'Harian' ? 'selected' : '' }}>
+                                                                    {{ old('hubungan_keluarga') == 'Anak' ? 'selected' : '' }}>
                                                                     Anak</option>
                                                             </select>
                                                         </div>
@@ -1264,6 +1264,7 @@
                                                             <input type="text" name="nik_history_keluarga"
                                                                 maxlength="16" onkeyup="angka(this);"
                                                                 class="form-control" id="inputHistoryKeluarga"
+                                                                value="{{ old('nik_history_keluarga') }}"
                                                                 placeholder="Masukan NIK KTP">
                                                         </div>
                                                         <div class="col-md-6">
@@ -1272,6 +1273,7 @@
                                                             <input type="text" name="nama_history_keluarga"
                                                                 onkeyup="huruf(this);" class="form-control"
                                                                 id="inputHistoryKeluarga"
+                                                                value="{{ old('nama_history_keluarga') }}"
                                                                 placeholder="Masukan Nama Lengkap">
                                                         </div>
                                                         <div class="col-md-6">
@@ -1280,6 +1282,7 @@
                                                             <input type="text"
                                                                 name="nomor_bpjs_kesehatan_history_keluarga"
                                                                 onkeyup="angka(this);" maxlength="13"
+                                                                value="{{ old('nomor_bpjs_kesehatan_history_keluarga') }}"
                                                                 class="form-control" id="inputHistoryKeluarga"
                                                                 placeholder="Masukan Nomor BPJS Kesehatan">
                                                         </div>
@@ -1301,6 +1304,7 @@
                                                                 Lahir Lahir</label>
                                                             <input type="text" name="tempat_lahir_history_keluarga"
                                                                 class="form-control" id="inputHistoryKeluarga"
+                                                                value="{{ old('tempat_lahir_history_keluarga') }}"
                                                                 placeholder="Masukan Tempat Lahir">
                                                         </div>
                                                         <div class="col-md-6">
@@ -1308,6 +1312,7 @@
                                                                 Lahir</label>
                                                             <input type="date" name="tanggal_lahir_history_keluarga"
                                                                 class="form-control" id="inputHistoryKeluarga"
+                                                                value="{{ old('tanggal_lahir_history_keluarga') }}"
                                                                 placeholder="dd/mm/yyyy">
                                                         </div>
                                                         <div class="col-md-6">
@@ -1332,7 +1337,7 @@
                                                         <div class="col-md-12">
                                                             <div class="d-md-flex d-grid align-items-center gap-3">
                                                                 <button type="submit"
-                                                                    class="btn btn-grd-danger px-4">Submit</button>
+                                                                    class="btn btn-grd-danger px-4">Simpan</button>
                                                             </div>
                                                         </div>
                                                     </form>
