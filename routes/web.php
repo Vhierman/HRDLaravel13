@@ -149,7 +149,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('certification_ministry', CertificationMinistryController::class);
     Route::get('certification_other/exportExcel', [CertificationOtherController::class, 'exportExcel'])->name('certification_other.exportExcel');
     Route::resource('certification_other', CertificationOtherController::class);
-    });
+    
     //Overtimes
     Route::put('overtime/update_upah_lembur_perjam/{id}', [OvertimeController::class, 'update_upah_lembur_perjam'])->name('overtime.update_upah_lembur_perjam');
     Route::post('overtime/proses_lembur_perjam/{id}', [OvertimeController::class, 'proses_lembur_perjam'])->name('overtime.proses_lembur_perjam');
@@ -235,7 +235,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('safety/exportExcel', [SafetyController::class, 'exportExcel'])->name('safety.exportExcel');
     Route::resource('safety', SafetyController::class);
     // Route Admin Area
-    
+    });
     
     // Route User Area
     // Login User Area

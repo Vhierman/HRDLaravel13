@@ -5,15 +5,13 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter; // Tambahkan ini
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
         return view('user.auth');
     }
 
@@ -24,15 +22,35 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
+        // Membuat kunci unik berdasarkan email dan IP Address
+        $throttleKey = Str::transliterate(Str::lower($request->input('email')).'|'.$request->ip());
+
+        // Cek apakah pengguna terlalu banyak melakukan percobaan login
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            
+            return back()->withErrors([
+                'email' => "Terlalu banyak percobaan login. Silakan coba lagi dalam $seconds detik."
+            ])->withInput();
+        }
+
         $credentials = $request->only('email', 'password');
-        $credentials['roles'] = 'karyawan';
+        // Memastikan hanya user dengan role 'karyawan' yang bisa login lewat sini
+        $credentials['roles'] = 'karyawan'; 
 
         if (Auth::attempt($credentials)) {
+            // Bersihkan catatan rate limit jika berhasil login
+            RateLimiter::clear($throttleKey);
+
             $request->session()->regenerate();
             return redirect()->route('user.dashboard');
         }
+
+        // Catat kegagalan login jika salah password/email
+        RateLimiter::hit($throttleKey, 60); // mengunci selama 60 detik jika limit habis
+
         return back()->withErrors([
-            'error' => 'Your credentials are wrong'
+            'email' => 'Email atau password yang Anda masukkan salah.'
         ])->withInput();
     }
 
@@ -42,53 +60,5 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('user.login');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

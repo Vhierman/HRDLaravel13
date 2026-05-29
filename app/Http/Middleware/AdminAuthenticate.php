@@ -18,11 +18,26 @@ class AdminAuthenticate
     {
         // return $next($request);
         $user = Auth::user();
-        if ($user) {
+        // if ($user) {
+        //     return $next($request);
+        // }
+        //     return redirect()->route('admin.login');
+
+        // return $next($request);
+
+
+        if (!$user) {
+            return redirect()->route('admin.login');
+        }
+        $allowedRoles = ['admin', 'hrd', 'accounting', 'leader'];
+        if (in_array($user->roles, $allowedRoles)) {
             return $next($request);
         }
-            return redirect()->route('admin.login');
+        return redirect()->route('user.dashboard')->withErrors([
+            'error' => 'Anda tidak memiliki hak akses ke halaman Admin.'
+        ]);
 
-        return $next($request);
+
+
     }
 }

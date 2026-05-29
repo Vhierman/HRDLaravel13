@@ -4,6 +4,12 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Admin\Employees;
+use App\Models\Admin\Divisions;
+use App\Models\Admin\Positions;
+use App\Models\Admin\Areas;
+use App\Models\Admin\Golongans;
+use Alert;
 
 class DashboardUserController extends Controller
 {
@@ -13,7 +19,23 @@ class DashboardUserController extends Controller
     public function index()
     {
         //
-        return view('user.dashboard_user');
+        $allowedRoles = ['karyawan'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        toast('Hello ' . auth()->user()->name, 'success');
+
+        $employee = Employees::with([
+                            'divisions',
+                            'positions',
+                            'areas',
+                            ])->where('nik_karyawan',auth()->user()->nik)->first();
+
+                            // dd($employee);
+        return view('user.dashboard_user',[
+            'employee'=>$employee
+        ]);
     }
 
     /**

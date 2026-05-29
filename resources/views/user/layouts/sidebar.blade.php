@@ -1,1 +1,255 @@
-<h1>INI SIDEBAR</h1>
+<aside class="sidebar-wrapper" data-simplebar="true">
+    <div class="sidebar-header">
+        <div class="logo-icon">
+            <img src="#" class="logo-img" alt="">
+        </div>
+        <div class="logo-name flex-grow-1">
+            <h5 class="mb-0">HRIS_v3</h5>
+        </div>
+        <div class="sidebar-close">
+            <span class="material-icons-outlined">close</span>
+        </div>
+    </div>
+
+    <div class="sidebar-nav">
+        <!--navigation-->
+        <ul class="metismenu" id="sidenav">
+
+            {{-- Dashboard --}}
+            <li>
+                <a href="#">
+                    <div class="parent-icon"><i class="material-icons-outlined">home</i>
+                    </div>
+                    <div class="menu-title">Dashboard</div>
+                </a>
+            </li>
+            {{-- Dashboard --}}
+
+            {{-- Master --}}
+
+
+            {{-- Karyawan --}}
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">people_outline</i>
+                    </div>
+                    <div class="menu-title">Karyawan</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">emoji_people</i>Karyawan Aktif</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">follow_the_signs</i>Karyawan Keluar</a>
+                    </li>
+                </ul>
+            </li>
+            {{-- Karyawan --}}
+
+            {{-- Absensi --}}
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">fingerprint</i>
+                    </div>
+                    <div class="menu-title">Absensi</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a></li>
+                </ul>
+            </li>
+            {{-- Absensi --}}
+
+            {{-- Inventaris --}}
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
+                    </div>
+                    <div class="menu-title">Inventaris</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">two_wheeler</i>Inventaris Motor</a></li>
+                    <li><a href="#"><i class="material-icons-outlined">directions_car</i>Inventaris Mobil</a></li>
+                </ul>
+            </li>
+
+            {{-- Inventaris --}}
+
+
+            {{-- Training --}}
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">work_history</i>
+                    </div>
+                    <div class="menu-title">Training</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Internal</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Training Eksternal</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Training --}}
+
+            {{-- Sertifikasi --}}
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">workspace_premium</i>
+                    </div>
+                    <div class="menu-title">Sertifikasi</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>BNSP</a></li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Kementrian</a></li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Lainnya</a></li>
+                </ul>
+            </li>
+
+            {{-- Sertifikasi --}}
+
+            {{-- Overtimes --}}
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">alarm_add</i>
+                    </div>
+                    <div class="menu-title">Overtimes</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime Karyawan</a>
+                    </li>
+                </ul>
+            </li>
+            {{-- Overtimes --}}
+
+            {{-- Kontrak Kerja --}}
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">ads_click</i>
+                    </div>
+                    <div class="menu-title">Kontrak Kerja</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan PKWT</a></li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Harian</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Penilaian Karyawan</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Kontrak Kerja --}}
+
+            {{-- Pelanggaran --}}
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">back_hand</i>
+                    </div>
+                    <div class="menu-title">Pelanggaran</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Pelanggaran
+                            Karyawan</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">assured_workload</i>
+                    </div>
+                    <div class="menu-title">Perijinan</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Perijinan
+                            Perusahaan</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">health_and_safety</i>
+                    </div>
+                    <div class="menu-title">Safety</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Data Kecelakaan
+                            Kerja</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Statistik Kecelakaan
+                            Kerja</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Perijinan --}}
+
+            {{-- Salary --}}
+
+            <li>
+                <a href="#" class="has-arrow">
+                    <div class="parent-icon"><i class="material-icons-outlined">currency_exchange</i>
+                    </div>
+                    <div class="menu-title">Gaji</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Gaji
+                            Karyawan</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Surat --}}
+
+            {{-- Laporan --}}
+
+            <li>
+                <a class="has-arrow" href="javascript:;">
+                    <div class="parent-icon"><i class="material-icons-outlined">assignment_turned_in</i>
+                    </div>
+                    <div class="menu-title">Laporan</div>
+                </a>
+                <ul>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Rekap Absensi</a></li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Absensi Karyawan</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Masuk</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Karyawan Keluar</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>TurnOver Karyawan</a>
+                    </li>
+                    <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Overtime</a></li>
+                </ul>
+            </li>
+
+            {{-- Laporan --}}
+
+            {{-- Privacy Policy, Terms of Service, Documentation, and Support --}}
+            {{-- <li>
+                <a href="#">
+                    <div class="parent-icon"><i class="material-icons-outlined">description</i>
+                    </div>
+                    <div class="menu-title">Privacy Policy</div>
+                </a>
+            </li> --}}
+            {{-- Privacy Policy, Terms of Service, Documentation, and Support --}}
+
+            {{-- Logout --}}
+            <li>
+                <a href="#">
+                    <div class="parent-icon"><i class="material-icons-outlined">logout</i>
+                    </div>
+                    <div class="menu-title">Logout</div>
+                </a>
+            </li>
+            {{-- Logout --}}
+
+
+        </ul>
+        <!--end navigation-->
+    </div>
+</aside>
