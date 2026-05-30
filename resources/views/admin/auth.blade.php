@@ -85,6 +85,11 @@
                                         <button type="reset" class="btn btn-grd-danger">Reset</button>
                                     </div>
                                 </div>
+                                <div class="col-12 text-center mt-4">
+                                    <small class="text-secondary">
+                                        © {{ date('Y') }} BangBOR. All Rights Reserved.
+                                    </small>
+                                </div>
                             </form>
                         </div>
                     </div>
