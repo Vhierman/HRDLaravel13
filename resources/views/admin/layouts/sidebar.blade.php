@@ -26,43 +26,45 @@
             {{-- Dashboard --}}
 
             {{-- Master --}}
-            {{-- @if (Auth::user()->roles == 'admin') --}}
-            <li>
-                <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon"><i class="material-icons-outlined">apps</i>
-                    </div>
-                    <div class="menu-title">Master</div>
-                </a>
-                <ul>
-                    <li><a href="{{ route('user.index') }}"><i class="material-icons-outlined">arrow_right</i>User</a>
-                    </li>
-                    <li><a href="{{ route('company.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Perusahaan</a></li>
-                    <li><a href="{{ route('area.index') }}"><i class="material-icons-outlined">arrow_right</i>Area</a>
-                    </li>
-                    <li><a href="{{ route('division.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Penempatan</a></li>
-                    <li><a href="{{ route('position.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
-                    <li><a href="{{ route('golongan.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Golongan</a></li>
-                    <li><a href="{{ route('working_hour.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Jam Kerja</a></li>
-                    <li><a href="{{ route('minimal_salary.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Minimal Upah</a></li>
-                    <li><a href="{{ route('maksimal_upah_bpjskesehatan.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
-                            Kesehatan</a></li>
-                    <li><a href="{{ route('maksimal_upah_bpjstk.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
-                            Ketenagakerjaan</a>
-                    </li>
-                    <li><a href="{{ route('bonus.index') }}"><i
-                                class="material-icons-outlined">arrow_right</i>Bonus</a>
-                    </li>
-                </ul>
-            </li>
-            {{-- @endif --}}
+            @if (Auth::user()->roles == 'admin')
+                <li>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">apps</i>
+                        </div>
+                        <div class="menu-title">Master</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('user.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>User</a>
+                        </li>
+                        <li><a href="{{ route('company.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Perusahaan</a></li>
+                        <li><a href="{{ route('area.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Area</a>
+                        </li>
+                        <li><a href="{{ route('division.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Penempatan</a></li>
+                        <li><a href="{{ route('position.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Jabatan</a></li>
+                        <li><a href="{{ route('golongan.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Golongan</a></li>
+                        <li><a href="{{ route('working_hour.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Jam Kerja</a></li>
+                        <li><a href="{{ route('minimal_salary.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Minimal Upah</a></li>
+                        <li><a href="{{ route('maksimal_upah_bpjskesehatan.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
+                                Kesehatan</a></li>
+                        <li><a href="{{ route('maksimal_upah_bpjstk.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Maksimal Upah BPJS
+                                Ketenagakerjaan</a>
+                        </li>
+                        <li><a href="{{ route('bonus.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Bonus</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             {{-- Master --}}
 
             {{-- Karyawan --}}
