@@ -27,16 +27,21 @@
     <link href="{{ asset('template_admin/sass/dark-theme.css') }}" rel="stylesheet">
     <link href="{{ asset('template_admin/sass/blue-theme.css') }}" rel="stylesheet">
     <link href="{{ asset('template_admin/sass/responsive.css') }}" rel="stylesheet">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center mx-3 mx-lg-0">
-        <div class="card my-5 col-xl-9 col-xxl-8 mx-auto rounded-4 overflow-hidden p-4">
+    <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center px-3">
+        <div class="card my-5 w-100 mx-auto rounded-4 overflow-hidden p-4" style="max-width:900px;">
             <div class="row g-4">
                 <div class="col-lg-6 d-flex">
                     <div class="card-body">
                         <img src="{{ asset('template_admin/assets/images/logo/LogoPanjang.png') }}"
-                            class="mb-6 d-block mx-auto" width="350" alt="">
+                            class="img-fluid mb-6 d-block mx-auto" style="max-width:100%; height:auto;" alt="">
                         <h5 class="fw-bold mt-4">Get Started Now</h5>
 
                         <div class="separator">
