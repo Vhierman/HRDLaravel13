@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('template_user/login/style.css') }}" />
     <title>HRIS</title>
 </head>
@@ -13,10 +12,14 @@
     <div class="container">
         <div class="forms-container">
             <div class="signin-signup">
-
                 <form action="{{ route('user.login.auth') }}" class="sign-in-form" method="post">
                     @csrf
-                    <h2 class="title">Sign in</h2>
+                    <!-- LOGO BARU KHUSUS MOBILE -->
+
+                    <img src="{{ asset('template_user/login/img/LogoPrima.png') }}" class="logo-mobile"
+                        alt="Logo" />
+
+                    <h2 class="title">Login Karyawan</h2>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="email" class="form-control" name="email" value="{{ old('email') }}"
@@ -28,6 +31,7 @@
                             required>
                     </div>
                     <input type="submit" value="Login" class="btn solid" />
+                    <button type="reset" class="btn btn-grd-danger">Reset</button>
                     @if ($errors->any())
                         <div
                             style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; width: 100%; max-width: 380px;">
@@ -38,37 +42,16 @@
                             </ul>
                         </div>
                     @endif
+                    <div class="copyright">
+                        © {{ date('Y') }} BangBOR. All Rights Reserved.
+                    </div>
                 </form>
-                {{-- <form action="#" class="sign-up-form">
-                    <h2 class="title">Sign up</h2>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Username" />
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" placeholder="Email" />
-                    </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password" />
-                    </div>
-                    <input type="submit" class="btn" value="Sign up" />
-                </form> --}}
             </div>
         </div>
 
         <div class="panels-container">
             <div class="panel left-panel">
                 <div class="content">
-                    {{-- <h3>New here ?</h3> --}}
-                    {{-- <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-                        ex ratione. Aliquid!
-                    </p> --}}
-                    {{-- <button class="btn transparent" id="sign-up-btn">
-                        Sign up
-                    </button> --}}
                 </div>
                 <img src="{{ asset('template_user/login/img/LogoPrima.png') }}" class="image" alt="" />
             </div>
@@ -88,7 +71,7 @@
         </div>
     </div>
 
-    <script src="{{ asset('template_user/login/app.js') }}"></script>
+    {{-- <script src="{{ asset('template_user/login/app.js') }}"></script> --}}
 </body>
 
 </html>
