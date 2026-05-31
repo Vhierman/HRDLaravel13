@@ -5,37 +5,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bang BOR | @yield('title')</title>
-    <!--favicon-->
+
     <link rel="icon" href="{{ asset('template_user/lama/assets/images/favicon-32x32.png') }}" type="image/png">
 
-    <!--=============== BOXICONS ===============-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <!--=============== CSS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('template_user/assets/css/styles.css') }}">
 
     @yield('css')
-
 </head>
 
-<body class="d-flex flex-column min-vh-100">
-    <!--start navbar-->
+<body class="bg-light">
     @include('user.layouts.navbar')
-    <!--end top navbar-->
-
-    @if (Session::has('alert.config'))
-        @include('sweetalert::alert')
-    @endif
-
-    <main class="main-wrapper">
-        <div class="main-content">
-            @yield('content')
-        </div>
-    </main>
+    @include('sweetalert::alert')
 
 
-    <!--=============== MAIN JS ===============-->
-    <script src="{{ asset('template_user/assets/js/main.js') }}"></script>
+    @yield('content')
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @yield('js')
 </body>
 

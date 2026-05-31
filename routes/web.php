@@ -41,39 +41,109 @@ use App\Http\Controllers\Admin\SafetyController;
 
 
 //
-// Route::get('/config-clear', function() {
-//     Artisan::call('config:clear'); 
-//     return 'Configuration cache cleared!';
-// });
-// Route::get('/config-cache', function() {
-//     Artisan::call('config:cache');
-//     return 'Configuration cache cleared! <br> Configuration cached successfully!';
-// });
-// Route::get('/cache-clear', function() {
-//     Artisan::call('cache:clear');
-//     return 'Application cache cleared!';
-// });
-// Route::get('/view-cache', function() {
-//     Artisan::call('view:cache');
-//     return 'Compiled views cleared! <br> Blade templates cached successfully!';
-// });
-// Route::get('/view-clear', function() {
-//     Artisan::call('view:clear');
-//     return 'Compiled views cleared!';
-// });
-// Route::get('/route-cache', function() {
-//     Artisan::call('route:cache');
-//     return 'Route cache cleared! <br> Routes cached successfully!';
-// });
-// Route::get('/route-clear', function() {
-//     Artisan::call('route:clear');
-//     return 'Route cache cleared!';
-// });
-// Route::get('/storage-link', function() {
-//     Artisan::call('storage:link');
-//     return 'The links have been created.';
-// });
-//
+Route::get('/config-clear', function() {
+    Artisan::call('config:clear'); 
+    return 'Configuration cache cleared!';
+});
+Route::get('/config-cache', function() {
+    Artisan::call('config:cache');
+    return 'Configuration cache cleared! <br> Configuration cached successfully!';
+});
+Route::get('/cache-clear', function() {
+    Artisan::call('cache:clear');
+    return 'Application cache cleared!';
+});
+Route::get('/view-cache', function() {
+    Artisan::call('view:cache');
+    return 'Compiled views cleared! <br> Blade templates cached successfully!';
+});
+Route::get('/view-clear', function() {
+    Artisan::call('view:clear');
+    return 'Compiled views cleared!';
+});
+Route::get('/route-cache', function() {
+    Artisan::call('route:cache');
+    return 'Route cache cleared! <br> Routes cached successfully!';
+});
+Route::get('/route-clear', function() {
+    Artisan::call('route:clear');
+    return 'Route cache cleared!';
+});
+Route::get('/storage-link', function () {
+    try {
+        Artisan::call('storage:link');
+
+        return [
+            'success' => true,
+            'output' => Artisan::output()
+        ];
+    } catch (\Throwable $e) {
+        return [
+            'success' => false,
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ];
+    }
+});
+
+Route::get('/cek-symlink', function () {
+    return function_exists('symlink')
+        ? 'symlink tersedia'
+        : 'symlink diblokir';
+});
+
+Route::get('/cek-public-storage', function () {
+    return [
+        'exists' => file_exists(public_path('storage')),
+        'is_link' => is_link(public_path('storage')),
+        'path' => public_path('storage')
+    ];
+});
+
+Route::get('/cek-storage-source', function () {
+    return [
+        'storage_app_public_exists' => is_dir(storage_path('app/public')),
+        'storage_app_exists' => is_dir(storage_path('app')),
+        'storage_exists' => is_dir(storage_path()),
+    ];
+});
+
+Route::get('/debug-storage-link', function () {
+
+    $target = storage_path('app/public');
+    $link = public_path('storage');
+
+    return [
+        'target' => $target,
+        'target_exists' => file_exists($target),
+        'target_is_dir' => is_dir($target),
+
+        'link' => $link,
+        'public_exists' => file_exists(public_path()),
+        'public_is_writable' => is_writable(public_path()),
+
+        'link_exists' => file_exists($link),
+        'link_parent_exists' => file_exists(dirname($link)),
+        'link_parent_writable' => is_writable(dirname($link)),
+    ];
+});
+
+Route::get('/storage-link-manual', function () {
+
+    $target = storage_path('app/public');
+
+    $link = '/home/achmadf5/public_html/storage';
+
+    if (file_exists($link)) {
+        return 'Storage sudah ada';
+    }
+
+    symlink($target, $link);
+
+    return 'Berhasil';
+});
+
 
 // Halaman Utama
 Route::view('/','index');
@@ -280,6 +350,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 // Halaman User Area
 Route::prefix('user')->middleware('auth')->group(function () {
+    Route::post('/overtime', [DashboardUserController::class, 'overtime'])->name('user.overtime');
     Route::get('/', [DashboardUserController::class, 'index'])->name('user.dashboard');
     Route::get('/logout', [UserLoginController::class, 'logout'])->name('user.logout');
 });

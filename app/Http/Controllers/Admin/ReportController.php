@@ -682,13 +682,28 @@ class ReportController extends Controller
             $persentase = $total_karyawan_keluar > 0 ? round(($item->total / $total_karyawan_keluar) * 100, 2) : 0;
             
             if ($persentase > 0) {
-                $pieData[] = ['name' => $item->keterangan_keluar, 'y' => $persentase, 'v' => $item->total];
+                // Gabungkan total dan persentase berdasarkan keterangan_keluar di array PHP
+                if (!isset($pieDataRaw[$item->keterangan_keluar])) {
+                    $pieDataRaw[$item->keterangan_keluar] = ['y' => 0, 'v' => 0];
+                }
+                $pieDataRaw[$item->keterangan_keluar]['y'] += $persentase;
+                $pieDataRaw[$item->keterangan_keluar]['v'] += $item->total;
                 
                 if ($item->alasan_keluar) {
                     $categoriesAlasan[] = $item->alasan_keluar;
                     $ratesAlasan[]      = $persentase;
                 }
             }
+        }
+
+        // Format ulang hasil mapping array agar sesuai dengan struktur Highcharts
+        $pieData = [];
+        foreach ($pieDataRaw as $name => $values) {
+            $pieData[] = [
+                'name' => $name,
+                'y'    => round($values['y'], 2), // Pastikan total persentase rapi
+                'v'    => $values['v']
+            ];
         }
 
         // ==========================================
@@ -790,6 +805,96 @@ class ReportController extends Controller
             ];
         }
 
+
+        //Menampilkan jumlah Rp. (jumlahuangditerimapembulatan) Overtime Sesuai tanggal awal dan akhir
+        // 1. Ambil rekap total jam lembur per karyawan terlebih dahulu
+            $total_overtimes = Overtimes::join('employees', 'employees.id', '=', 'overtimes.employees_id')
+                                        ->select(
+                                            'overtimes.employees_id',
+                                            'overtimes.nik_karyawan',
+                                            'employees.nama_karyawan',
+                                            'employees.status_kerja'
+                                        )
+                                        ->selectRaw('
+                                            SUM(overtimes.jumlah_jam_pertama) as total_jam_pertama,
+                                            SUM(overtimes.jumlah_jam_kedua) as total_jam_kedua,
+                                            SUM(overtimes.jumlah_jam_ketiga) as total_jam_ketiga,
+                                            SUM(overtimes.jumlah_jam_keempat) as total_jam_keempat,
+                                            SUM(overtimes.uang_makan_lembur) as total_uang_makan
+                                        ')
+                                        ->whereBetween('overtimes.tanggal_lembur', [$tanggal_awal, $tanggal_akhir])
+                                        ->whereNotNull('overtimes.acc_hrd')
+                                        ->groupBy(
+                                            'overtimes.employees_id',
+                                            'overtimes.nik_karyawan',
+                                            'employees.nama_karyawan',
+                                            'employees.status_kerja'
+                                        )
+                                        ->orderBy('employees.nama_karyawan')
+                                        ->get();
+
+            $bulanawal  = \Carbon\Carbon::parse($tanggal_awal)->isoformat('MM');
+            $bulanakhir = \Carbon\Carbon::parse($tanggal_akhir)->isoformat('MM');
+            $tahunawal  = \Carbon\Carbon::parse($tanggal_awal)->isoformat('YYYY');
+            $tahunakhir = \Carbon\Carbon::parse($tanggal_akhir)->isoformat('YYYY');
+
+            // Penampung hasil akhir perhitungan per karyawan
+            $hasil_pembulatan_overtime = [];
+
+            // 2. Lakukan looping untuk menghitung upah masing-masing karyawan
+            foreach ($total_overtimes as $overtime) {
+                
+                // Ambil data karyawan beserta rekap salarinya berdasarkan employees_id yang sedang aktif di loop
+                $employee = Employees::with([
+                                'positions',
+                                'history_salaries',
+                                'rekap_salaries' => function ($query) use ($bulanawal, $bulanakhir, $tahunawal, $tahunakhir) {
+                                    $query->whereMonth('periode_awal', $bulanawal)
+                                        ->whereMonth('periode_akhir', $bulanakhir)
+                                        ->whereYear('periode_awal', $tahunawal)
+                                        ->whereYear('periode_akhir', $tahunakhir);
+                                }
+                            ])
+                            ->where('id', $overtime->employees_id)
+                            ->first(); // Menggunakan first() karena mencari spesifik 1 karyawan tunggal
+
+                if ($employee) {
+                    $rekapSalary = $employee->rekap_salaries->first();
+                    $upahlemburperjam = $rekapSalary?->upah_lembur_perjam ?? 0;
+
+                    // Hitung total akumulasi jam lembur 
+                    // (Catatan: Jika ada faktor pengali seperti x1.5 atau x2, kalikan masing-masing jam di sini sebelum dijumlah)
+                    $jumlahjam = $overtime->total_jam_pertama + $overtime->total_jam_kedua + $overtime->total_jam_ketiga + $overtime->total_jam_keempat;
+                    
+                    $uangmakanlembur = $overtime->total_uang_makan;
+
+                    // Rumus Perhitungan Uang Lembur
+                    $jumlahuanglembur             = $upahlemburperjam * $jumlahjam;
+                    $jumlahuangditerima           = $jumlahuanglembur + $uangmakanlembur;
+                    $jumlahuangditerimapembulatan = ceil($jumlahuangditerima);
+
+                    // Masukkan data hasil kalkulasi karyawan ke dalam array penampung
+                    $hasil_pembulatan_overtime[] = [
+                        'nama_karyawan'           => $overtime->nama_karyawan,
+                        'nik'                     => $overtime->nik_karyawan,
+                        'total_jam'               => $jumlahjam,
+                        'uang_makan'              => $uangmakanlembur,
+                        'total_terima_pembulatan' => $jumlahuangditerimapembulatan
+                    ];
+                }
+            }
+
+            // 3. Menghitung SUM (Grand Total) dari keseluruhan uang lembur yang diterima
+            $grand_total_overtime = collect($hasil_pembulatan_overtime)->sum('total_terima_pembulatan');
+
+            // 4. Debugging untuk melihat struktur data akhir dan total keseluruhannya
+            // dd([
+            //     'detail_per_karyawan'    => $hasil_pembulatan_overtime,
+            //     'grand_total_seluruhnya' => $grand_total_overtime,
+            //     'format_rupiah_total'    => 'Rp ' . number_format($grand_total_overtime, 0, ',', '.')
+            // ]);
+
+
         // 5. LEMPAR DATA KE VIEW BLADE
         return view('admin.pages.report.tampil_overtime', [
             'tanggal_awal'           => $tanggal_awal,
@@ -804,6 +909,7 @@ class ReportController extends Controller
             'categoriesDivisi'       => json_encode($categoriesDivisi),
             'seriesJamLembur'        => json_encode($seriesJamLembur, JSON_NUMERIC_CHECK),
             'pieDataKaryawan'        => json_encode($pieDataKaryawan, JSON_NUMERIC_CHECK),
+            'format_rupiah_total'    => $grand_total_overtime,
         ]);
     }
     

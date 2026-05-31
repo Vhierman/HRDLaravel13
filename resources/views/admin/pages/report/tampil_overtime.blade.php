@@ -4,18 +4,37 @@
 
 @section('content')
 
-    <div class="row row-cols-1 row-cols-xl-2">
+    <div class="row row-cols-1 row-cols-xl-3">
         <div class="col">
             <div class="card rounded-4">
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <div class="">
-                            <h2 class="mb-0">{{ number_format($total_jam_overtime) }}</h2>
+                            <h2 class="mb-0">{{ number_format($format_rupiah_total, 0, ',', '.') }}</h2>
                         </div>
                         <div class="">
                             <p
                                 class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-success text-success bg-opacity-10">
-                                Jumlah Jam Lembur
+                                Jumlah Overtime (Rp)
+                            </p>
+                        </div>
+                    </div>
+                    <p class="mb-0">Periode {{ \Carbon\Carbon::parse($tanggal_awal)->isoformat('DD-MM-Y') }} s/d
+                        {{ \Carbon\Carbon::parse($tanggal_akhir)->isoformat('DD-MM-Y') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card rounded-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <div class="">
+                            <h2 class="mb-0">{{ number_format($total_jam_overtime, 0, ',', '.') }}</h2>
+                        </div>
+                        <div class="">
+                            <p
+                                class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-success text-success bg-opacity-10">
+                                Jumlah Jam Lembur (Jam)
                             </p>
                         </div>
                     </div>

@@ -13,7 +13,7 @@
                         <div class="">
                             <p
                                 class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-success text-success bg-opacity-10">
-                                Jumlah Kasus Cuti Tahunan
+                                Jumlah Cuti Tahunan
                             </p>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         <div class="">
                             <p
                                 class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-success text-success bg-opacity-10">
-                                Jumlah Kasus Sakit
+                                Jumlah Sakit
                             </p>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         <div class="">
                             <p
                                 class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-success text-success bg-opacity-10">
-                                Jumlah Kasus Ijin
+                                Jumlah Ijin
                             </p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         <div class="">
                             <p
                                 class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-success text-success bg-opacity-10">
-                                Jumlah Kasus Alpa
+                                Jumlah Alpa
                             </p>
                         </div>
                     </div>

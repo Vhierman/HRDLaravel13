@@ -120,7 +120,7 @@
                         </a>
                         <a href="{{ route('safety.exportExcel') }}" target="_blank" class="btn-group position-static">
                             <button type="button" class="btn btn-success">
-                                <i class="bi bi-cloud-arrow-down"></i> Download Data Inventaris Mobil
+                                <i class="bi bi-cloud-arrow-down"></i> Download Data Kecelakaan Kerja
                             </button>
                         </a>
                     </div>
