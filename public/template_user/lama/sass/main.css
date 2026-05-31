@@ -581,9 +581,9 @@ input::placeholder {
 
 /* main content */
 .main-wrapper {
-  margin-top: 0px;
-  padding-bottom: 10px;
-  margin-left: 0px;
+  margin-top: 70px;
+  padding-bottom: 20px;
+  margin-left: 260px;
   transition: ease-out 0.3s;
 }
 .main-wrapper .main-content {
