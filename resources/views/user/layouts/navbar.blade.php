@@ -1,4 +1,4 @@
-<!--=============== HEADER ===============-->
+<!--=============== NAVBAR ===============-->
 <header class="header" id="header">
     <nav class="nav container">
         <a href="#" class="nav__logo">Hello {{ $employee->nama_karyawan }}</a>
@@ -6,28 +6,32 @@
         <div class="nav__menu" id="nav-menu">
             <ul class="nav__list">
                 <li class="nav__item">
-                    <a href="#home" class="nav__link active-link">
+                    <a href="{{ route('user.dashboard') }}"
+                        class="nav__link {{ request()->routeIs('user.dashboard') ? 'active-link' : '' }}">
                         <i class='bx bx-home-alt nav__icon'></i>
                         <span class="nav__name">Home</span>
                     </a>
                 </li>
 
                 <li class="nav__item">
-                    <a href="#overtime" class="nav__link">
+                    <a href="{{ route('user.overtime') }}"
+                        class="nav__link {{ request()->routeIs('user.overtime') ? 'active-link' : '' }}">
                         <i class='bx bx-time nav__icon'></i>
                         <span class="nav__name">Overtime</span>
                     </a>
                 </li>
 
                 <li class="nav__item">
-                    <a href="#skills" class="nav__link">
+                    <a href="{{ route('user.skill') }}"
+                        class="nav__link {{ request()->routeIs('user.skill') ? 'active-link' : '' }}">
                         <i class='bx bx-book-alt nav__icon'></i>
                         <span class="nav__name">Skills</span>
                     </a>
                 </li>
 
                 <li class="nav__item">
-                    <a href="#cuti" class="nav__link">
+                    <a href="{{ route('user.cuti') }}"
+                        class="nav__link {{ request()->routeIs('user.cuti') ? 'active-link' : '' }}">
                         <i class='bx bx-briefcase-alt nav__icon'></i>
                         <span class="nav__name">Cuti</span>
                     </a>
@@ -46,3 +50,4 @@
             class="nav__img">
     </nav>
 </header>
+<!--=============== NAVBAR ===============-->

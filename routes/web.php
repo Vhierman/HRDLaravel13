@@ -350,7 +350,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 // Halaman User Area
 Route::prefix('user')->middleware('auth')->group(function () {
-    Route::post('/overtime', [DashboardUserController::class, 'overtime'])->name('user.overtime');
+    Route::get('/cuti', [DashboardUserController::class, 'cuti'])->name('user.cuti');
+    Route::get('/skill', [DashboardUserController::class, 'skill'])->name('user.skill');
+    Route::post('/tampil_overtime', [DashboardUserController::class, 'tampil_overtime'])->name('user.tampil_overtime');
+    Route::get('/overtime', [DashboardUserController::class, 'overtime'])->name('user.overtime');
     Route::get('/', [DashboardUserController::class, 'index'])->name('user.dashboard');
     Route::get('/logout', [UserLoginController::class, 'logout'])->name('user.logout');
 });

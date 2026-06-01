@@ -2,6 +2,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
 
 /*=============== VARIABLES CSS ===============*/
+
+body {
+    margin: var(--header-height) 0 0 0;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    background-color: var(--body-color);
+    color: var(--text-color);
+    overflow-x: hidden; /* <--- MENGUNCI AGAR TIDAK BISA SCROLL SAMPING SECARA GLOBAL */
+}
+
 :root {
   --header-height: 3rem;
 
@@ -24,6 +34,15 @@
   /*========== z index ==========*/
   --z-tooltip: 10;
   --z-fixed: 100;
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 @media screen and (min-width: 968px) {
@@ -78,14 +97,14 @@ img {
 }
 
 .section__height {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /*=============== LAYOUT ===============*/
 .container {
   max-width: 968px;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  /* margin-left: 1rem;
+  margin-right: 1rem; */
 }
 
 /*=============== HEADER ===============*/
@@ -235,10 +254,6 @@ img {
     border-radius: 50%;
   }
 
-  /* Minimalist design */
-  /* .active-link::before{
-      bottom: -.75rem;
-  } */
 }
 
 /* For large devices */

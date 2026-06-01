@@ -128,7 +128,26 @@ class DashboardUserController extends Controller
         }
     }
 
-    public function overtime(BulanRequest $request)
+    public function overtime()
+    {
+        $allowedRoles = ['karyawan'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        $employee = Employees::with([
+                            'divisions',
+                            'companies',
+                            'positions',
+                            'areas',
+                            ])->where('nik_karyawan',auth()->user()->nik)->first();
+
+        return view('user.pages.overtime.index',[
+            'employee'=>$employee
+        ]);
+    }
+
+    public function tampil_overtime(BulanRequest $request)
     {
         $allowedRoles = ['karyawan'];
         if (!in_array(auth()->user()->roles, $allowedRoles)) {
@@ -396,5 +415,43 @@ class DashboardUserController extends Controller
                 exit;
          
         }
+    }
+
+    public function skill()
+    {
+        $allowedRoles = ['karyawan'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        $employee = Employees::with([
+                            'divisions',
+                            'companies',
+                            'positions',
+                            'areas',
+                            ])->where('nik_karyawan',auth()->user()->nik)->first();
+
+        return view('user.pages.skill.index',[
+            'employee'=>$employee
+        ]);
+    }
+
+    public function cuti()
+    {
+        $allowedRoles = ['karyawan'];
+        if (!in_array(auth()->user()->roles, $allowedRoles)) {
+            abort(403);
+        }
+
+        $employee = Employees::with([
+                            'divisions',
+                            'companies',
+                            'positions',
+                            'areas',
+                            ])->where('nik_karyawan',auth()->user()->nik)->first();
+
+        return view('user.pages.cuti.index',[
+            'employee'=>$employee
+        ]);
     }
 }
