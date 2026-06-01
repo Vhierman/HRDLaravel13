@@ -1,10 +1,9 @@
-<!--=============== NAVBAR ===============-->
 <header class="header" id="header">
-    <nav class="nav container">
-        <a href="#" class="nav__logo">Hello {{ $employee->nama_karyawan }}</a>
+    <nav class="nav custom-container px-3 px-md-0">
+        <a href="{{ route('user.dashboard') }}" class="nav__logo">Hello {{ $employee->nama_karyawan }}</a>
 
         <div class="nav__menu" id="nav-menu">
-            <ul class="nav__list">
+            <ul class="nav__list mb-0 ps-0">
                 <li class="nav__item">
                     <a href="{{ route('user.dashboard') }}"
                         class="nav__link {{ request()->routeIs('user.dashboard') ? 'active-link' : '' }}">
@@ -47,7 +46,6 @@
         </div>
 
         <img src="{{ asset('storage/assets/foto/karyawan/' . $employee->foto_karyawan) }}" alt="Foto Karyawan"
-            class="nav__img">
+            class="nav__img" loading="lazy">
     </nav>
 </header>
-<!--=============== NAVBAR ===============-->

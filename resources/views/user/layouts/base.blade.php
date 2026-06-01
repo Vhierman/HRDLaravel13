@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bang BOR | @yield('title')</title>
     <link rel="icon" href="{{ asset('template_user/lama/assets/images/favicon-32x32.png') }}" type="image/png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -12,12 +12,14 @@
     @yield('css')
 </head>
 
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
     @include('user.layouts.navbar')
     @include('sweetalert::alert')
-    <main>
+
+    <main class="flex-grow-1">
         @yield('content')
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('template_user/assets/js/main.js') }}"></script>
     @yield('js')
