@@ -130,5 +130,8 @@ class Employees extends Model
     public function safetys() {
         return $this->hasMany(Safetys::class,'employees_id','id');
     }
+    public function health_employees() {
+        return $this->hasMany(PemeriksaanKaryawan::class,'employees_id','id');
+    }
     // From Table Karyawan
 }

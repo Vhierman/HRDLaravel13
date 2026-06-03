@@ -38,6 +38,8 @@ use App\Http\Controllers\Admin\BonusController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SafetyController;
+use App\Http\Controllers\Admin\PemeriksaanKaryawanController;
+use App\Http\Controllers\Admin\FaskesController;
 
 
 //
@@ -340,6 +342,22 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('safety/form_statistik_kecelakaan', [SafetyController::class, 'form_statistik_kecelakaan'])->name('safety.form_statistik_kecelakaan');
     Route::get('safety/exportExcel', [SafetyController::class, 'exportExcel'])->name('safety.exportExcel');
     Route::resource('safety', SafetyController::class);
+    
+    // Pemeriksaan Karyawan
+    Route::post('pemeriksaan_karyawan/tampil_data_statistik_pemeriksaan', [PemeriksaanKaryawanController::class, 'tampil_data_statistik_pemeriksaan'])->name('pemeriksaan_karyawan.tampil_data_statistik_pemeriksaan');
+    Route::get('pemeriksaan_karyawan/form_lihat_statistik_pemeriksaan', [PemeriksaanKaryawanController::class, 'form_lihat_statistik_pemeriksaan'])->name('pemeriksaan_karyawan.form_lihat_statistik_pemeriksaan');
+    Route::post('pemeriksaan_karyawan/export_excell', [PemeriksaanKaryawanController::class, 'export_excell'])->name('pemeriksaan_karyawan.export_excell');
+    Route::post('pemeriksaan_karyawan/tampil_data_pemeriksaan', [PemeriksaanKaryawanController::class, 'tampil_data_pemeriksaan'])->name('pemeriksaan_karyawan.tampil_data_pemeriksaan');
+    Route::get('pemeriksaan_karyawan/form_lihat_data_pemeriksaan', [PemeriksaanKaryawanController::class, 'form_lihat_data_pemeriksaan'])->name('pemeriksaan_karyawan.form_lihat_data_pemeriksaan');
+    Route::post('pemeriksaan_karyawan/tambah_data_pemeriksaan', [PemeriksaanKaryawanController::class, 'tambah_data_pemeriksaan'])->name('pemeriksaan_karyawan.tambah_data_pemeriksaan');
+    Route::get('pemeriksaan_karyawan/form_tambah_data_pemeriksaan', [PemeriksaanKaryawanController::class, 'form_tambah_data_pemeriksaan'])->name('pemeriksaan_karyawan.form_tambah_data_pemeriksaan');
+    Route::delete('pemeriksaan_karyawan/hapus_faskes/{id}', [PemeriksaanKaryawanController::class, 'hapus_faskes'])->name('pemeriksaan_karyawan.hapus_faskes');
+    Route::put('pemeriksaan_karyawan/update_faskes/{id}', [PemeriksaanKaryawanController::class, 'update_faskes'])->name('pemeriksaan_karyawan.update_faskes');
+    Route::get('pemeriksaan_karyawan/form_edit_faskes/{id}', [PemeriksaanKaryawanController::class, 'form_edit_faskes'])->name('pemeriksaan_karyawan.form_edit_faskes');
+    Route::post('pemeriksaan_karyawan/tambah_faskes', [PemeriksaanKaryawanController::class, 'tambah_faskes'])->name('pemeriksaan_karyawan.tambah_faskes');
+    Route::get('pemeriksaan_karyawan/form_tambah_faskes', [PemeriksaanKaryawanController::class, 'form_tambah_faskes'])->name('pemeriksaan_karyawan.form_tambah_faskes');
+    Route::get('pemeriksaan_karyawan/data_faskes', [PemeriksaanKaryawanController::class, 'data_faskes'])->name('pemeriksaan_karyawan.data_faskes');
+    Route::resource('pemeriksaan_karyawan', PemeriksaanKaryawanController::class);
     // Route Admin Area
     });
     

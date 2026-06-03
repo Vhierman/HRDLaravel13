@@ -207,6 +207,23 @@
             @endif
             {{-- Pelanggaran --}}
 
+            {{-- Cek Kesehatan --}}
+            @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
+                <li>
+                    <a href="#" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">health_and_safety</i>
+                        </div>
+                        <div class="menu-title">Cek Kesehatan</div>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('pemeriksaan_karyawan.index') }}"><i
+                                    class="material-icons-outlined">arrow_right</i>Pemeriksaan
+                                Karyawan</a></li>
+                    </ul>
+                </li>
+            @endif
+            {{-- Cek Kesehatan --}}
+
             {{-- Perijinan --}}
             @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd' || Auth::user()->roles == 'accounting')
                 <li>
@@ -224,7 +241,7 @@
             @endif
             {{-- Perijinan --}}
 
-            {{-- Perijinan --}}
+            {{-- Safety --}}
             @if (Auth::user()->roles == 'admin' || Auth::user()->roles == 'hrd')
                 <li>
                     <a href="#" class="has-arrow">
@@ -242,7 +259,7 @@
                     </ul>
                 </li>
             @endif
-            {{-- Perijinan --}}
+            {{-- Safety --}}
 
             {{-- Salary --}}
             @if (Auth::user()->roles == 'admin')

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bang BOR | @yield('title')</title>
+    <title>PT Prima Komponen Indonesia | @yield('title')</title>
     <!--favicon-->
     <link rel="icon" href="{{ asset('template_admin/assets/images/favicon-32x32.png') }}" type="image/png">
     <!-- loader-->
