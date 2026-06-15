@@ -94,8 +94,8 @@
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-12">
                         <label for="karyawan-select" class="form-label fs-6">Nama Karyawan</label>
-                        <select name="employees_id[]" class="form-select" id="multiple-select-custom-field"
-                            data-placeholder="Pilih Nama Karyawan" multiple>
+                        <select name="employees_id[]" class="form-control" id="karyawan-select2"
+                            data-placeholder="Cari dan Pilih Karyawan" multiple>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}"
                                     {{ in_array($employee->id, old('employees_id', [])) ? 'selected' : '' }}>
@@ -138,10 +138,23 @@
     {{-- Select2 --}}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('template_admin/assets/plugins/select2/js/select2-custom.js') }}"></script>
-    <script>
+    {{-- <script>
         $('#karyawan-select').select2({
             theme: 'bootstrap-5',
             width: '100%'
         });
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+            $('#karyawan-select2').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' :
+                    'style',
+                placeholder: $(this).data('placeholder'),
+                closeOnSelect: false // Supaya dropdown tidak langsung tertutup saat klik 1 item
+            });
+        });
     </script>
+
 @endsection

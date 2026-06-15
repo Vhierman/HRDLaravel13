@@ -7,6 +7,23 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+
+Aplikasi berbasis web yang dirancang untuk mengelola data karyawan, penggajian, dan absensi secara efisien menggunakan Laravel 13.
+
+---
+
+## 📸 Tampilan Aplikasi
+
+Berikut adalah beberapa tampilan dari sistem ini:
+
+### 1. Dashboard Utama
+Menampilkan ringkasan data statistik karyawan dan grafik kehadiran bulanan.
+
+<p align="center">
+  <img src="screenshots/dashboard.png" alt="Dashboard Admin" width="700">
+</p>
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
