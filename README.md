@@ -20,7 +20,7 @@ Berikut adalah beberapa tampilan dari sistem ini:
 Menampilkan ringkasan data statistik karyawan dan grafik kehadiran bulanan.
 
 <p align="center">
-  <img src="screenshots/dashboard.png" alt="Dashboard Admin" width="700">
+  <img src="screenshot/dashboard.png" alt="Dashboard Admin" width="700">
 </p>
 
 
