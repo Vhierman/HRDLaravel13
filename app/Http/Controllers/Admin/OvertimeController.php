@@ -1521,9 +1521,9 @@ class OvertimeController extends Controller
         $akhir        = $request->input('akhir');
 
         $tahunlembur  = \Carbon\Carbon::parse($awal)->isoformat('YYYY');
-        $bulanawal    = \Carbon\Carbon::parse($awal)->isoformat('MM');
+        
+        // Gunakan bulan dan tahun dari akhir periode untuk penentuan upah rekap salary
         $bulanakhir   = \Carbon\Carbon::parse($akhir)->isoformat('MM');
-        $tahunawal    = \Carbon\Carbon::parse($awal)->isoformat('YYYY');
         $tahunakhir   = \Carbon\Carbon::parse($akhir)->isoformat('YYYY');
 
         $divisi = match ($penempatan) {
@@ -1535,57 +1535,52 @@ class OvertimeController extends Controller
             default        => abort(403),
         };
 
-        // 1. QUERY EAGER LOADING (Tarik semua data sekaligus untuk menghindari N+1)
-        $item_overtimes = Overtimes::with([
-                                'employees.positions',
-                                'employees.divisions',
-                                'employees.rekap_salaries' => function ($query) use ($bulanawal, $tahunawal) {
-                                    $query->whereMonth('periode_akhir', $bulanawal)
-                                        ->whereYear('periode_akhir', $tahunawal);
-                                }
-                            ])
-                            ->join('employees', 'employees.id', '=', 'overtimes.employees_id')
-                            ->select(
-                                'overtimes.employees_id',
-                                'overtimes.nik_karyawan',
-                                'employees.nama_karyawan',
-                                'employees.status_kerja'
-                            )
-                            ->selectRaw('
-                                SUM(jumlah_jam_pertama) as jumlah_jam_pertama,
-                                SUM(jumlah_jam_kedua) as jumlah_jam_kedua,
-                                SUM(jumlah_jam_ketiga) as jumlah_jam_ketiga,
-                                SUM(jumlah_jam_keempat) as jumlah_jam_keempat,
-                                SUM(uang_makan_lembur) as uang_makan_lembur
-                            ')
-                            ->whereIn('employees.divisions_id', $divisi)
-                            ->whereNotNull('overtimes.acc_hrd')
-                            ->whereNull('overtimes.deleted_at')
-                            ->whereNull('employees.deleted_at')
-                            ->where('employees.status_kerja', $status_kerja)
-                            ->whereBetween('overtimes.tanggal_lembur', [$awal, $akhir])
-                            ->groupBy(
-                                'overtimes.employees_id',
-                                'overtimes.nik_karyawan',
-                                'employees.nama_karyawan',
-                                'employees.status_kerja'
-                            )
-                            ->orderBy('employees.nama_karyawan')
-                            ->get();
+        // 1. QUERY BERBASIS EMPLOYEES (Lebih aman untuk grouping per karyawan & Eager Loading)
+        $employees = Employees::with([
+                        'divisions',
+                        'rekap_salaries' => function ($query) use ($bulanakhir, $tahunakhir) {
+                            // Mengunci upah berdasarkan periode akhir penarikan/bulan berjalan
+                            $query->whereMonth('periode_akhir', $bulanakhir)
+                                ->whereYear('periode_akhir', $tahunakhir);
+                        }
+                    ])
+                    ->withSum(['overtimes as total_jam_pertama' => function($q) use ($awal, $akhir) {
+                        $q->whereBetween('tanggal_lembur', [$awal, $akhir])->whereNotNull('acc_hrd');
+                    }], 'jumlah_jam_pertama')
+                    ->withSum(['overtimes as total_jam_kedua' => function($q) use ($awal, $akhir) {
+                        $q->whereBetween('tanggal_lembur', [$awal, $akhir])->whereNotNull('acc_hrd');
+                    }], 'jumlah_jam_kedua')
+                    ->withSum(['overtimes as total_jam_ketiga' => function($q) use ($awal, $akhir) {
+                        $q->whereBetween('tanggal_lembur', [$awal, $akhir])->whereNotNull('acc_hrd');
+                    }], 'jumlah_jam_ketiga')
+                    ->withSum(['overtimes as total_jam_keempat' => function($q) use ($awal, $akhir) {
+                        $q->whereBetween('tanggal_lembur', [$awal, $akhir])->whereNotNull('acc_hrd');
+                    }], 'jumlah_jam_keempat')
+                    ->withSum(['overtimes as total_uang_makan' => function($q) use ($awal, $akhir) {
+                        $q->whereBetween('tanggal_lembur', [$awal, $akhir])->whereNotNull('acc_hrd');
+                    }], 'uang_makan_lembur')
+                    ->whereIn('divisions_id', $divisi)
+                    ->where('status_kerja', $status_kerja)
+                    ->orderBy('nama_karyawan')
+                    ->get();
+
+        // Filter karyawan yang benar-benar memiliki jam lembur di periode tersebut
+        $item_overtimes = $employees->filter(function($employee) {
+            return ($employee->total_jam_pertama + $employee->total_jam_kedua + $employee->total_jam_ketiga + $employee->total_jam_keempat) > 0;
+        });
 
         if ($item_overtimes->isEmpty()) {
             return redirect()->back()->with('error', 'Data rekap lembur tidak ditemukan.');
         }
 
-        // 2. INISIALISASI FPDF DI LUAR LOOP
+        // 2. INISIALISASI FPDF
         $this->fpdf = new FPDF('P', 'cm', [21, 28]);
-        $this->fpdf->setTopMargin(0.2);
-        $this->fpdf->setLeftMargin(0.2);
+        $this->fpdf->setTopMargin(0.5);
+        $this->fpdf->setLeftMargin(0.4); // Sedikit dilonggarkan agar tidak terlalu mepet potong printer
         $this->fpdf->SetAutoPageBreak(true, 1.5);
         $this->fpdf->AddPage();
 
-        // Render Header Dokumen (Hanya sekali di atas tabel)
-        $this->fpdf->Cell(20.5, 0.5, '', 0, 1, 'C');
+        // Render Header Dokumen
         $this->fpdf->SetFont('Arial', 'B', '8');
         $this->fpdf->Cell(10, 0.5, "PT PRIMA KOMPONEN INDONESIA", 0, 1, 'L');
         
@@ -1595,10 +1590,10 @@ class OvertimeController extends Controller
         $this->fpdf->Ln(0.4);
 
         $this->fpdf->SetFont('Arial', 'B', '8');
-        $this->fpdf->Cell(7, 0.5, $penempatan, 0, 1, 'L');
+        $this->fpdf->Cell(7, 0.5, "Penempatan: " . $penempatan, 0, 1, 'L');
 
         // Render Table Header
-        $this->fpdf->SetFont('Arial', '', '8');
+        $this->fpdf->SetFont('Arial', 'B', '8');
         $this->fpdf->Cell(0.6, 0.9, 'No', 1, 0, 'C');
         $this->fpdf->Cell(3.5, 0.9, 'Nama Karyawan', 1, 0, 'C');
         $this->fpdf->Cell(3.0, 0.9, 'Penempatan', 1, 0, 'C');
@@ -1608,23 +1603,20 @@ class OvertimeController extends Controller
         $this->fpdf->Cell(3.0, 0.9, 'Jumlah Uang Lembur', 1, 0, 'C');
         $this->fpdf->Cell(1.5, 0.9, 'Uang Mkn', 1, 0, 'C');
         $this->fpdf->Cell(2.0, 0.9, 'Gross', 1, 0, 'C');
-        $this->fpdf->Cell(2.0, 0.9, 'Diterima', 1, 1, 'C'); // Gunakan ln=1 untuk pindah baris
+        $this->fpdf->Cell(2.0, 0.9, 'Diterima', 1, 1, 'C');
 
-        // 3. SATU LOOP UTAMA UNTUK BARIS DATA TABEL
+        // 3. LOOP DATA
         $no = 1;
         $totaljumlahuanglembur   = 0;
         $totaluangmakanlembur    = 0;
         $totaljumlahuangditerima = 0;
         $totalhasiluangditerima  = 0;
 
-        foreach ($item_overtimes as $item_overtime) {
-            $employee = $item_overtime->employees;
-            if (!$employee) continue;
+        foreach ($item_overtimes as $employee) {
+            $jumlahjam = $employee->total_jam_pertama + $employee->total_jam_kedua + $employee->total_jam_ketiga + $employee->total_jam_keempat;
+            $uangmakanlembur = $employee->total_uang_makan ?? 0;
 
-            $jumlahjam = $item_overtime->jumlah_jam_pertama + $item_overtime->jumlah_jam_kedua + $item_overtime->jumlah_jam_ketiga + $item_overtime->jumlah_jam_keempat;
-            $uangmakanlembur = $item_overtime->uang_makan_lembur;
-
-            // Penentuan lokasi penempatan berdasarkan ID Divisi Pihak ke-3 / Daihatsu
+            // Penentuan lokasi penempatan
             $lokasiPenempatan = match ($employee->divisions?->id) {
                 19      => "Sunter",
                 20      => "Cibitung",
@@ -1638,7 +1630,7 @@ class OvertimeController extends Controller
             $jumlahuanglembur   = $upahlemburperjam * $jumlahjam;
             $jumlahuangditerima = $jumlahuanglembur + $uangmakanlembur;
 
-            // Logika Pembulatan yang lebih bersih (Ratusan terdekat)
+            // Logika Pembulatan Ratusan Terdekat
             $pembulatan2Digit = ceil($jumlahuangditerima) % 100;
             $total_jumlahuangditerima = match (true) {
                 $pembulatan2Digit > 50 && $pembulatan2Digit < 100 => round($jumlahuangditerima, -2),
@@ -1681,7 +1673,7 @@ class OvertimeController extends Controller
         $this->fpdf->Cell(10, 0.4, 'Tangerang, ........................................, ' . $tahunlembur, 0, 0, 'L');
         $this->fpdf->Cell(5, 0.4, 'Diperiksa,', 0, 1, 'L');
 
-        $this->fpdf->Ln(1.2); // Jarak untuk Tanda Tangan
+        $this->fpdf->Ln(1.2); 
         
         $this->fpdf->SetFont('Arial', 'B', '8');
         $this->fpdf->Cell(5, 0.4, 'Veronica', 0, 0, 'L');
@@ -1704,64 +1696,16 @@ class OvertimeController extends Controller
             abort(403);
         }
 
-        $data   = $request->except('_token');
+        $penempatan   = $request->input('penempatan');
+        $status_kerja = $request->input('status_kerja');
+        $awal         = $request->input('awal');
+        $akhir        = $request->input('akhir');
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        // Header
-        $sheet->setCellValue('A1', 'No');
-        $sheet->setCellValue('B1', 'NIK Karyawan');
-        $sheet->setCellValue('C1', 'Nama Karyawan');
-        $sheet->setCellValue('D1', 'Golongan');
-        $sheet->setCellValue('E1', 'Area');
-        $sheet->setCellValue('F1', 'Jabatan');
-        $sheet->setCellValue('G1', 'Penempatan');
-        $sheet->setCellValue('H1', 'Nomor Rekening');
-        $sheet->setCellValue('I1', 'Jam Lembur');
-        $sheet->setCellValue('J1', 'Upah Lembur Perjam');
-        $sheet->setCellValue('K1', 'Jumlah Uang Lembur');
-        $sheet->setCellValue('L1', 'Uang Makan Lembur');
-        $sheet->setCellValue('M1', 'Jumlah Uang Diterima');
-        $sheet->setCellValue('N1', 'Hasil Uang Lembur');
-        // Header
-
-        //Style
-        $sheet->getStyle('A1:N1')->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'color' => [
-                    'rgb' => 'FFFFFF'
-                ],
-                'size' => 12
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => '4CAF50'
-                ]
-            ],
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN
-                ]
-            ]
-            ]);
-            $sheet->getRowDimension(1)->setRowHeight(30);
-        //Style
-        
-        $penempatan     = $request->input('penempatan');
-        $status_kerja   = $request->input('status_kerja');
-        $awal           = $request->input('awal');
-        $akhir          = $request->input('akhir');
-
-        $bulanawal    = \Carbon\Carbon::parse($awal)->isoformat('MM');
-        $tahunawal    = \Carbon\Carbon::parse($awal)->isoformat('YYYY');
-        $bulanakhir   = \Carbon\Carbon::parse($akhir)->isoformat('MM');
-        $tahunakhir   = \Carbon\Carbon::parse($akhir)->isoformat('YYYY');
+        // Menggunakan Carbon dengan format standard angka (01-12)
+        $bulanawal  = \Carbon\Carbon::parse($awal)->format('m');
+        $bulanakhir = \Carbon\Carbon::parse($akhir)->format('m');
+        $tahunawal  = \Carbon\Carbon::parse($awal)->format('Y');
+        $tahunakhir = \Carbon\Carbon::parse($akhir)->format('Y');
 
         $divisi = match ($penempatan) {
             'Produksi'      => [11],
@@ -1772,15 +1716,19 @@ class OvertimeController extends Controller
             default         => abort(404, 'Penempatan tidak valid'),
         };
 
+        // Ambil data dasar overtimes dengan query yang sama persis seperti di view
         $item_overtimes = Overtimes::join('employees', 'employees.id', '=', 'overtimes.employees_id')
                             ->with([
                                 'employees.golongans',
                                 'employees.areas',
                                 'employees.divisions',
                                 'employees.positions',
-                                'employees.rekap_salaries' => function ($query) use ($bulanawal, $tahunawal) {
-                                    $query->whereMonth('periode_akhir', $bulanawal)
-                                        ->whereYear('periode_akhir', $tahunawal);
+                                // Samakan logic whereMonth & whereYear dengan yang ada di view Anda
+                                'employees.rekap_salaries' => function ($query) use ($bulanawal, $bulanakhir, $tahunawal, $tahunakhir) {
+                                    $query->whereMonth('periode_awal', $bulanawal)
+                                        ->whereMonth('periode_akhir', $bulanakhir)
+                                        ->whereYear('periode_awal', $tahunawal)
+                                        ->whereYear('periode_akhir', $tahunakhir);
                                 }
                             ])
                             ->select(
@@ -1802,6 +1750,7 @@ class OvertimeController extends Controller
                             ->orderBy('employees.nama_karyawan')
                             ->get();
         
+        // Inisialisasi Spreadsheet
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -1828,13 +1777,13 @@ class OvertimeController extends Controller
 
         foreach ($item_overtimes as $item) 
         {
+            // Pastikan memanggil relasi ke employees dengan benar
             $employee = $item->employees;
-            if (!$employee) continue; // Skip jika data karyawan tidak sengaja hilang
+            if (!$employee) continue; 
 
             $jumlahjam = $item->jam_1 + $item->jam_2 + $item->jam_3 + $item->jam_4;
             $uangmakanlembur = $item->total_uang_makan;
 
-            // Logika Penempatan Cabang/Divisi
             $penempatan_nama = match ($employee->divisions?->id) {
                 19 => "Sunter",
                 20 => "Cibitung",
@@ -1842,12 +1791,13 @@ class OvertimeController extends Controller
                 default => $employee->divisions?->penempatan ?? '-',
             };
 
+            // Ambal data rekap salary pertama yang sudah di-filter di atas
             $rekapSalary = $employee->rekap_salaries->first();
             $upahlemburperjam = $rekapSalary?->upah_lembur_perjam ?? 0;
+            
             $jumlahuanglembur = $upahlemburperjam * $jumlahjam;
             $jumlahuangditerima = $jumlahuanglembur + $uangmakanlembur;
 
-            // Logika Pembulatan Nominal Uang
             $pembulatan = ceil($jumlahuangditerima);
             $dua_angka_terakhir = $pembulatan % 100;
 
@@ -1863,7 +1813,7 @@ class OvertimeController extends Controller
             $sheet->getRowDimension($row)->setRowHeight(25);
             $sheet->setCellValue('A'.$row, $no);
             $sheet->setCellValue('B'.$row, "'".$employee->nik_karyawan);
-            $sheet->setCellValue('C'.$row, "'".$employee->nama_karyawan);
+            $sheet->setCellValue('C'.$row, $employee->nama_karyawan); // dihilangkan kutip satu di depan nama jika tidak diperlukan teks murni
             $sheet->setCellValue('D'.$row, $employee->golongans?->golongan ?? '-');
             $sheet->setCellValue('E'.$row, $employee->areas?->area ?? '-');
             $sheet->setCellValue('F'.$row, $employee->positions?->jabatan ?? '-');
@@ -1880,48 +1830,31 @@ class OvertimeController extends Controller
             $no++;
         }
 
-         // Border seluruh data
+        // Border & Alignment Styling
         $lastRow = $row - 1;
-        $sheet->getStyle("A1:N{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
-
-                $sheet->getStyle("A1:N{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $sheet->getStyle("A2:A{$lastRow}")
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("B2:B{$lastRow}")
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("D2:D{$lastRow}")
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("E2:E{$lastRow}")
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle("H2:N{$lastRow}")
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                
-        
-        // Auto width
-        $highestColumn = $sheet->getHighestColumn(); 
-        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
-
-        for ($col = 1; $col <= $highestColumnIndex; $col++) {
-            $columnLetter = Coordinate::stringFromColumnIndex($col);
-            $sheet->getColumnDimension($columnLetter)->setAutoSize(true);
+        if($lastRow >= 2) {
+            $sheet->getStyle("A1:N{$lastRow}")->applyFromArray(['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]]);
+            $sheet->getStyle("A1:N{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            $sheet->getStyle("A2:A{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("B2:B{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("D2:D{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("E2:E{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("H2:N{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
+        
+        // Auto width untuk seluruh kolom yang terisi
+        foreach (range('A', 'N') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Selesaikan proses download Excel (tambahkan return penutup kode Excel Anda di bawah ini)
         $writer = new Xlsx($spreadsheet);
-
-        $filename = 'RekapOvertime.xlsx';
-
+        $filename = 'Rekap_Overtime_'.time().'.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
-
         $writer->save('php://output');
         exit;
-
-
     }
 
     public function notif_overtime_belum_rekap()
