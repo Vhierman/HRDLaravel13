@@ -108,15 +108,13 @@
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
                         <label class="form-label fs-6">Berat Badan (kg)</label>
-                        <input type="number" name="berat_badan" value="{{ $pemeriksaan_karyawan->berat_badan }}"
-                            class="form-control" placeholder="Masukan Berat Badan" maxlength="3"
-                            onkeyup="onKeyUpAngka(this)">
+                        <input type="text" name="berat_badan" value="{{ $pemeriksaan_karyawan->berat_badan }}"
+                            class="form-control" placeholder="Masukan Berat Badan" maxlength="5">
                     </div>
                     <div class="col-12 col-lg-6">
                         <label class="form-label fs-6">Tinggi Badan (cm)</label>
-                        <input type="number" name="tinggi_badan" value="{{ $pemeriksaan_karyawan->tinggi_badan }}"
-                            class="form-control" placeholder="Masukan Tinggi Badan" maxlength="3"
-                            onkeyup="onKeyUpAngka(this)">
+                        <input type="text" name="tinggi_badan" value="{{ $pemeriksaan_karyawan->tinggi_badan }}"
+                            class="form-control" placeholder="Masukan Tinggi Badan" maxlength="5">
                     </div>
                 </div>
                 <div class="row g-3 mt-2">

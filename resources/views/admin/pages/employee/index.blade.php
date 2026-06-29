@@ -1,96 +1,21 @@
 @section('css')
     <link href="{{ asset('template_admin/assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
     <style>
-        /* Memastikan container responsive membungkus dengan sempurna */
-        .table-responsive {
-            width: 100% !important;
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 1rem;
-        }
-
-        /* Memaksa tabel memanfaatkan lebar maksimal */
-        #example2 {
-            width: 100% !important;
-            margin: 0 !important;
-        }
-
-        /* Desain Header Utama Tabel */
-        #example2 thead tr:first-child th {
-            background-color: #f8f9fa;
-            color: #343a40;
-            font-weight: 600;
-            font-size: 14px;
-            border-bottom: 2px solid #dee2e6;
-            padding: 12px 8px !important;
-            white-space: nowrap;
-            /* Mencegah judul kolom patah baris berantakan */
-        }
-
-        /* Desain Baris Pencarian Kolom */
+        /* Membuat input pencarian kolom lebih tipis dan rapi */
         .search-row th {
-            background-color: #ffffff !important;
-            padding: 6px 4px !important;
-            border-bottom: 2px solid #dee2e6 !important;
+            padding: 8px 4px !important;
         }
 
         .search-row input {
-            font-size: 12px;
-            padding: 5px 8px;
-            border-radius: 6px;
-            border: 1px solid #ced4da;
-            transition: all 0.2s ease-in-out;
-            width: 100%;
-            min-width: 100px;
-            /* Batas minimal agar input tidak mengecil habis */
-            box-sizing: border-box;
+            font-size: 13px;
+            padding: 4px 8px;
         }
 
-        .search-row input:focus {
-            border-color: #86b7fe;
-            outline: 0;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        }
-
-        /* Merapikan Ukuran & Layout Tombol Aksi */
-        .action-container {
+        /* Menjaga tombol aksi tetap rapi dalam satu baris */
+        .action-buttons {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             justify-content: center;
-            align-items: center;
-        }
-
-        /* Mengunci ukuran tombol agar tetap simetris & responsive */
-        .action-container .btn-action {
-            width: 32px !important;
-            height: 32px !important;
-            padding: 0 !important;
-            display: inline-flex !important;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            flex-shrink: 0;
-            /* Mencegah tombol gepeng saat layar menyempit */
-        }
-
-        .action-container .btn-action i {
-            font-size: 16px !important;
-            line-height: 1;
-        }
-
-        /* Merapikan isi cell */
-        #example2 tbody td {
-            vertical-align: middle;
-            padding: 10px 8px !important;
-            font-size: 14px;
-            white-space: nowrap;
-            /* Menjaga data teks seperti Nopol/Tanggal tetap satu baris */
-        }
-
-        /* Berikan kelonggaran khusus kolom nama agar teks panjang bisa turun jika space habis */
-        #example2 tbody td:nth-child(2) {
-            white-space: normal;
-            min-width: 150px;
         }
     </style>
 @endsection
