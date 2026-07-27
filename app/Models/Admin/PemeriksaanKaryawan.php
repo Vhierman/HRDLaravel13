@@ -25,7 +25,7 @@ class PemeriksaanKaryawan extends Model
         'tinggi_badan',
         'tekanan_darah',
         'gula_darah',
-        'ekg',
+        'asam_urat',
         'jenis_pemeriksaan',
         'status_kelayakan',
         'catatan_dokter',

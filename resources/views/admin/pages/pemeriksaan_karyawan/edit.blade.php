@@ -131,9 +131,9 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-12 col-lg-6">
-                        <label class="form-label fs-6">EKG</label>
-                        <input type="text" name="ekg" value="{{ $pemeriksaan_karyawan->ekg }}"
-                            class="form-control" placeholder="Masukan EKG">
+                        <label class="form-label fs-6">Asam Urat</label>
+                        <input type="text" name="asam_urat" value="{{ $pemeriksaan_karyawan->asam_urat }}"
+                            class="form-control" placeholder="Masukan Asam Urat">
                     </div>
                     <div class="col-12 col-lg-6">
                         <label class="form-label fs-6">Tanggal Pemeriksaan Berikutnya</label>

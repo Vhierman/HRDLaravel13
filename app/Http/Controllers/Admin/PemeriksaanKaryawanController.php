@@ -178,7 +178,7 @@ class PemeriksaanKaryawanController extends Controller
             'tinggi_badan'                      => $request->input('tinggi_badan'),
             'tekanan_darah'                     => $request->input('tekanan_darah'),
             'gula_darah'                        => $request->input('gula_darah'),
-            'ekg'                               => $request->input('ekg'),
+            'asam_urat'                         => $request->input('asam_urat'),
             'jenis_pemeriksaan'                 => $request->input('jenis_pemeriksaan'),
             'status_kelayakan'                  => $request->input('status_kelayakan'),
             'catatan_dokter'                    => $request->input('catatan_dokter'),
@@ -359,7 +359,7 @@ class PemeriksaanKaryawanController extends Controller
             'tinggi_badan'                      => $request->input('tinggi_badan'),
             'tekanan_darah'                     => $request->input('tekanan_darah'),
             'gula_darah'                        => $request->input('gula_darah'),
-            'ekg'                               => $request->input('ekg'),
+            'asam_urat'                               => $request->input('asam_urat'),
             'jenis_pemeriksaan'                 => $request->input('jenis_pemeriksaan'),
             'status_kelayakan'                  => $request->input('status_kelayakan'),
             'catatan_dokter'                    => $request->input('catatan_dokter'),
@@ -495,7 +495,7 @@ class PemeriksaanKaryawanController extends Controller
                 $sheet->setCellValue('L'.$row, "'".$item_pemeriksaan->tinggi_badan); 
                 $sheet->setCellValue('M'.$row, "'".$item_pemeriksaan->tekanan_darah); 
                 $sheet->setCellValue('N'.$row, "'".$item_pemeriksaan->gula_darah); 
-                $sheet->setCellValue('O'.$row, "'".$item_pemeriksaan->ekg); 
+                $sheet->setCellValue('O'.$row, "'".$item_pemeriksaan->asam_urat); 
                 $sheet->setCellValue('P'.$row, $item_pemeriksaan->jenis_pemeriksaan); 
                 $sheet->setCellValue('Q'.$row, $item_pemeriksaan->status_kelayakan); 
                 $sheet->setCellValue('R'.$row, $item_pemeriksaan->catatan_dokter); 
